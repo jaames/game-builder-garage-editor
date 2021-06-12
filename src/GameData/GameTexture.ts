@@ -1,8 +1,10 @@
 // RGBA color palette
 const TEXTURE_PALETTE = new Uint32Array(256);
 
-TEXTURE_PALETTE[0] = 0;
+// TODO: figure out the correct order of this? it's kicking my ass
 
+TEXTURE_PALETTE[0] = 0;
+//  grays
 TEXTURE_PALETTE[1] = 0xffffffff;
 TEXTURE_PALETTE[2] = 0xedededff;
 TEXTURE_PALETTE[3] = 0xd9d9d9ff;
@@ -101,8 +103,8 @@ TEXTURE_PALETTE[86] = 0x00cca3ff;
 TEXTURE_PALETTE[87] = 0x008066ff;
 TEXTURE_PALETTE[88] = 0x98d9ccff;
 TEXTURE_PALETTE[89] = 0x6b9990ff;
-
 TEXTURE_PALETTE[90] = 0x1f4d43ff;
+
 TEXTURE_PALETTE[91] = 0xffe6e6ff;
 TEXTURE_PALETTE[92] = 0xffb3b3ff;
 TEXTURE_PALETTE[93] = 0xff8585ff;
@@ -111,8 +113,8 @@ TEXTURE_PALETTE[95] = 0xcc0012ff;
 TEXTURE_PALETTE[96] = 0x800000ff;
 TEXTURE_PALETTE[97] = 0xd95757ff;
 TEXTURE_PALETTE[98] = 0x804040ff;
-
 TEXTURE_PALETTE[99] = 0x4d1f1fff;
+
 TEXTURE_PALETTE[100] = 0xfff0e6ff;
 TEXTURE_PALETTE[101] = 0xffd3b3ff;
 TEXTURE_PALETTE[102] = 0xffb885ff;
@@ -121,8 +123,8 @@ TEXTURE_PALETTE[104] = 0xcc5500ff;
 TEXTURE_PALETTE[105] = 0x803500ff;
 TEXTURE_PALETTE[106] = 0xd9b398ff;
 TEXTURE_PALETTE[107] = 0x805b40ff;
-
 TEXTURE_PALETTE[108] = 0x4d321fff;
+
 TEXTURE_PALETTE[109] = 0xfffde6ff;
 TEXTURE_PALETTE[110] = 0xfffab3ff;
 TEXTURE_PALETTE[111] = 0xfff785ff;
@@ -131,7 +133,6 @@ TEXTURE_PALETTE[113] = 0xccbe00ff;
 TEXTURE_PALETTE[114] = 0x807700ff;
 TEXTURE_PALETTE[115] = 0xbfbb86ff;
 TEXTURE_PALETTE[116] = 0x807e5aff;
-
 TEXTURE_PALETTE[117] = 0x4d4b32ff;
 
 export class GameTexture {
@@ -178,7 +179,6 @@ export class GameTexture {
     const src = this.pixels;
     for (let i = 0, len = src.length; i < len; i++) {
       const px = src[i];
-      console.log(px);
       const a = palette[px * 4];
       const b = palette[px * 4 + 1];
       const g = palette[px * 4 + 2];
