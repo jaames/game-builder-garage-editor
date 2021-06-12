@@ -138,13 +138,11 @@ export class GameTexture {
   public width = 64;
   public height = 64;
   public id = -1;
-  public isUsed = false;
   public pixels: Uint8Array;
   public palette = TEXTURE_PALETTE;
 
-  constructor(pixels: Uint8Array, isUsed: boolean, id: number) {
+  constructor(pixels: Uint8Array, id: number) {
     this.pixels = pixels;
-    this.isUsed = isUsed;
     this.id = id;
   }
 

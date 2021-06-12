@@ -9,7 +9,7 @@ Current status:
  - Reads game metadata (title, author, ids, etc)
  - Reads+displays game thumbnail image
  - Reads+displays game textures
- - Reads game object list
- - Reads node connection list
+ - Reads nodon list
+ - Reads nodon connections
 
 Please don't submit PRs or issues yet, this code is going to change a lot as the project develops. If you're interested in helping reverse-engineer Game Builder Garage, you can find me on Twitter `@rakujira`, or on Discord `@jaames#9860`

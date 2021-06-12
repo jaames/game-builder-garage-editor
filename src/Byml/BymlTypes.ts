@@ -72,6 +72,7 @@ export interface BymlTypeMap {
   [BymlType.Bool]: BymlBool;
   [BymlType.Int]: BymlInt;
   [BymlType.Float]: BymlFloat;
+  [BymlType.Uint]: BymlUint;
   [BymlType.Int64]: BymlInt64;
   [BymlType.Uint64]: BymlUint64;
   [BymlType.Double]: BymlDouble;

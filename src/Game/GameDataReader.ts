@@ -4,11 +4,14 @@ import {
   BymlHash,
 } from '../Byml';
 
-import { GameTexture } from './GameTexture'
+import { GameTexture } from './GameTexture';
+import { GameThumbnail } from './GameThumbnail';
 import { GameMeta } from './GameMeta';
 import { Key } from './GameBymlKeys';
 
 import { assert } from '../utils';
+import { GameConnection } from './GameConnection';
+import { GameNodon } from './GameNodon';
 
 /**
  * node structure
@@ -29,9 +32,9 @@ import { assert } from '../utils';
  *        3c774805 (binary) - texture pixels
  *        d96ea34b (bool) - texture is used
  *      d2a89f4c (array) - object connection table ?
- *        1d833e74 (uint) - unknown
- *        27c2201a (uint) - unknown
- *        60625aca (uint) - unknown
+ *        1d833e74 (uint) - from/to
+ *        27c2201a (uint) - from/to
+ *        60625aca (uint) - socket id
  *      eff0b992 (array) - object table
  *        1d833e74 (number) - game object id - referenced by connection table?
  *        c97982da (string) - object label ("Invalid") if not in use
@@ -42,9 +45,10 @@ import { assert } from '../utils';
  *          (array unknown [?, ?, ?])
  */
 
-export class GameDataParser extends BymlReader {
+export class GameDataReader extends BymlReader {
 
-  private dataNode: BymlHash | null = null;
+  public formatVersion: number;
+  public dataNode: BymlHash | null = null;
 
   constructor(buffer: ArrayBuffer) {
     super(buffer);
@@ -55,6 +59,9 @@ export class GameDataParser extends BymlReader {
     //  project node contains a couple of sub-nodes, not sure why
     const gameNode = this.findNode(projectNode, Key.GAME, BymlType.Hash);
     const dataNode = this.findNode(gameNode,    Key.DATA, BymlType.Hash);
+    this.formatVersion = this.findNode(projectNode, Key.VERSION, BymlType.Uint).value;
+    // only format ver 1 is known / supported!
+    assert(this.formatVersion === 1, `Format version not recognised`);
     this.dataNode = dataNode;
   }
 
@@ -83,15 +90,9 @@ export class GameDataParser extends BymlReader {
     }
   }
 
-  public getThumbnailJpegData() {
+  public getThumbnail() {
     const thumbnailNode = this.findNode(this.dataNode, Key.THUMBNAIL, BymlType.Binary);
-    return thumbnailNode.value;
-  }
-
-  public getThumbnailJpegUrl() {
-    const data = this.getThumbnailJpegData();
-    const blob = new Blob([data], { type: 'image/jpeg' });
-    return URL.createObjectURL(blob);
+    return new GameThumbnail(thumbnailNode.value);
   }
 
   // TODO: double check if this is actually the palette?
@@ -110,51 +111,73 @@ export class GameDataParser extends BymlReader {
   }
 
   public getTextureList() {
-    const textureRoot = this.findNode(this.dataNode, Key.TEXTURELIST, BymlType.Array);
-    return textureRoot.childNodes.map((textureNode, i) => {
-      const pixelDataNode = this.findNode(textureNode, Key.TEXTURE_PIXELS,  BymlType.Binary);
-      const isUsedNode =    this.findNode(textureNode, Key.TEXTURE_IS_USED, BymlType.Bool);
-      return new GameTexture(pixelDataNode.value, isUsedNode.value, i);
-    });
+    const textureRoot = this.findNode(this.dataNode, Key.LIST_TEXTURES, BymlType.Array);
+    return textureRoot.childNodes
+      .map((textureNode, i) => {
+        const pixelData = this.findNode(textureNode, Key.TEXTURE_PIXELS,  BymlType.Binary).value;
+        const isUsed =    this.findNode(textureNode, Key.TEXTURE_IS_USED, BymlType.Bool).value;
+        return isUsed ? new GameTexture(pixelData, i) : null;
+      })
+      .filter((texture) => texture !== null);
   }
 
-  public getNodeConnectionList() {
-    const connectionListNode = this.findNode(this.dataNode, Key.CONNECTIONLIST, BymlType.Array);
+  public getConnections() {
+    const connectionListNode = this.findNode(this.dataNode, Key.LIST_CONNECTIONS, BymlType.Array);
     return connectionListNode.childNodes
-      .map(node => node.type === BymlType.Hash ? node.nodeMap : null)
-      .filter(nodeMap => {
-        const subNode = nodeMap.get('1d833e74');
+      // TODO: refactor this mess
+      .filter(node => {
+        if (node.type !== BymlType.Hash)
+          return false;
+        const subNode = node.nodeMap.get('1d833e74');
         if (subNode.type !== BymlType.Uint)
           return false;
         if (subNode.value === 0)
           return false;
         return true;
+      })
+      .map(node => {
+        const id =   this.findNode(node, Key.CONNECTION_ID,   BymlType.Uint).value;
+        const to =   this.findNode(node, Key.CONNECTION_TO,   BymlType.Uint).value;
+        const from = this.findNode(node, Key.CONNECTION_FROM, BymlType.Uint).value;
+        const [nodeId] =             this.parseNodonId(id);
+        const [toId, toSocket] =     this.parseNodonId(to);
+        const [fromId, fromSocket] = this.parseNodonId(from);
+        return new GameConnection(nodeId, toId, toSocket, fromId, fromSocket);
       });
   }
 
-  public getNumNodeConnections() {
-    const list = this.getNodeConnectionList();
+  public getNumConnections() {
+    const list = this.getConnections();
     return list.length;
   }
 
-  public getObjectList() {
-    const objectListNode = this.findNode(this.dataNode, Key.OBJECTLIST, BymlType.Array);
+  public getNodons() {
+    const objectListNode = this.findNode(this.dataNode, Key.LIST_NODON, BymlType.Array);
     return objectListNode.childNodes
-      .map(node => node.type === BymlType.Hash ? node.nodeMap : null)
-      .filter(nodeMap => {
-        if (nodeMap === null)
+      // TODO:
+      .filter(node => {
+        if (node === null || node.type !== BymlType.Hash)
           return false;
-        const subNode = nodeMap.get(Key.OBJECT_LABEL);
-        if (subNode.type !== BymlType.String)
-          return false;
-        if (subNode.value === 'Invalid')
+        if (this.findNode(node, Key.NODON_TYPE, BymlType.String).value === 'Invalid')
           return false;
         return true;
-      });
+      })
+      .map(node => {
+        const id =   this.findNode(node, Key.NODON_ID,   BymlType.Uint).value;
+        const type = this.findNode(node, Key.NODON_TYPE, BymlType.String).value;
+        const [nodeId] = this.parseNodonId(id);
+        return new GameNodon(nodeId, type);
+      })
   }
 
-  public getNumObjects() {
-    const list = this.getObjectList();
+  public getNumNodons() {
+    const list = this.getNodons();
     return list.length;
+  }
+
+  public parseNodonId(int: number) {
+    const id = Math.floor(int / 10);
+    const socketId = int % 10;
+    return [id, socketId];
   }
 }
