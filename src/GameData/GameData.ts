@@ -1,18 +1,13 @@
 import {
   BymlParser,
   BymlNodeType,
-  BymlNode,
-  BymlArrayNode,
-  BymlBoolNode,
   BymlHashNode,
-  BymlBinaryNode,
-  BymlStringNode,
-  BymlNodeMap
 } from '../Byml';
 
 import { GameTexture } from './GameTexture'
-import { assert } from '../utils';
 import { GameMeta } from './GameMeta';
+
+import { assert } from '../utils';
 
 /**
  * node structure
@@ -76,26 +71,25 @@ export class GameDataParser extends BymlParser {
     assert(this.rootNode !== null, 'Root node is missing');
     assert(this.rootNode.type === BymlNodeType.Hash, 'Root node must be a hash node');
     const projectNode = [...this.rootNode.nodeMap.values()][0];
-    const gameNode = this.findNode<BymlHashNode>(projectNode, KEY_GAMENODE);
-    const dataNode = this.findNode<BymlHashNode>(gameNode, KEY_DATANODE);
-    assert(dataNode !== null, 'Data node is missing');
-    assert(dataNode.type === BymlNodeType.Hash, 'Data node must be a hash node');
+    const gameNode = this.findNode(projectNode, KEY_GAMENODE, BymlNodeType.Hash);
+    const dataNode = this.findNode(gameNode,    KEY_DATANODE, BymlNodeType.Hash);
     this.dataNode = dataNode;
   }
 
   public getMetaData(): GameMeta {
     const dataNode = this.dataNode;
-    const gameTitle = this.findNode<BymlStringNode>(dataNode, KEY_GAME_TITLE).value;
-    const gameId = this.findNode<BymlStringNode>(dataNode, KEY_GAME_ID).value;
-    const gameLocale = this.findNode<BymlStringNode>(dataNode, KEY_GAME_LOCALE).value;
-    const gameOnlineId = this.findNode<BymlStringNode>(dataNode, KEY_GAME_ONLINEID).value;
-    const authorName = this.findNode<BymlStringNode>(dataNode, KEY_AUTHOR_NAME).value;
-    const authorId = this.findNode<BymlStringNode>(dataNode, KEY_AUTHOR_ID).value;
-    const gameIdListNode = this.findNode<BymlArrayNode>(dataNode, KEY_GAME_IDLIST);
+    const gameTitle =    this.findNode(dataNode, KEY_GAME_TITLE,    BymlNodeType.String).value;
+    const gameId =       this.findNode(dataNode, KEY_GAME_ID,       BymlNodeType.String).value;
+    const gameLocale =   this.findNode(dataNode, KEY_GAME_LOCALE,   BymlNodeType.String).value;
+    const gameOnlineId = this.findNode(dataNode, KEY_GAME_ONLINEID, BymlNodeType.String).value;
+    const authorName =   this.findNode(dataNode, KEY_AUTHOR_NAME,   BymlNodeType.String).value;
+    const authorId =     this.findNode(dataNode, KEY_AUTHOR_ID,     BymlNodeType.String).value;
+    // process game list to filter out empty strings
+    const gameIdListNode = this.findNode(dataNode, KEY_GAME_IDLIST, BymlNodeType.Array);
     const gameIdList = gameIdListNode.childNodes
       .map(node => node.type === BymlNodeType.String ? node.value : '')
       .filter(value => value);
-      
+
     return {
       gameTitle,
       gameId,
@@ -108,10 +102,8 @@ export class GameDataParser extends BymlParser {
   }
 
   public getThumbnailJpegData() {
-    const thumbnailNode = this.findNode(this.dataNode, KEY_THUMBNAIL);
-    if (thumbnailNode !== null && thumbnailNode.type === BymlNodeType.Binary)
-      return thumbnailNode.value;
-    return null;
+    const thumbnailNode = this.findNode(this.dataNode, KEY_THUMBNAIL, BymlNodeType.Binary);
+    return thumbnailNode.value;
   }
 
   public getThumbnailJpegUrl() {
@@ -122,7 +114,7 @@ export class GameDataParser extends BymlParser {
 
   // TODO: double check if this is actually the palette?
   public getTextureEditorPalette() {
-    const paletteNode = this.findNode<BymlHashNode>(this.dataNode, KEY_PALETTE_MAYBE);
+    const paletteNode = this.findNode(this.dataNode, KEY_PALETTE_MAYBE, BymlNodeType.Hash);
     const paletteListNodes = [...paletteNode.nodeMap.values()];
     return paletteListNodes
       .map(node => node.type === BymlNodeType.Uint ? node.value : null)
@@ -136,18 +128,18 @@ export class GameDataParser extends BymlParser {
   }
 
   public getTextureList() {
-    const textureRoot = this.findNode<BymlArrayNode>(this.dataNode, KEY_TEXTURELIST);
+    const textureRoot = this.findNode(this.dataNode, KEY_TEXTURELIST, BymlNodeType.Array);
     return textureRoot.childNodes.map((textureNode, i) => {
-      const pixelDataNode = this.findNode<BymlBinaryNode>(textureNode, KEY_TEXTURE_PIXELS);
-      const isUsedNode = this.findNode<BymlBoolNode>(textureNode, KEY_TEXTURE_IS_USED);
+      const pixelDataNode = this.findNode(textureNode, KEY_TEXTURE_PIXELS, BymlNodeType.Binary);
+      const isUsedNode = this.findNode(textureNode, KEY_TEXTURE_IS_USED, BymlNodeType.Bool);
       return new GameTexture(pixelDataNode.value, isUsedNode.value, i);
     });
   }
 
   public getNodeConnectionList() {
-    const connectionListNode = this.findNode<BymlArrayNode>(this.dataNode, KEY_CONNECTIONLIST);
+    const connectionListNode = this.findNode(this.dataNode, KEY_CONNECTIONLIST, BymlNodeType.Array);
     return connectionListNode.childNodes
-      .map<BymlNodeMap>(node => node.type === BymlNodeType.Hash ? node.nodeMap : null)
+      .map(node => node.type === BymlNodeType.Hash ? node.nodeMap : null)
       .filter(nodeMap => {
         const subNode = nodeMap.get('1d833e74');
         if (subNode.type !== BymlNodeType.Uint)
@@ -164,10 +156,12 @@ export class GameDataParser extends BymlParser {
   }
 
   public getObjectList() {
-    const objectListNode = this.findNode<BymlArrayNode>(this.dataNode, KEY_OBJECTLIST);
+    const objectListNode = this.findNode(this.dataNode, KEY_OBJECTLIST, BymlNodeType.Array);
     return objectListNode.childNodes
-      .map<BymlNodeMap>(node => node.type === BymlNodeType.Hash ? node.nodeMap : null)
+      .map(node => node.type === BymlNodeType.Hash ? node.nodeMap : null)
       .filter(nodeMap => {
+        if (nodeMap === null)
+          return false;
         const subNode = nodeMap.get(KEY_OBJECT_LABEL);
         if (subNode.type !== BymlNodeType.String)
           return false;
@@ -181,16 +175,4 @@ export class GameDataParser extends BymlParser {
     const list = this.getObjectList();
     return list.length;
   }
-
-  private findNode<T extends BymlNode>(node: BymlNode, key: string | number): T {
-    let result = null;
-    if (node === null || node === undefined)
-      return result;
-    else if (node.type === BymlNodeType.Array && typeof key === 'number')
-      result = node.childNodes[key] ?? null;
-    else if (node.type === BymlNodeType.Hash && typeof key === 'string')
-      result = node.nodeMap.has(key) ? node.nodeMap.get(key) : null;
-    return result as T;
-  }
-
 }

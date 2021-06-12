@@ -10,6 +10,7 @@ import {
 import {
   BymlNode,
   BymlNodeType,
+  BymlNodeTypeMap,
   BymlStringNode,
   BymlBinaryNode,
   BymlArrayNode,
@@ -35,6 +36,24 @@ export class BymlParser extends ParserBase {
     this.read();
   }
 
+  public findNode<K extends keyof BymlNodeTypeMap>(node: BymlNode, key: string | number, type: K): BymlNodeTypeMap[K] {
+    let foundNode = null;
+    // fail if search node isn't available
+    assert(node !== null && node !== undefined, `Node cannot be searched, it doesn't exist`);
+    // if search node is array type, find by numerical index
+    if (node.type === BymlNodeType.Array && typeof key === 'number')
+      foundNode = node.childNodes[key] ?? null;
+    // if search node is hash type, find by string key
+    else if (node.type === BymlNodeType.Hash && typeof key === 'string')
+      foundNode = node.nodeMap.get(key) ?? null;
+    // fail if node not found
+    assert(foundNode !== null, `Could not find node with key ${ key }`);
+    // fail if node typee doesn't match
+    assert(foundNode.type === type);
+    // we can be pretty sure that the found node matcchs the required type now
+    return foundNode as BymlNodeTypeMap[K];
+  }
+
   public read() {
     const magic = this.readChars(0, 2);
     assert(magic === 'YB', 'Big-endian BYML not supported');
@@ -49,7 +68,7 @@ export class BymlParser extends ParserBase {
     this.rootNode = this.readNode(rootNodeType, 12);
   }
 
-  public readNode(nodeType: BymlNodeType, ptr: number): BymlNode {
+  private readNode(nodeType: BymlNodeType, ptr: number): BymlNode {
     switch (nodeType) {
       case BymlNodeType.String:
         return this.readStringNode(this.readU32(ptr));
