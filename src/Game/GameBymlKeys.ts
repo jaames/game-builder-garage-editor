@@ -27,4 +27,8 @@ export enum Key {
 
   NODON_TYPE = 'c97982da',
   NODON_ID = '1d833e74',
+  NODON_DATA = '5c83d3bc',
+  NODON_WORLD_TRANSFORM = 'fb532a17',
+  NODON_GRAPH_POS_FRONT = '2bb4be37',
+  NODON_GRAPH_POS_TOP = 'b0705703'
 };

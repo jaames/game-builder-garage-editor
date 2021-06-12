@@ -33,7 +33,7 @@ export interface BymlArray extends BymlNodeBase<BymlType.Array>  {
 export type BymlHashMap = Map<string, BymlNode>;
 
 export interface BymlHash extends BymlNodeBase<BymlType.Hash> {
-  nodeMap: BymlHashMap;
+  hashMap: BymlHashMap;
 };
 
 export interface BymlBool extends BymlNodeBase<BymlType.Bool> {

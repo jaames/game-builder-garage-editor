@@ -46,7 +46,7 @@ export class BymlReader extends DataStream {
     this.rootNode = this.readNode(rootNodeType, 12);
   }
 
-  public findNode<K extends keyof BymlTypeMap>(node: BymlNode, key: string | number, type: K): BymlTypeMap[K] {
+  public getNode<K extends keyof BymlTypeMap>(node: BymlNode, key: string | number, type: K): BymlTypeMap[K] {
     let foundNode = null;
     // fail if search node isn't available
     assert(node !== null && node !== undefined, `Node cannot be searched, it doesn't exist`);
@@ -55,13 +55,21 @@ export class BymlReader extends DataStream {
       foundNode = node.childNodes[key] ?? null;
     // if search node is hash type, find by string key
     else if (node.type === BymlType.Hash && typeof key === 'string')
-      foundNode = node.nodeMap.get(key) ?? null;
+      foundNode = node.hashMap.get(key) ?? null;
     // fail if node not found
     assert(foundNode !== null, `Could not find node with key ${ key }`);
     // fail if node typee doesn't match
     assert(foundNode.type === type);
     // we can be pretty sure that the found node matcchs the required type now
     return foundNode as BymlTypeMap[K];
+  }
+
+  public hasNode(node: BymlNode, key: string | number): boolean {
+    if (node.type === BymlType.Array && typeof key === 'number')
+      return typeof node.childNodes[key] !== undefined;
+    else if (node.type === BymlType.Hash && typeof key === 'string')
+      return node.hashMap.has(key);
+    return false;
   }
 
   private readNode(nodeType: BymlType, ptr: number): BymlNode {
@@ -135,7 +143,7 @@ export class BymlReader extends DataStream {
     }
     return {
       type: BymlType.Hash,
-      nodeMap: result,
+      hashMap: result,
     };
   }
 
