@@ -1,9 +1,10 @@
 // RGBA color palette
 const TEXTURE_PALETTE = new Uint32Array(256);
 
-// TODO: figure out the correct order of this? it's kicking my ass
+// TODO: figure out the correct order of this pallete? it's kicking my ass
 
 TEXTURE_PALETTE[0] = 0;
+
 //  grays
 TEXTURE_PALETTE[1] = 0xffffffff;
 TEXTURE_PALETTE[2] = 0xedededff;

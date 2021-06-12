@@ -1,3 +1,6 @@
+// Nintendo BYML file parser
+// Ported from the excellent https://github.com/zeldamods/byml-v2
+
 import {
   ParserBase,
   assert,
