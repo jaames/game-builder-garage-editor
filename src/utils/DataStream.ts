@@ -1,4 +1,4 @@
-export class ParserBase {
+export class DataStream {
 
   public buffer: ArrayBuffer;
   public le = true;

@@ -8,7 +8,7 @@ Current status:
  - Parses user-generated level files extracted from the game's savedata
  - Reads game metadata (title, author, ids, etc)
  - Reads+displays game thumbnail image
- - Reads+displays game textures (but correct palette is still TODO)
+ - Reads+displays game textures
  - Reads game object list
  - Reads node connection list
 

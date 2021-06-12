@@ -1,4 +1,4 @@
-export const enum BymlNodeType {
+export const enum BymlType {
   String = 0xa0,
   Binary = 0xa1,
   Array = 0xc0,
@@ -18,75 +18,75 @@ export interface BymlNodeBase<T> {
   type: T;
 };
 
-export interface BymlStringNode extends BymlNodeBase<BymlNodeType.String> {
+export interface BymlString extends BymlNodeBase<BymlType.String> {
   value: string;
 };
 
-export interface BymlBinaryNode extends BymlNodeBase<BymlNodeType.Binary>  {
+export interface BymlBinary extends BymlNodeBase<BymlType.Binary>  {
   value: Uint8Array;
 };
 
-export interface BymlArrayNode extends BymlNodeBase<BymlNodeType.Array>  {
+export interface BymlArray extends BymlNodeBase<BymlType.Array>  {
   childNodes: BymlNode[];
 };
 
-export type BymlNodeHash = Map<string, BymlNode>;
+export type BymlHashMap = Map<string, BymlNode>;
 
-export interface BymlHashNode extends BymlNodeBase<BymlNodeType.Hash> {
-  nodeMap: BymlNodeHash;
+export interface BymlHash extends BymlNodeBase<BymlType.Hash> {
+  nodeMap: BymlHashMap;
 };
 
-export interface BymlBoolNode extends BymlNodeBase<BymlNodeType.Bool> {
+export interface BymlBool extends BymlNodeBase<BymlType.Bool> {
   value: boolean;
 };
 
-export interface BymlIntNode extends BymlNodeBase<BymlNodeType.Int> {
+export interface BymlInt extends BymlNodeBase<BymlType.Int> {
   value: number;
 };
 
-export interface BymlFloatNode extends BymlNodeBase<BymlNodeType.Float> {
+export interface BymlFloat extends BymlNodeBase<BymlType.Float> {
   value: number;
 };
 
-export interface BymlUintNode extends BymlNodeBase<BymlNodeType.Uint> {
+export interface BymlUint extends BymlNodeBase<BymlType.Uint> {
   value: number;
 };
 
-export interface BymlInt64Node extends BymlNodeBase<BymlNodeType.Int64> {
+export interface BymlInt64 extends BymlNodeBase<BymlType.Int64> {
   value: bigint;
 };
 
-export interface BymlUint64Node extends BymlNodeBase<BymlNodeType.Uint64> {
+export interface BymlUint64 extends BymlNodeBase<BymlType.Uint64> {
   value: bigint;
 };
 
-export interface BymlDoubleNode extends BymlNodeBase<BymlNodeType.Double> {
+export interface BymlDouble extends BymlNodeBase<BymlType.Double> {
   value: number;
 };
 
-export interface BymlNodeTypeMap {
-  [BymlNodeType.String]: BymlStringNode;
-  [BymlNodeType.Binary]: BymlBinaryNode;
-  [BymlNodeType.Array]: BymlArrayNode;
-  [BymlNodeType.Hash]: BymlHashNode;
-  [BymlNodeType.Bool]: BymlBoolNode;
-  [BymlNodeType.Int]: BymlIntNode;
-  [BymlNodeType.Float]: BymlFloatNode;
-  [BymlNodeType.Int64]: BymlInt64Node;
-  [BymlNodeType.Uint64]: BymlUint64Node;
-  [BymlNodeType.Double]: BymlDoubleNode;
+export interface BymlTypeMap {
+  [BymlType.String]: BymlString;
+  [BymlType.Binary]: BymlBinary;
+  [BymlType.Array]: BymlArray;
+  [BymlType.Hash]: BymlHash;
+  [BymlType.Bool]: BymlBool;
+  [BymlType.Int]: BymlInt;
+  [BymlType.Float]: BymlFloat;
+  [BymlType.Int64]: BymlInt64;
+  [BymlType.Uint64]: BymlUint64;
+  [BymlType.Double]: BymlDouble;
 };
 
-export type BymlNode = BymlStringNode
- | BymlBinaryNode
- | BymlArrayNode
- | BymlHashNode
- | BymlBoolNode
- | BymlIntNode
- | BymlFloatNode
- | BymlUintNode
- | BymlInt64Node
- | BymlUint64Node
- | BymlDoubleNode
+export type BymlNode = BymlString
+ | BymlBinary
+ | BymlArray
+ | BymlHash
+ | BymlBool
+ | BymlInt
+ | BymlFloat
+ | BymlUint
+ | BymlInt64
+ | BymlUint64
+ | BymlDouble
  | null;
 

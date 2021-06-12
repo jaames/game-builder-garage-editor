@@ -4,6 +4,6 @@ export interface GameMeta {
   gameOnlineId: string,
   gameIdList: string[],
   gameLocale: string,
-  authorName: string,
-  authorId: string,
+  programmerName: string,
+  programmerId: string,
 };

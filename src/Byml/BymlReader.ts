@@ -2,59 +2,37 @@
 // Ported from the excellent https://github.com/zeldamods/byml-v2
 
 import {
-  ParserBase,
+  BymlNode,
+  BymlType,
+  BymlTypeMap,
+  BymlString,
+  BymlBinary,
+  BymlArray,
+  BymlHash,
+  BymlBool,
+  BymlInt,
+  BymlFloat,
+  BymlUint,
+  BymlInt64,
+  BymlUint64,
+  BymlDouble,
+} from './BymlTypes';
+
+import {
+  DataStream,
   assert,
   align
 } from '../utils';
 
-import {
-  BymlNode,
-  BymlNodeType,
-  BymlNodeTypeMap,
-  BymlStringNode,
-  BymlBinaryNode,
-  BymlArrayNode,
-  BymlHashNode,
-  BymlBoolNode,
-  BymlIntNode,
-  BymlFloatNode,
-  BymlUintNode,
-  BymlInt64Node,
-  BymlUint64Node,
-  BymlDoubleNode,
-} from './BymlTypes';
+export class BymlReader extends DataStream {
 
-export class BymlParser extends ParserBase {
+  public rootNode: BymlNode;
 
-  public rootNode: BymlNode = null;
-
-  private hashKeyTable: string[] = [];
-  private stringTable: string[] = [];
+  private hashKeyTable: string[];
+  private stringTable: string[];
 
   constructor(buffer: ArrayBuffer) {
     super(buffer);
-    this.read();
-  }
-
-  public findNode<K extends keyof BymlNodeTypeMap>(node: BymlNode, key: string | number, type: K): BymlNodeTypeMap[K] {
-    let foundNode = null;
-    // fail if search node isn't available
-    assert(node !== null && node !== undefined, `Node cannot be searched, it doesn't exist`);
-    // if search node is array type, find by numerical index
-    if (node.type === BymlNodeType.Array && typeof key === 'number')
-      foundNode = node.childNodes[key] ?? null;
-    // if search node is hash type, find by string key
-    else if (node.type === BymlNodeType.Hash && typeof key === 'string')
-      foundNode = node.nodeMap.get(key) ?? null;
-    // fail if node not found
-    assert(foundNode !== null, `Could not find node with key ${ key }`);
-    // fail if node typee doesn't match
-    assert(foundNode.type === type);
-    // we can be pretty sure that the found node matcchs the required type now
-    return foundNode as BymlNodeTypeMap[K];
-  }
-
-  public read() {
     const magic = this.readChars(0, 2);
     assert(magic === 'YB', 'Big-endian BYML not supported');
     const version = this.readU16(2);
@@ -68,52 +46,70 @@ export class BymlParser extends ParserBase {
     this.rootNode = this.readNode(rootNodeType, 12);
   }
 
-  private readNode(nodeType: BymlNodeType, ptr: number): BymlNode {
+  public findNode<K extends keyof BymlTypeMap>(node: BymlNode, key: string | number, type: K): BymlTypeMap[K] {
+    let foundNode = null;
+    // fail if search node isn't available
+    assert(node !== null && node !== undefined, `Node cannot be searched, it doesn't exist`);
+    // if search node is array type, find by numerical index
+    if (node.type === BymlType.Array && typeof key === 'number')
+      foundNode = node.childNodes[key] ?? null;
+    // if search node is hash type, find by string key
+    else if (node.type === BymlType.Hash && typeof key === 'string')
+      foundNode = node.nodeMap.get(key) ?? null;
+    // fail if node not found
+    assert(foundNode !== null, `Could not find node with key ${ key }`);
+    // fail if node typee doesn't match
+    assert(foundNode.type === type);
+    // we can be pretty sure that the found node matcchs the required type now
+    return foundNode as BymlTypeMap[K];
+  }
+
+  private readNode(nodeType: BymlType, ptr: number): BymlNode {
     switch (nodeType) {
-      case BymlNodeType.String:
+      case BymlType.String:
         return this.readStringNode(this.readU32(ptr));
-      case BymlNodeType.Binary:
+      case BymlType.Binary:
         return this.readBinaryNode(this.readU32(ptr));
-      case BymlNodeType.Array:
+      case BymlType.Array:
         return this.readArrayNode(this.readU32(ptr));
-      case BymlNodeType.Hash:
+      case BymlType.Hash:
         return this.readHashNode(this.readU32(ptr));
-      case BymlNodeType.Bool:
+      case BymlType.Bool:
         return this.readBoolNode(ptr);
-      case BymlNodeType.Int:
+      case BymlType.Int:
         return this.readIntNode(ptr);
-      case BymlNodeType.Float:
+      case BymlType.Float:
         return this.readFloatNode(ptr);
-      case BymlNodeType.Uint:
+      case BymlType.Uint:
         return this.readUintNode(ptr);
-      case BymlNodeType.Int64:
+      case BymlType.Int64:
         return this.readInt64Node(ptr);
-      case BymlNodeType.Uint64:
+      case BymlType.Uint64:
         return this.readUint64Node(ptr);
-      case BymlNodeType.Double:
+      case BymlType.Double:
         return this.readDoubleNode(ptr);
-      case BymlNodeType.Null:
+      case BymlType.Null:
         return null;
     }
     throw `Unknown node type ${ nodeType } @${ ptr }`;
   }
 
-  private readStringNode(i: number): BymlStringNode {
+  private readStringNode(i: number): BymlString {
     return {
-      type: BymlNodeType.String,
+      type: BymlType.String,
       value: this.stringTable[i]
     };
   }
 
-  private readBinaryNode(ptr: number): BymlBinaryNode {
+  private readBinaryNode(ptr: number): BymlBinary {
     const size = this.readU32(ptr);
     return {
-      type: BymlNodeType.Binary,
+      type: BymlType.Binary,
       value: this.readBytes(ptr + 4, size)
     };
   }
 
-  private readArrayNode(ptr: number): BymlArrayNode {
+  private readArrayNode(ptr: number): BymlArray {
     const size = this.readU24(ptr + 1);
     const childNodes = new Array<BymlNode>(size);
     const childPtr = ptr + align(size, 4) + 4;
@@ -122,12 +118,12 @@ export class BymlParser extends ParserBase {
       childNodes[i] = this.readNode(nodeType, childPtr + 4 * i);
     }
     return {
-      type: BymlNodeType.Array,
+      type: BymlType.Array,
       childNodes: childNodes,
     };
   }
 
-  private readHashNode(ptr: number): BymlHashNode {
+  private readHashNode(ptr: number): BymlHash {
     const size = this.readU24(ptr + 1);
     const result = new Map<string, BymlNode>();
     for (let i = 0; i < size; i++) {
@@ -138,56 +134,56 @@ export class BymlParser extends ParserBase {
       result.set(name, this.readNode(nodeType, entryPtr + 4));
     }
     return {
-      type: BymlNodeType.Hash,
+      type: BymlType.Hash,
       nodeMap: result,
     };
   }
 
-  private readBoolNode(ptr: number): BymlBoolNode {
+  private readBoolNode(ptr: number): BymlBool {
     return {
-      type: BymlNodeType.Bool,
+      type: BymlType.Bool,
       value: this.readU32(ptr) !== 0
     }
   }
 
-  private readIntNode(ptr: number): BymlIntNode {
+  private readIntNode(ptr: number): BymlInt {
     return {
-      type: BymlNodeType.Int,
+      type: BymlType.Int,
       value: this.readI32(ptr),
     }
   }
 
-  private readFloatNode(ptr: number): BymlFloatNode {
+  private readFloatNode(ptr: number): BymlFloat {
     return {
-      type: BymlNodeType.Float,
+      type: BymlType.Float,
       value: this.readF32(ptr),
     }
   }
 
-  private readUintNode(ptr: number): BymlUintNode {
+  private readUintNode(ptr: number): BymlUint {
     return {
-      type: BymlNodeType.Uint,
+      type: BymlType.Uint,
       value: this.readU32(ptr),
     }
   }
 
-  private readInt64Node(ptr: number): BymlInt64Node {
+  private readInt64Node(ptr: number): BymlInt64 {
     return {
-      type: BymlNodeType.Int64,
+      type: BymlType.Int64,
       value: this.readI64(ptr),
     }
   }
 
-  private readUint64Node(ptr: number): BymlUint64Node {
+  private readUint64Node(ptr: number): BymlUint64 {
     return {
-      type: BymlNodeType.Uint64,
+      type: BymlType.Uint64,
       value: this.readU64(ptr)
     }
   }
 
-  private readDoubleNode(ptr: number): BymlDoubleNode {
+  private readDoubleNode(ptr: number): BymlDouble {
     return {
-      type: BymlNodeType.Double,
+      type: BymlType.Double,
       value: this.readF64(ptr)
     }
   }
@@ -195,7 +191,7 @@ export class BymlParser extends ParserBase {
   // TODO: strings are likely actually utf-8 or something
   private readStringTable(ptr: number) {
     const type = this.readU8(ptr);
-    assert(type === BymlNodeType.StringTable, `Expected string table node, got typr ${ type }`);
+    assert(type === BymlType.StringTable, `Expected string table node, got typr ${ type }`);
     const size = this.readU24(ptr + 1);
     const stringList = new Array<string>(size);
     for (let i = 0; i < size; i++) {
@@ -221,22 +217,22 @@ export class BymlParser extends ParserBase {
     return (bytes[2] << 16) | (bytes[1] << 8) | (bytes[0]);
   }
 
-  private readNodeType(ptr: number): BymlNodeType {
+  private readNodeType(ptr: number): BymlType {
     const type = this.readU8(ptr);
     switch (type) {
-      case 0xa0: return BymlNodeType.String;
-      case 0xa1: return BymlNodeType.Binary;
-      case 0xc0: return BymlNodeType.Array;
-      case 0xc1: return BymlNodeType.Hash;
-      case 0xc2: return BymlNodeType.StringTable;
-      case 0xd0: return BymlNodeType.Bool;
-      case 0xd1: return BymlNodeType.Int;
-      case 0xd2: return BymlNodeType.Float;
-      case 0xd3: return BymlNodeType.Uint;
-      case 0xd4: return BymlNodeType.Int64;
-      case 0xd5: return BymlNodeType.Uint64;
-      case 0xd6: return BymlNodeType.Double;
-      case 0xff: return BymlNodeType.Null;
+      case 0xa0: return BymlType.String;
+      case 0xa1: return BymlType.Binary;
+      case 0xc0: return BymlType.Array;
+      case 0xc1: return BymlType.Hash;
+      case 0xc2: return BymlType.StringTable;
+      case 0xd0: return BymlType.Bool;
+      case 0xd1: return BymlType.Int;
+      case 0xd2: return BymlType.Float;
+      case 0xd3: return BymlType.Uint;
+      case 0xd4: return BymlType.Int64;
+      case 0xd5: return BymlType.Uint64;
+      case 0xd6: return BymlType.Double;
+      case 0xff: return BymlType.Null;
     }
     throw `Uknown type ${ type } @${ ptr }`;
   }
