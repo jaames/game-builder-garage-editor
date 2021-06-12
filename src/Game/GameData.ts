@@ -14,6 +14,9 @@ export class GameData {
   public textures: GameTexture[] = [];
   public nodons: GameNodon[] = [];
   public connections: GameConnection[] = [];
+  public textStrings: string[] = [];
+  public commentStrings: string[] = [];
+  public textureEditorPalette: number[][] = [];
 
   public _bymlCache: BymlNode; // for reconstructing full data when exporting
 
@@ -23,9 +26,12 @@ export class GameData {
     game._bymlCache = reader.rootNode;
     game.meta = reader.getMetaData();
     game.thumbnail = reader.getThumbnail();
-    game.textures = reader.getTextureList();
+    game.textures = reader.getTextures();
     game.connections = reader.getConnections();
     game.nodons = reader.getNodons();
+    game.textStrings = reader.getTextNodonStrings();
+    game.commentStrings = reader.getCommentNodonStrings();
+    game.textureEditorPalette = reader.getTextureEditorPalette();
     return game;
   }
 

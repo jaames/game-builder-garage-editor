@@ -129,15 +129,29 @@ export class GameDataReader extends BymlReader {
       ]);
   }
 
-  public getTextureList() {
-    const textureRoot = this.getNode(this.dataNode, Key.LIST_TEXTURES, BymlType.Array);
-    return textureRoot.childNodes
+  public getTextures() {
+    const listNode = this.getNode(this.dataNode, Key.LIST_TEXTURES, BymlType.Array);
+    return listNode.childNodes
       .map((textureNode, i) => {
         const pixelData = this.getNode(textureNode, Key.TEXTURE_PIXELS,  BymlType.Binary).value;
         const isUsed =    this.getNode(textureNode, Key.TEXTURE_IS_USED, BymlType.Bool).value;
         return isUsed ? new GameTexture(pixelData, i) : null;
       })
       .filter((texture) => texture !== null);
+  }
+
+  public getTextNodonStrings() {
+    const listRoot = this.getNode(this.dataNode, Key.LIST_TEXT_NODON_STRINGS, BymlType.Array);
+    return listRoot.childNodes
+      .map(textNode => this.getNode(textNode, Key.STRING_VALUE, BymlType.String).value)
+      .filter(textNode => textNode);
+  }
+
+  public getCommentNodonStrings() {
+    const listRoot = this.getNode(this.dataNode, Key.LIST_COMMENT_NODON_STRINGS, BymlType.Array);
+    return listRoot.childNodes
+      .map(textNode => this.getNode(textNode, Key.STRING_VALUE, BymlType.String).value)
+      .filter(textNode => textNode);
   }
 
   public getConnections() {
