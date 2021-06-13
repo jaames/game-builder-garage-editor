@@ -9,23 +9,10 @@
 import {
   BymlNode,
   BymlType,
-  BymlTypeMap,
-  BymlString,
-  BymlBinary,
-  BymlArray,
-  BymlHash,
-  BymlBool,
-  BymlInt,
-  BymlFloat,
-  BymlUint,
-  BymlInt64,
-  BymlUint64,
-  BymlDouble,
 } from './BymlTypes';
 
 import {
   BinaryWriter,
-  assert,
   align,
   stringCompareChr
 } from '../utils';
@@ -69,7 +56,7 @@ export class BymlWriter extends BinaryWriter {
   private hashKeyTable: string[] = [];
   private stringTable: string[] = [];
 
-  constructor(rootNode: BymlNode, hashKeyTable: string[], stringTable: string[]) {
+  constructor(rootNode: BymlNode) {
     super();
     this.rootNode = rootNode;
     const hashKeys = new Set<string>();
@@ -105,7 +92,6 @@ export class BymlWriter extends BinaryWriter {
     const game = new BymlReader(this.getArrayBuffer());
   }
 
-  // working
   getStringsForNode(node: BymlNode, hashKeys: Set<string>, strings: Set<string>) {
     if (node.type === BymlType.Hash) {
       node.hashMap.forEach((subNode, key) => {
@@ -125,7 +111,6 @@ export class BymlWriter extends BinaryWriter {
     }
   }
 
-  // working
   writeStringTable(table: string[]) {
     const base = this.realPtr;
     const size = table.length;
@@ -146,7 +131,6 @@ export class BymlWriter extends BinaryWriter {
     lastOffsetPtr.writeCurrentPtr(base);
   }
 
-  // not quite?
   writeNode(node: BymlNode) {
     const nonValueNodeMap = new Map<BymlNode, PtrPlaceholder>();
     if (node.type === BymlType.Array) {

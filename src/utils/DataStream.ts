@@ -68,7 +68,7 @@ export class DataStream {
   public readU64(ptr: number) {
     return this.data.getBigUint64(ptr, this.le);
   }
-  
+
   public writeU64(ptr: number, value: bigint) {
     return this.data.setBigUint64(ptr, value, this.le);
   }
@@ -82,19 +82,19 @@ export class DataStream {
   }
 
   public readF32(ptr: number) {
-    return this.data.getFloat32(ptr);
+    return this.data.getFloat32(ptr, this.le);
   }
 
   public writeF32(ptr: number, value: number) {
-    this.data.setFloat32(ptr, value);
+    this.data.setFloat32(ptr, value, this.le);
   }
 
   public readF64(ptr: number) {
-    return this.data.getFloat64(ptr);
+    return this.data.getFloat64(ptr, this.le);
   }
 
   public writeF64(ptr: number, value: number) {
-    this.data.setFloat64(ptr, value);
+    this.data.setFloat64(ptr, value, this.le);
   }
 
   public readBytes(ptr: number, count: number) {

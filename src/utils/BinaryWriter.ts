@@ -78,13 +78,6 @@ export class BinaryWriter {
     this.writeByte((value >>> 24) & 0xFF);
   }
 
-  public writeU64(value: bigint) {
-    this._tmp64View.setBigUint64(0, value);
-    for (let i = 0; i < 8; i++) {
-      this.writeByte(this._tmp64[i]);
-    }
-  }
-
   public writeI8(value: number) {
     this.writeByte((value >>> 0) & 0xFF);
   }
@@ -100,23 +93,30 @@ export class BinaryWriter {
     this.writeByte((value >>> 16) & 0xFF);
     this.writeByte((value >>> 24) & 0xFF);
   }
-
-  public writeI64(value: bigint) {
-    this._tmp64View.setBigInt64(0, value);
-    for (let i = 0; i < 8; i++) {
-      this.writeByte(this._tmp64[i]);
-    }
-  }
-
+  
   public writeF32(value: number) {
-    this._tmp32View.setFloat32(0, value);
+    this._tmp32View.setFloat32(0, value, true);
     for (let i = 0; i < 4; i++) {
       this.writeByte(this._tmp32[i]);
     }
   }
 
+  public writeU64(value: bigint) {
+    this._tmp64View.setBigUint64(0, value, true);
+    for (let i = 0; i < 8; i++) {
+      this.writeByte(this._tmp64[i]);
+    }
+  }
+
+  public writeI64(value: bigint) {
+    this._tmp64View.setBigInt64(0, value, true);
+    for (let i = 0; i < 8; i++) {
+      this.writeByte(this._tmp64[i]);
+    }
+  }
+
   public writeF64(value: number) {
-    this._tmp64View.setFloat64(0, value);
+    this._tmp64View.setFloat64(0, value, true);
     for (let i = 0; i < 8; i++) {
       this.writeByte(this._tmp64[i]);
     }
