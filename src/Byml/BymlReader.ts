@@ -52,7 +52,7 @@ export class BymlReader extends DataStream {
     assert(node !== null && node !== undefined, `Node cannot be searched, it doesn't exist`);
     // if search node is array type, find by numerical index
     if (node.type === BymlType.Array && typeof key === 'number')
-      foundNode = node.childNodes[key] ?? null;
+      foundNode = node.children[key] ?? null;
     // if search node is hash type, find by string key
     else if (node.type === BymlType.Hash && typeof key === 'string')
       foundNode = node.hashMap.get(key) ?? null;
@@ -66,7 +66,7 @@ export class BymlReader extends DataStream {
 
   public hasNode(node: BymlNode, key: string | number): boolean {
     if (node.type === BymlType.Array && typeof key === 'number')
-      return typeof node.childNodes[key] !== undefined;
+      return typeof node.children[key] !== undefined;
     else if (node.type === BymlType.Hash && typeof key === 'string')
       return node.hashMap.has(key);
     return false;
@@ -127,7 +127,7 @@ export class BymlReader extends DataStream {
     }
     return {
       type: BymlType.Array,
-      childNodes: childNodes,
+      children: childNodes,
     };
   }
 

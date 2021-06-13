@@ -27,7 +27,7 @@ export interface BymlBinary extends BymlNodeBase<BymlType.Binary>  {
 };
 
 export interface BymlArray extends BymlNodeBase<BymlType.Array>  {
-  childNodes: BymlNode[];
+  children: BymlNode[];
 };
 
 export type BymlHashMap = Map<string, BymlNode>;

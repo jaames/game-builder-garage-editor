@@ -94,7 +94,7 @@ export class GameDataReader extends BymlReader {
     const programmerId =   this.getNode(dataNode, Key.PROGRAMMER_ID,   BymlType.String).value;
     // process game list to filter out empty strings
     const gameIdListNode = this.getNode(dataNode, Key.GAME_IDLIST, BymlType.Array);
-    const gameIdList = gameIdListNode.childNodes
+    const gameIdList = gameIdListNode.children
       .map(node => node.type === BymlType.String ? node.value : '')
       .filter(value => value);
 
@@ -131,7 +131,7 @@ export class GameDataReader extends BymlReader {
 
   public getTextures() {
     const listNode = this.getNode(this.dataNode, Key.LIST_TEXTURES, BymlType.Array);
-    return listNode.childNodes
+    return listNode.children
       .map((textureNode, i) => {
         const pixelData = this.getNode(textureNode, Key.TEXTURE_PIXELS,  BymlType.Binary).value;
         const isUsed =    this.getNode(textureNode, Key.TEXTURE_IS_USED, BymlType.Bool).value;
@@ -142,21 +142,21 @@ export class GameDataReader extends BymlReader {
 
   public getTextNodonStrings() {
     const listRoot = this.getNode(this.dataNode, Key.LIST_TEXT_NODON_STRINGS, BymlType.Array);
-    return listRoot.childNodes
+    return listRoot.children
       .map(textNode => this.getNode(textNode, Key.STRING_VALUE, BymlType.String).value)
       .filter(textNode => textNode);
   }
 
   public getCommentNodonStrings() {
     const listRoot = this.getNode(this.dataNode, Key.LIST_COMMENT_NODON_STRINGS, BymlType.Array);
-    return listRoot.childNodes
+    return listRoot.children
       .map(textNode => this.getNode(textNode, Key.STRING_VALUE, BymlType.String).value)
       .filter(textNode => textNode);
   }
 
   public getConnections() {
     const connectionListNode = this.getNode(this.dataNode, Key.LIST_CONNECTIONS, BymlType.Array);
-    return connectionListNode.childNodes
+    return connectionListNode.children
       // TODO: refactor this mess
       .filter(node => {
         if (node.type !== BymlType.Hash)
@@ -186,7 +186,7 @@ export class GameDataReader extends BymlReader {
 
   public getNodons() {
     const objectListNode = this.getNode(this.dataNode, Key.LIST_NODON, BymlType.Array);
-    return objectListNode.childNodes
+    return objectListNode.children
       .filter(node => {
         if (node === null || node.type !== BymlType.Hash)
           return false;
@@ -230,7 +230,7 @@ export class GameDataReader extends BymlReader {
 
   public getNumberArray(node: BymlNode, key: string | number) {
     const foundNode = this.getNode(node, key, BymlType.Array);
-    return foundNode.childNodes.map<number>(childNode => {
+    return foundNode.children.map<number>(childNode => {
       return (childNode as any).value; // sorry
     });
   }
