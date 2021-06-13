@@ -1,5 +1,10 @@
-// Nintendo BYML file parser
-// Ported from the excellent https://github.com/zeldamods/byml-v2
+/**
+ * BYML reader for Game Builder Garage
+ * Based on https://github.com/zeldamods/byml-v2/blob/master/byml/byml.py
+ * More reference: https://zeldamods.org/wiki/BYML
+ * 
+ * GBG's byml parser doesn't seem to have any major differences from version 4 of the format, luckily
+ */ 
 
 import {
   BymlNode,
@@ -19,14 +24,19 @@ import {
 } from './BymlTypes';
 
 import {
-  DataStream,
+  getNode,
+  hasNode,
+} from './bymlUtils';
+
+import {
+  BinaryReader,
   assert,
   align
 } from '../utils';
 
-export class BymlReader extends DataStream {
+export class BymlReader extends BinaryReader {
 
-  public rootNode: BymlNode;
+  public rootNode: BymlNode = null;
 
   private hashKeyTable: string[];
   private stringTable: string[];
@@ -41,36 +51,14 @@ export class BymlReader extends DataStream {
     const hashKeyTablePtr = this.readU32(4);
     const stringTablePtr = this.readU32(8);
     const rootNodePtr = this.readU32(12);
+    assert(hashKeyTablePtr !== 0, 'Hash key table offset cannot be 0');
+    assert(hashKeyTablePtr !== 0, 'String table offset cannot be 0');
+    assert(hashKeyTablePtr !== 0, 'Root node offset scannot be 0');
     const rootNodeType = this.readNodeType(rootNodePtr);
+    assert(rootNodeType === BymlType.Hash, 'Root node must be a hash node');
     this.hashKeyTable = this.readStringTable(hashKeyTablePtr);
     this.stringTable = this.readStringTable(stringTablePtr);
     this.rootNode = this.readNode(rootNodeType, 12);
-  }
-
-  public getNode<K extends keyof BymlTypeMap>(node: BymlNode, key: string | number, type: K): BymlTypeMap[K] {
-    let foundNode = null;
-    // fail if search node isn't available
-    assert(node !== null && node !== undefined, `Node cannot be searched, it doesn't exist`);
-    // if search node is array type, find by numerical index
-    if (node.type === BymlType.Array && typeof key === 'number')
-      foundNode = node.children[key] ?? null;
-    // if search node is hash type, find by string key
-    else if (node.type === BymlType.Hash && typeof key === 'string')
-      foundNode = node.hashMap.get(key) ?? null;
-    // fail if node not found
-    assert(foundNode !== null, `Could not find node with key ${ key }`);
-    // fail if node typee doesn't match
-    assert(foundNode.type === type);
-    // we can be pretty sure that the found node matcchs the required type now
-    return foundNode as BymlTypeMap[K];
-  }
-
-  public hasNode(node: BymlNode, key: string | number): boolean {
-    if (node.type === BymlType.Array && typeof key === 'number')
-      return typeof node.children[key] !== undefined;
-    else if (node.type === BymlType.Hash && typeof key === 'string')
-      return node.hashMap.has(key);
-    return false;
   }
 
   private readNode(nodeType: BymlType, ptr: number): BymlNode {
@@ -197,7 +185,7 @@ export class BymlReader extends DataStream {
     }
   }
 
-  // TODO: strings are likely actually utf-8 or something
+  // TODO: strings are actually utf-8
   private readStringTable(ptr: number) {
     const type = this.readU8(ptr);
     assert(type === BymlType.StringTable, `Expected string table node, got typr ${ type }`);

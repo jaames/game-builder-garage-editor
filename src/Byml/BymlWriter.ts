@@ -1,9 +1,20 @@
 /**
- * Game Builder Garage seems to use an unoptimised byml format where the file size is always consistent given the same structure
+ * BYML writer for Game Builder Garage
+ * Based on https://github.com/zeldamods/byml-v2/blob/master/byml/byml.py
+ * More reference: https://zeldamods.org/wiki/BYML
+ * 
+ * This is not a generic BYML exporter!!
+ * I have written this with the intention of doing the bare minimum needed to support Game Builder Garage
+ * 
+ * GBG seems to have a couple of slight differences to the Python writer this is based on:
+ * - No nodes are reused or optimised, the file size is pretty much always similar given the same structure
+ * 
  * This exporter doesn't match the GBG exporter perfectly, in a couple of areas:
+ * - My file size is slightly larger, guessing there's a padding quirk somewhere?
  * - GBG writes special node types (Binary, Uint64, Int64, Double) before all the other nodes
  * - I'm guessing GBG also sorts nodes by the original node key, which isn't possible since we only have a hask of the key here
- * But since it's a tree structure, this shouldn't matter too much?
+ * 
+ * The game seems to parse the resulting file just fine, fortunately!!!
  */
 
 import {
@@ -17,15 +28,10 @@ import {
   stringCompareChr
 } from '../utils';
 
-
-import { 
-  BymlReader
- }  from './BymlReader';
-
 class PtrPlaceholder {
 
   public ptr = 0;
-  public writer: BinaryWriter;
+  private writer: BinaryWriter;
 
   constructor(writer: BinaryWriter) {
     this.writer = writer;
@@ -33,7 +39,7 @@ class PtrPlaceholder {
   }
 
   writePlaceholder() {
-    this.writer.writeU32(0xffffffff);
+    this.writer.writeU32(0xcafebabe);
   }
 
   writePtr(ptr: number, base: number = 0) {
@@ -78,18 +84,14 @@ export class BymlWriter extends BinaryWriter {
     hashKeyTablePtr.writeCurrentPtr();
     this.writeStringTable(this.hashKeyTable);
     this.writeAlignBytesTo(4);
-
+    // write string table
     stringTablePtr.writeCurrentPtr();
     this.writeStringTable(this.stringTable);
     this.writeAlignBytesTo(4);
-
+    // write nodes
     rootNodePtr.writeCurrentPtr();
     this.writeNode(this.rootNode);
     this.writeAlignBytesTo(4);
-
-    this.saveAs('finaltest.bin');
-
-    const game = new BymlReader(this.getArrayBuffer());
   }
 
   getStringsForNode(node: BymlNode, hashKeys: Set<string>, strings: Set<string>) {
@@ -142,7 +144,7 @@ export class BymlWriter extends BinaryWriter {
       children.forEach(subNode => {
         this.writeU8(subNode.type);
       });
-      // pad bytes
+      // pad bytes TODO; this might not be necessary? is this why my files are slightly larger?
       this.writeAlignBytesTo(4);
       children.forEach(subNode => {
         // For regular value nodes, this is the 4 byte node value
@@ -219,13 +221,6 @@ export class BymlWriter extends BinaryWriter {
       this.writeF32(node.value);
     else if (node === null)
       this.writeU32(0);
-  }
-
-  isContainerNode(node: BymlNode) {
-    return (
-      node.type === BymlType.Hash ||
-      node.type === BymlType.Array
-    );
   }
 
   writePtrPlaceholder() {

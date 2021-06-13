@@ -135,6 +135,8 @@ TEXTURE_PALETTE[117] = 0x4d4b32ff;
 
 export class GameTexture {
 
+  get [Symbol.toStringTag]() { return 'Texture' };
+
   public width = 64;
   public height = 64;
   public id = -1;

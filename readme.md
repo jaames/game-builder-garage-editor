@@ -1,4 +1,4 @@
-Experimental game data parser for Nintendo's [Game Builder Garage](https://www.nintendo.co.uk/Games/Nintendo-Switch-download-software/Game-Builder-Garage-1964648.html).
+Experimental savedata editor for Nintendo's [Game Builder Garage](https://www.nintendo.co.uk/Games/Nintendo-Switch-download-software/Game-Builder-Garage-1964648.html).
 
 This is super early, but I've already made a lot of progress and expect to be able to pull off some pretty neat stuff -- like texture edits, 3D level export, and so on.
 

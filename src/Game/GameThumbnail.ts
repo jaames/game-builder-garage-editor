@@ -1,5 +1,7 @@
 export class GameThumbnail {
 
+  get [Symbol.toStringTag]() { return 'Thumbnail Image' };
+
   public jpegData: Uint8Array;
 
   constructor(jpegData: Uint8Array) {

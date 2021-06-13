@@ -4,6 +4,8 @@ export type Vec3 = [number, number, number];
 
 export class GameNodon {
 
+  get [Symbol.toStringTag]() { return 'Nodon' };
+
   public id: number = 0;
   public type: string = 'Invalid';
 
