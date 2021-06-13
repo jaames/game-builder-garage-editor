@@ -91,11 +91,11 @@ export class BymlReader extends DataStream {
       case BymlType.Uint:
         return this.readUintNode(ptr);
       case BymlType.Int64:
-        return this.readInt64Node(ptr);
+        return this.readInt64Node(this.readU32(ptr));
       case BymlType.Uint64:
-        return this.readUint64Node(ptr);
+        return this.readUint64Node(this.readU32(ptr));
       case BymlType.Double:
-        return this.readDoubleNode(ptr);
+        return this.readDoubleNode(this.readU32(ptr));
       case BymlType.Null:
         return null;
     }
