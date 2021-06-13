@@ -1,0 +1,57 @@
+root (hash)
+  2cef67ea (hash)
+    1042b334 (hash)
+    11f309ec (string) - local programmer ID
+    15e979b2 (hash) - control settings
+      1785fb3b (string) - unknown, seen as 'Enable'
+      5516dd36 (string) - handheld/tabletop mode controls
+      5c828001 (string) - unknown, seen as 'Disable'
+      9db84991 (string) - unknown, seen as 'Enable'
+      d0b72bb7 (string) - unknown, seen as 'Disable'
+      ded6de0e (string) - unknown, seen as 'Enable'
+      e4b8f89d (string) - unknown, seen as 'Large'
+      eae307cc (string) - tv mode control
+    2209e9d9 (array[64]) - level meta
+      [] (hash)
+        29a36d10 (bool) - unknown
+        4aaddc4f (array[6]) - last modified timestamp
+          [0] (uint) - year
+          [1] (int) - month
+          [2] (uint) - day
+          [3] (uint) - hour
+          [4] (uint) - minute
+          [5] (uint) - second
+        4c0ff1a4 (binary) - jpeg thumbnail?
+        4f3aa598 (int) - unknown, seen as 0
+        62f3087b (string) - game ID
+        6404e56c (string) - game title
+        79823569 (uint) - unknown
+        b2e9bf5a (int) - unknown, seen as 0
+        b716818e (bool) - unknown
+        c7d2cec (uint) - unknown
+        cc3bc69f (bool) - unknown
+        d2554f13 (bool) - unknown
+        da75c3df (string) - unknown, possibly online game ID
+        e2783c35 (string) - game programmer ID
+        e4d0371 (string) - game programmer name?
+        f2357dbb (hash)
+          73abc186 (string) - unknown, seen as empty
+          d96ea34b (bool) - unknown
+        f4e1a3f4 (int) - unknown
+        fcf9a281 (array[6]) - created timestamp
+          [0] (uint) - year
+          [1] (int) - month
+          [2] (uint) - day
+          [3] (uint) - hour
+          [4] (uint) - minute
+          [5] (uint) - second
+    343f7f9b (array[72])
+      [] (uint) unknown
+    3463e2fa (array[7]) - tutorial level data
+      [] (hash) - seems to be the same as level meta? TODO: check deeper
+    4022b320 (array[72])
+      [] (int) - level file id, -1 if unused
+    79823569 (int) - unknown
+    b2c48b64 ()
+
+4aaddc4f
