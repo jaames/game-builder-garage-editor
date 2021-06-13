@@ -1,13 +1,17 @@
-import { GameMeta } from "./GameMeta";
-import { GameThumbnail } from "./GameThumbnail";
-import { GameConnection } from "./GameConnection";
-import { GameTexture } from "./GameTexture";
+import { GameMeta } from './GameMeta';
+import { GameThumbnail } from './GameThumbnail';
+import { GameConnection } from './GameConnection';
+import { GameTexture } from './GameTexture';
 import { GameNodon } from "./GameNodon";
 
-import { GameDataReader } from "./GameDataReader";
-import { BymlNode } from "../Byml";
+import { GameDataReader } from './GameDataReader';
+import { GameDataWriter } from './GameDataWriter';
+
+import { BymlNode } from '../Byml';
 
 export class GameData {
+  
+  get [Symbol.toStringTag]() { return 'Game Builder Garage Game' };
 
   public meta: GameMeta | null = null;
   public thumbnail: GameThumbnail | null = null;
@@ -48,6 +52,25 @@ export class GameData {
         uniques.add(nodon.type)
     });
     return [...uniques];
+  }
+
+  public getWriter() {
+    return new GameDataWriter(this);
+  }
+
+  public getArrayBuffer() {
+    const writer = this.getWriter();
+    return writer.getArrayBuffer();
+  }
+
+  public getBytes() {
+    const writer = this.getWriter();
+    return writer.getBytes();
+  }
+
+  public saveAs(filename: string) {
+    const writer = this.getWriter();
+    writer.saveAs(filename);
   }
 
 }

@@ -1,9 +1,16 @@
 {
   "compilerOptions": {
-      "module": "commonjs",
+      "module": "esnext",
       "esModuleInterop": true,
       "allowSyntheticDefaultImports": true,
+      "experimentalDecorators": true,
       "target": "es5",
+      "lib": [
+        "ES2020",
+        "dom",
+      ],
+      "jsx": "react",
+      "jsxFactory": "h",
       "noImplicitAny": true,
       "moduleResolution": "node",
       "downlevelIteration": true,
