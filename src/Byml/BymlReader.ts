@@ -34,7 +34,8 @@ export class BymlReader extends DataStream {
   constructor(buffer: ArrayBuffer) {
     super(buffer);
     const magic = this.readChars(0, 2);
-    assert(magic === 'YB', 'Big-endian BYML not supported');
+    assert(magic !== 'BY', 'Big-endian BYML not supported');
+    assert(magic === 'YB', 'File magic not recognised');
     const version = this.readU16(2);
     assert(version === 4, 'BYML version is not suppored');
     const hashKeyTablePtr = this.readU32(4);

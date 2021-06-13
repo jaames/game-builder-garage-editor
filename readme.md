@@ -5,8 +5,8 @@ This is super early, but I've already made a lot of progress and expect to be ab
 Written in Typescript since I would like to create web-based tools around the game.
 
 Current status:
- - Parses user-generated level files extracted from the game's savedata (with one minor glitch)
- - Experimental game data exporter
+ - Parses user-generated level files extracted from the game's savedata
+ - Exports edited level files (!!!)
  - Reads game metadata (title, author, ids, etc)
  - Reads+displays game thumbnail image
  - Reads+displays game textures
