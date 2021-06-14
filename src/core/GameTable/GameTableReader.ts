@@ -35,12 +35,14 @@ export class GameTableReader extends BymlReader {
   public getUserGameEntries(): GameTableEntry[] {
     const listNode = getNode(this.dataNode, Key.LIST_USER_GAMES, BymlType.Array);
     return listNode.children
+      .filter((childNode) => this.isGameEntryUsed(childNode))
       .map((childNode) => this.parseGameEntry(childNode));
   }
 
   public getTutorialGameEntries(): GameTableEntry[] {
     const listNode = getNode(this.dataNode, Key.LIST_TUTORIAL_GAMES, BymlType.Array);
     return listNode.children
+      .filter((childNode) => this.isGameEntryUsed(childNode))
       .map((childNode) => this.parseGameEntry(childNode));
   }
 
@@ -58,7 +60,11 @@ export class GameTableReader extends BymlReader {
     };
   }
 
-  public parseGameEntry(parent: BymlNode): GameTableEntry {
+  public isGameEntryUsed(parent: BymlNode) {
+    return getNode(parent, Key.GAME_ID, BymlType.String).value !== '';
+  }
+
+  public parseGameEntry(parent: BymlNode, id: number = 0): GameTableEntry {
     const gameId =         getNode(parent, Key.GAME_ID,         BymlType.String).value;
     const gameTitle =      getNode(parent, Key.GAME_TITLE,      BymlType.String).value;
     const gameLocale =     getNode(parent, Key.GAME_LOCALE,     BymlType.String).value;

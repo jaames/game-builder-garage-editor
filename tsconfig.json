@@ -10,7 +10,6 @@
         "dom",
       ],
       "jsx": "react",
-      "jsxFactory": "h",
       "noImplicitAny": true,
       "moduleResolution": "node",
       "downlevelIteration": true,
