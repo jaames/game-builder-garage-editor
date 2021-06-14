@@ -1,14 +1,25 @@
 import React, { useCallback, useContext } from 'react';
+import { useHistory } from 'react-router';
 import { useDropzone } from 'react-dropzone';
 
-import { GlobalContext } from '../context/GlobalContext';
+import { SavedataContext } from '../context/SavedataContext';
+import { GameEditorContext } from '../context/GameEditorContext';
 
 export const Index: React.FunctionComponent = () => {
 
-  const globalCtx = useContext(GlobalContext);
+  const savedataCtx = useContext(SavedataContext);
+  const gameEditorCtx = useContext(GameEditorContext);
+
+  const history = useHistory();
 
   const onDrop = useCallback(acceptedFiles => {
-    globalCtx.setFiles(acceptedFiles);
+    savedataCtx.setFiles(acceptedFiles);
+  }, []);
+
+  const loadGameWithIdx = useCallback(async (idx) => {
+    const [filename, file] = savedataCtx.getGameFileWithIdx(idx);
+    await gameEditorCtx.loadGameFromFile(file, idx, filename);
+    history.push(`/game/${idx}/`);
   }, []);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -28,9 +39,12 @@ export const Index: React.FunctionComponent = () => {
       </div>
       <div className="GameTable">
         <div className="GameItem">
-          { globalCtx.userGames.map((gameMeta) => (
-            <div>
-              { gameMeta.gameTitle }
+          { savedataCtx.userGames.map((gameMeta, idx) => (
+            <div key={ gameMeta.gameId } onClick={ () => loadGameWithIdx(idx) }>
+              <img src={ gameMeta.thumbnail.getUrl() } />
+              <h3>{ gameMeta.gameTitle }</h3>
+              <div>Nodon count: { gameMeta.nodonCount }</div>
+              <div>Connection count: { gameMeta.connectionCount }</div>
             </div>
           ))}
         </div>

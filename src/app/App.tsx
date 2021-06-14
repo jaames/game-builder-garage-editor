@@ -1,25 +1,24 @@
 import React from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 
-import { GlobalContextProvider } from './context/GlobalContext';
-// import { NoteListContextProvider } from './context/NoteListContext';
-// import { PlayerContextProvider } from './context/PlayerContext';
+import { SavedataContextProvider } from './context/SavedataContext';
+import { GameEditorContextProvider } from './context/GameEditorContext';
 
 import { Index } from './routes/Index';
+import { GameView } from './routes/GameView';
 
 export default function App() {
   return (
     <BrowserRouter>
-      <GlobalContextProvider>
-        {/* <NoteListContextProvider>
-          <PlayerContextProvider> */}
-            <Switch>
-              <Route exact path="/" component={ Index }/>
-              {/* <Route path="/view" component={ View }/> */}
-            </Switch>
-          {/* </PlayerContextProvider>
-        </NoteListContextProvider> */}
-      </GlobalContextProvider>
+      <SavedataContextProvider>
+        <GameEditorContextProvider>
+          <Switch>
+            <Route exact path="/" component={ Index }/>
+            <Route path="/game/:gameIdx" component={ GameView }/>
+            {/* <Route path="/game/:gameIdx/texture/:texIdx" component={ GameTextureEditor }/> */}
+          </Switch>
+        </GameEditorContextProvider>
+      </SavedataContextProvider>
     </BrowserRouter>
   );
 }

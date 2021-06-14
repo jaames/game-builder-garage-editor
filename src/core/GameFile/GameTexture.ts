@@ -191,4 +191,9 @@ export class GameTexture {
     return canvas;
   }
 
+  public getUrl() {
+    const canvas = this.getCanvas();
+    return canvas.toDataURL();
+  }
+
 }
