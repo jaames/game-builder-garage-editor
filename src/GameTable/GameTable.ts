@@ -4,14 +4,18 @@ import { UserSettings } from './UserSettings';
 
 export class GameTable {
 
-  public games: GameTableEntry[] = [];
-  public userSettings: UserSettings = {};
+  public userGames: GameTableEntry[] = [];
+  public tutorialGames: GameTableEntry[] = [];
+  public order: number[];
+  public userSettings: UserSettings;
 
   static fromBuffer(buffer: ArrayBuffer) {
     const reader = new GameTableReader(buffer);
     const table = new GameTable();
-    table.games = reader.getEntries();
-    // todo: set table from reader
+    table.userGames = reader.getUserGameEntries();
+    table.tutorialGames = reader.getTutorialGameEntries();
+    table.userSettings = reader.getUserSettings();
+    table.order = reader.getIdMap();
     return table;
   }
 

@@ -3,9 +3,13 @@ export enum Key {
   DATA = '2cef67ea',
 
   USER_SETTINGS = '15e979b2',
+  USER_PROGRAMMER_ID = '11f309ec',
+  USER_HANDCONTROL = '5516dd36',
+  USER_TVCONTROL = 'eae307cc',
 
   LIST_USER_GAMES = '2209e9d9',
   LIST_TUTORIAL_GAMES = '3463e2fa',
+  LIST_ID_MAP = '4022b320',
 
   GAME_THUMBNAIL = '4c0ff1a4',
   GAME_ID = '62f3087b',
