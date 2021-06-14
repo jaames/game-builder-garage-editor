@@ -17,16 +17,17 @@ export class GameFileWriter {
   patchGameNodes(rootNode: BymlNode): BymlNode {
     assert(rootNode.type === BymlType.Hash, 'Root node must be a hash node');
     const projectNode = [...rootNode.hashMap.values()][0];
-    const gameNode = getNode(projectNode, Key.FILE, BymlType.Hash);
-    const dataNode = getNode(gameNode,    Key.DATA, BymlType.Hash);
-    this.patchMetaNodes(dataNode);
+    const fileHolder = getNode(projectNode, Key.FILE_HOLDER, BymlType.Hash);
+    const fileNode = getNode(fileHolder,    Key.FILE, BymlType.Hash);
+    this.patchMetaNodes(fileNode);
     return rootNode;
   }
 
-  patchMetaNodes(dataNode: BymlHash) {
-    const meta = this.game.meta;
-    const titleNode = getNode(dataNode, Key.GAME_TITLE, BymlType.String);
-    titleNode.value = meta.gameTitle;
+  patchMetaNodes(fileNode: BymlHash) {
+    // TODO: for title edits, we need to patch the cached title in the LgcTpb.bin as well
+    // const meta = this.game.meta;
+    // const titleNode = getNode(fileNode, Key.GAME_TITLE, BymlType.String);
+    // titleNode.value = meta.gameTitle;
   }
 
   getBytes() {

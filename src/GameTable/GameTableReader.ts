@@ -64,18 +64,25 @@ export class GameTableReader extends BymlReader {
     const gameLocale =     getNode(parent, Key.GAME_LOCALE,     BymlType.String).value;
     const programmerId =   getNode(parent, Key.PROGRAMMER_ID,   BymlType.String).value;
     const programmerName = getNode(parent, Key.PROGRAMMER_NAME, BymlType.String).value;
+
+    const nodonCount =      getNode(parent, Key.GAME_NUM_NODON,       BymlType.Int).value;
+    const connectionCount = getNode(parent, Key.GAME_NUM_CONNECTIONS, BymlType.Int).value;
+
     const thumbnailData =  getNode(parent, Key.GAME_THUMBNAIL,  BymlType.Binary).value;
     const modified = this.parseTimestamp(parent, Key.GAME_TIME_MODIFIED);
     const created =  this.parseTimestamp(parent, Key.GAME_TIME_CREATED);
     const thumbnail = new GameThumbnail(thumbnailData);
     return {
+      id: 0,
       gameId,
       gameTitle,
       gameLocale,
-      gameIdList: [], // don't think this is present
+      gameIdHistory: [], // don't think this is present
       gameOnlineId: '', // don't think this is either
       programmerId,
       programmerName,
+      nodonCount,
+      connectionCount,
       modified,
       created,
       thumbnail,

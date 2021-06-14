@@ -22,6 +22,8 @@ export enum Key {
   GAME_LOCALE = 'da75c3df',
   GAME_TIME_MODIFIED = '4aaddc4f',
   GAME_TIME_CREATED = 'fcf9a281',
+  GAME_NUM_NODON = 'f4e1a3f4',
+  GAME_NUM_CONNECTIONS = '4f3aa598',
   PROGRAMMER_ID = 'e2783c35',
   PROGRAMMER_NAME = 'e4d0371',
 

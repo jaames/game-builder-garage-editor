@@ -18,7 +18,7 @@ import { GameNodon, Vec2, Vec3 } from './GameNodon';
 export class GameFileReader extends BymlReader {
 
   public formatVersion: number;
-  public dataNode: BymlHash | null = null;
+  public fileNode: BymlHash | null = null;
 
   constructor(buffer: ArrayBuffer) {
     super(buffer);
@@ -27,25 +27,31 @@ export class GameFileReader extends BymlReader {
     // root node is always a hash node with one item, which has a random (?) key
     const projectNode = [...this.rootNode.hashMap.values()][0];
     //  project node contains a couple of sub-nodes, not sure why
-    const gameNode = getNode(projectNode, Key.FILE, BymlType.Hash);
-    const dataNode = getNode(gameNode,    Key.DATA, BymlType.Hash);
+    const fileHolder = getNode(projectNode, Key.FILE_HOLDER, BymlType.Hash);
+    const fileNode = getNode(fileHolder,    Key.FILE, BymlType.Hash);
     this.formatVersion = getNode(projectNode, Key.VERSION, BymlType.Uint).value;
     // only format ver 1 is known / supported!
     assert(this.formatVersion === 1, `Format version not recognised`);
-    this.dataNode = dataNode;
+    this.fileNode = fileNode;
   }
 
   public getMetaData(): GameMeta {
-    const dataNode = this.dataNode;
+    const dataNode = this.fileNode;
     const gameTitle =      getNode(dataNode, Key.GAME_TITLE,      BymlType.String).value;
     const gameId =         getNode(dataNode, Key.GAME_ID,         BymlType.String).value;
     const gameLocale =     getNode(dataNode, Key.GAME_LOCALE,     BymlType.String).value;
     const gameOnlineId =   getNode(dataNode, Key.GAME_ONLINEID,   BymlType.String).value;
     const programmerName = getNode(dataNode, Key.PROGRAMMER_NAME, BymlType.String).value;
     const programmerId =   getNode(dataNode, Key.PROGRAMMER_ID,   BymlType.String).value;
-    // process game list to filter out empty strings
-    const gameIdListNode = getNode(dataNode, Key.GAME_IDLIST, BymlType.Array);
-    const gameIdList = gameIdListNode.children
+    // object counts
+    const nodonCount =      getNode(dataNode, Key.GAME_NUM_NODON,       BymlType.Int).value;
+    const connectionCount = getNode(dataNode, Key.GAME_NUM_CONNECTIONS, BymlType.Int).value;
+    // timestamps
+    const modified = this.parseTimestamp(dataNode, Key.GAME_TIME_MODIFIED);
+    const created =  this.parseTimestamp(dataNode, Key.GAME_TIME_CREATED);
+    // process game id history to filter out empty strings
+    const gameIdHistoryNode = getNode(dataNode, Key.GAME_IDLIST, BymlType.Array);
+    const gameIdHistory = gameIdHistoryNode.children
       .map(node => node.type === BymlType.String ? node.value : '')
       .filter(value => value);
 
@@ -54,20 +60,24 @@ export class GameFileReader extends BymlReader {
       gameId,
       gameLocale,
       gameOnlineId,
-      gameIdList,
+      gameIdHistory,
       programmerName,
-      programmerId
+      programmerId,
+      nodonCount,
+      connectionCount,
+      modified,
+      created
     }
   }
 
   public getThumbnail() {
-    const thumbnailNode = getNode(this.dataNode, Key.THUMBNAIL, BymlType.Binary);
+    const thumbnailNode = getNode(this.fileNode, Key.THUMBNAIL, BymlType.Binary);
     return new GameThumbnail(thumbnailNode.value);
   }
 
   // TODO: double check if this is actually the palette?
   public getTextureEditorPalette() {
-    const paletteNode = getNode(this.dataNode, Key.PALETTE_MAYBE, BymlType.Hash);
+    const paletteNode = getNode(this.fileNode, Key.PALETTE_COLORS, BymlType.Hash);
     const paletteListNodes = [...paletteNode.hashMap.values()];
     return paletteListNodes
       .map(node => node.type === BymlType.Uint ? node.value : null)
@@ -81,7 +91,7 @@ export class GameFileReader extends BymlReader {
   }
 
   public getTextures() {
-    const listNode = getNode(this.dataNode, Key.LIST_TEXTURES, BymlType.Array);
+    const listNode = getNode(this.fileNode, Key.LIST_TEXTURES, BymlType.Array);
     return listNode.children
       .map((textureNode, i) => {
         const pixelData = getNode(textureNode, Key.TEXTURE_PIXELS,  BymlType.Binary).value;
@@ -92,21 +102,21 @@ export class GameFileReader extends BymlReader {
   }
 
   public getTextNodonStrings() {
-    const listRoot = getNode(this.dataNode, Key.LIST_TEXT_NODON_STRINGS, BymlType.Array);
+    const listRoot = getNode(this.fileNode, Key.LIST_TEXT_NODON_STRINGS, BymlType.Array);
     return listRoot.children
       .map(textNode => getNode(textNode, Key.STRING_VALUE, BymlType.String).value)
       .filter(textNode => textNode);
   }
 
   public getCommentNodonStrings() {
-    const listRoot = getNode(this.dataNode, Key.LIST_COMMENT_NODON_STRINGS, BymlType.Array);
+    const listRoot = getNode(this.fileNode, Key.LIST_COMMENT_NODON_STRINGS, BymlType.Array);
     return listRoot.children
       .map(textNode => getNode(textNode, Key.STRING_VALUE, BymlType.String).value)
       .filter(textNode => textNode);
   }
 
   public getConnections() {
-    const connectionListNode = getNode(this.dataNode, Key.LIST_CONNECTIONS, BymlType.Array);
+    const connectionListNode = getNode(this.fileNode, Key.LIST_CONNECTIONS, BymlType.Array);
     return connectionListNode.children
       // TODO: refactor this mess
       .filter(node => {
@@ -136,7 +146,7 @@ export class GameFileReader extends BymlReader {
   }
 
   public getNodons() {
-    const objectListNode = getNode(this.dataNode, Key.LIST_NODON, BymlType.Array);
+    const objectListNode = getNode(this.fileNode, Key.LIST_NODON, BymlType.Array);
     return objectListNode.children
       .filter(node => {
         if (node === null || node.type !== BymlType.Hash)
@@ -190,5 +200,21 @@ export class GameFileReader extends BymlReader {
     const id = Math.floor(int / 10);
     const socketId = int % 10;
     return [id, socketId];
+  }
+
+  public parseTimestamp(parent: BymlNode, key: string) {
+    const node = getNode(parent, key, BymlType.Array)
+    const year =   getNode(node, 0, BymlType.Uint).value;
+    const month =  getNode(node, 1, BymlType.Int).value;
+    const day =    getNode(node, 2, BymlType.Uint).value;
+    const hour =   getNode(node, 3, BymlType.Uint).value;
+    const minute = getNode(node, 4, BymlType.Uint).value;
+    const second = getNode(node, 5, BymlType.Uint).value;
+    const date = new Date;
+    date.setFullYear(year);
+    date.setMonth(month - 1); // js Date months start at 0
+    date.setDate(day);
+    date.setHours(hour, minute, second);
+    return date;
   }
 }

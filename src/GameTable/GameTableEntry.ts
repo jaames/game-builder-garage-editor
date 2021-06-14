@@ -1,8 +1,6 @@
 import { GameMeta, GameThumbnail } from '../GameFile';
 
 export interface GameTableEntry extends GameMeta {
-  // id: number;
+  id: number;
   thumbnail: GameThumbnail;
-  created: Date;
-  modified: Date;
 };
