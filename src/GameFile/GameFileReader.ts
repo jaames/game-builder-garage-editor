@@ -15,7 +15,7 @@ import { GameMeta } from './GameMeta';
 import { GameConnection } from './GameConnection';
 import { GameNodon, Vec2, Vec3 } from './GameNodon';
 
-export class GameDataReader extends BymlReader {
+export class GameFileReader extends BymlReader {
 
   public formatVersion: number;
   public dataNode: BymlHash | null = null;
@@ -27,7 +27,7 @@ export class GameDataReader extends BymlReader {
     // root node is always a hash node with one item, which has a random (?) key
     const projectNode = [...this.rootNode.hashMap.values()][0];
     //  project node contains a couple of sub-nodes, not sure why
-    const gameNode = getNode(projectNode, Key.GAME, BymlType.Hash);
+    const gameNode = getNode(projectNode, Key.FILE, BymlType.Hash);
     const dataNode = getNode(gameNode,    Key.DATA, BymlType.Hash);
     this.formatVersion = getNode(projectNode, Key.VERSION, BymlType.Uint).value;
     // only format ver 1 is known / supported!

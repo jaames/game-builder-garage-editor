@@ -1,14 +1,14 @@
-import { GameData } from './GameData';
+import { GameFile } from './GameFile';
 import { Key } from './GameBymlKeys';
 import { BymlNode, BymlType, BymlHash, BymlWriter, getNode, hasNode } from '../Byml';
 import { assert } from '../utils';
 
-export class GameDataWriter {
+export class GameFileWriter {
 
   public writer: BymlWriter;
-  public game: GameData;
+  public game: GameFile;
 
-  constructor(game: GameData) {
+  constructor(game: GameFile) {
     this.game = game;
     const rootNode = this.patchGameNodes(game._bymlCache);
     this.writer = new BymlWriter(rootNode);
@@ -17,7 +17,7 @@ export class GameDataWriter {
   patchGameNodes(rootNode: BymlNode): BymlNode {
     assert(rootNode.type === BymlType.Hash, 'Root node must be a hash node');
     const projectNode = [...rootNode.hashMap.values()][0];
-    const gameNode = getNode(projectNode, Key.GAME, BymlType.Hash);
+    const gameNode = getNode(projectNode, Key.FILE, BymlType.Hash);
     const dataNode = getNode(gameNode,    Key.DATA, BymlType.Hash);
     this.patchMetaNodes(dataNode);
     return rootNode;

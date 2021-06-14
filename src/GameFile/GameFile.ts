@@ -4,12 +4,12 @@ import { GameConnection } from './GameConnection';
 import { GameTexture } from './GameTexture';
 import { GameNodon } from "./GameNodon";
 
-import { GameDataReader } from './GameDataReader';
-import { GameDataWriter } from './GameDataWriter';
+import { GameFileReader } from './GameFileReader';
+import { GameFileWriter } from './GameFileWriter';
 
 import { BymlNode } from '../Byml';
 
-export class GameData {
+export class GameFile {
   
   get [Symbol.toStringTag]() { return 'Game Builder Garage Game' };
 
@@ -25,8 +25,8 @@ export class GameData {
   public _bymlCache: BymlNode; // for reconstructing full data when exporting
 
   static fromBuffer(buffer: ArrayBuffer) {
-    const reader = new GameDataReader(buffer);
-    const game = new GameData();
+    const reader = new GameFileReader(buffer);
+    const game = new GameFile();
     game._bymlCache = reader.rootNode;
     game.meta = reader.getMetaData();
     game.thumbnail = reader.getThumbnail();
@@ -42,7 +42,7 @@ export class GameData {
   static async fromUrl(url: string) {
     const response = await fetch(url);
     const data = await response.arrayBuffer();
-    return GameData.fromBuffer(data);
+    return GameFile.fromBuffer(data);
   }
 
   public getNodonTypesUsed() {
@@ -55,7 +55,7 @@ export class GameData {
   }
 
   public getWriter() {
-    return new GameDataWriter(this);
+    return new GameFileWriter(this);
   }
 
   public getArrayBuffer() {

@@ -1,5 +1,5 @@
 export enum Key {
-  GAME = 'adaf3055',
+  FILE = 'adaf3055',
   DATA = 'aa6902d3',
   VERSION = '79823569',
 

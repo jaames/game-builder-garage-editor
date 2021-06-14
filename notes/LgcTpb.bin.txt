@@ -21,7 +21,7 @@ root (hash)
           [3] (uint) - hour
           [4] (uint) - minute
           [5] (uint) - second
-        4c0ff1a4 (binary) - jpeg thumbnail?
+        4c0ff1a4 (binary) - jpeg thumbnail
         4f3aa598 (int) - unknown, seen as 0
         62f3087b (string) - game ID
         6404e56c (string) - game title
@@ -31,7 +31,7 @@ root (hash)
         c7d2cec (uint) - unknown
         cc3bc69f (bool) - unknown
         d2554f13 (bool) - unknown
-        da75c3df (string) - unknown, possibly online game ID
+        da75c3df (string) - game locale
         e2783c35 (string) - game programmer ID
         e4d0371 (string) - game programmer name?
         f2357dbb (hash)
@@ -53,5 +53,3 @@ root (hash)
       [] (int) - level file id, -1 if unused
     79823569 (int) - unknown
     b2c48b64 ()
-
-4aaddc4f

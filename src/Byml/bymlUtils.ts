@@ -14,7 +14,7 @@ export function getNode<K extends keyof BymlTypeMap>(node: BymlNode, key: string
   // fail if node not found
   assert(foundNode !== null, `Could not find node with key ${ key }`);
   // fail if node type doesn't match
-  assert(foundNode.type === type);
+  assert(foundNode.type === type, `Node type does not match ${ type }`);
   // we can be pretty sure that the found node matches the required type now
   return foundNode as BymlTypeMap[K];
 }
