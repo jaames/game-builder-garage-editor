@@ -2,23 +2,26 @@ import React, { useCallback, useContext } from 'react';
 import { useHistory } from 'react-router';
 import { useDropzone } from 'react-dropzone';
 
-import { SavedataContext } from '../context/SavedataContext';
-import { GameEditorContext } from '../context/GameEditorContext';
+import { useSaveData } from '../store/saveData';
+import { useGameFile } from '../store/gameFile';
 
 export const Index: React.FunctionComponent = () => {
 
-  const savedataCtx = useContext(SavedataContext);
-  const gameEditorCtx = useContext(GameEditorContext);
+  const setSaveData = useSaveData((state) => state.setFiles);
+  const getGameFileWithIdx = useSaveData((state) => state.getGameFileWithIdx);
+  const loadGameFromFile = useGameFile((state) => state.loadGameFromFile);
+
+  const userGames = useSaveData((state) => state.userGames);
 
   const history = useHistory();
 
   const onDrop = useCallback(acceptedFiles => {
-    savedataCtx.setFiles(acceptedFiles);
+    setSaveData(acceptedFiles);
   }, []);
 
   const loadGameWithIdx = useCallback(async (idx) => {
-    const [filename, file] = savedataCtx.getGameFileWithIdx(idx);
-    await gameEditorCtx.loadGameFromFile(file, idx, filename);
+    const [filename, file] = getGameFileWithIdx(idx);
+    await loadGameFromFile(file, idx, filename);
     history.push(`/game/${idx}/`);
   }, []);
 
@@ -39,7 +42,7 @@ export const Index: React.FunctionComponent = () => {
       </div>
       <div className="GameTable">
         <div className="GameItem">
-          { savedataCtx.userGames.map((gameMeta, idx) => (
+          { userGames.map((gameMeta, idx) => (
             <div key={ gameMeta.gameId } onClick={ () => loadGameWithIdx(idx) }>
               <img src={ gameMeta.thumbnail.getUrl() } />
               <h3>{ gameMeta.gameTitle }</h3>
