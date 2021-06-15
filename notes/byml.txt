@@ -10,16 +10,30 @@ If it's an array, the key name crc32(name + '[].' + type), otherwise it's crc32(
 Key type strings:
 
 bool
-f32, f64
-s8, s16, s32, s64
-u8, u16, u32, u64
+f32
+f64
+s8
+s16
+s32
+s64
+u8
+u16
+u32
+u64
 Bit
-C4f, C4u8
+C4f
+C4u8
 Curvef
 Enum
-Rangei, Rangef
+Rangei
+Rangef
 Q4f
 Str
-V2i, V3i, V4i
-V2f, V3f, V4f
+V2i
+V3i
+V4i
+V2f
+V3f
+V4f
+Binary
 

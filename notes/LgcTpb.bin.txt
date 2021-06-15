@@ -1,4 +1,6 @@
-root (hash)
+
+
+2cef67ea (hash) - key is crc32('LgcTpb')
   2cef67ea (hash)
     1042b334 (hash)
     11f309ec (string) - local programmer ID
@@ -31,7 +33,7 @@ root (hash)
         c7d2cec (uint) - unknown
         cc3bc69f (bool) - unknown
         d2554f13 (bool) - unknown
-        da75c3df (string) - game locale
+        da75c3df (string) - game locale (key is crc32('mLang.Str'))
         e2783c35 (string) - game programmer ID
         e4d0371 (string) - game programmer name?
         f2357dbb (hash)
