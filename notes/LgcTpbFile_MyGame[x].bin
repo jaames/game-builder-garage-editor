@@ -44,7 +44,7 @@ root (hash) key is crc32 sun of the file name without the extension, eg crc32('L
       b2e9bf5a (i32) - share code history length (key is crc32('mShareCodeHistNum.s32'))
       b716818e (bool) - is file empty (key is crc32('mEmpty.bool'))
       c7d2cec (u32) - jpeg thumbnail size (key is crc32('mThumbnailImageByteSize.u32'))
-      cc3bc69f (bool) - unknown
+      cc3bc69f (bool) - file locck (key is crc32('mFileLock.bool'))
       cc66c4f6 (array) - unknown, maybe canvas view position? (key maybe based on 'mCanvasPos')
         [0] (float)
         [1] (float)
