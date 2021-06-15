@@ -1,4 +1,4 @@
-import React, { useCallback, useContext } from 'react';
+import React, { useCallback } from 'react';
 import { useHistory } from 'react-router';
 import { useDropzone } from 'react-dropzone';
 
@@ -22,7 +22,7 @@ export const Index: React.FunctionComponent = () => {
   const loadGameWithIdx = useCallback(async (idx) => {
     const [filename, file] = getGameFileWithIdx(idx);
     await loadGameFromFile(file, idx, filename);
-    history.push(`/game/${idx}/`);
+    history.push(`/game/${idx}`);
   }, []);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({

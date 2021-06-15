@@ -23,7 +23,10 @@ export const useGameFile = create<State>((set, get) => ({
   loadGameFromFile: async (file: File, fileIdx: number, filename: string) => {
     const data = await file.arrayBuffer();
     const game = GameFile.fromBuffer(data);
+    const meta = game.meta;
+    const textures = game.textures;
+    console.log('loaded game: ', game);
     (window as any).game = game; // for debugging
-    set({ game, fileIdx, filename });
+    set({ game, meta, textures, fileIdx, filename });
   },
 }));

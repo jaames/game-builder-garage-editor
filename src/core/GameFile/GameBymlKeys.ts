@@ -2,7 +2,7 @@
 // TODO: investigate mComment
 // TODO: investigate mNodeNum
 
-export enum Key {
+export const enum Key {
   // mFileHolder
   FILE_HOLDER = 'adaf3055',
   // mFile

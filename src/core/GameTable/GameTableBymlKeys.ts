@@ -1,4 +1,4 @@
-export enum Key {
+export const enum Key {
 
   DATA = '2cef67ea',
 
