@@ -1,57 +1,55 @@
 
 
 2cef67ea (hash) - key is crc32('LgcTpb')
-  2cef67ea (hash)
-    1042b334 (hash)
-    11f309ec (string) - local programmer ID
-    15e979b2 (hash) - control settings
-      1785fb3b (string) - unknown, seen as 'Enable'
-      5516dd36 (string) - handheld/tabletop mode controls
-      5c828001 (string) - unknown, seen as 'Disable'
-      9db84991 (string) - unknown, seen as 'Enable'
-      d0b72bb7 (string) - unknown, seen as 'Disable'
-      ded6de0e (string) - unknown, seen as 'Enable'
-      e4b8f89d (string) - unknown, seen as 'Large'
-      eae307cc (string) - tv mode control
-    2209e9d9 (array[64]) - level meta
-      [] (hash)
-        29a36d10 (bool) - unknown
-        4aaddc4f (array[6]) - last modified timestamp
-          [0] (uint) - year
-          [1] (int) - month
-          [2] (uint) - day
-          [3] (uint) - hour
-          [4] (uint) - minute
-          [5] (uint) - second
-        4c0ff1a4 (binary) - jpeg thumbnail
-        4f3aa598 (int) - unknown, seen as 0
-        62f3087b (string) - game ID
-        6404e56c (string) - game title
-        79823569 (uint) - unknown
-        b2e9bf5a (int) - unknown, seen as 0
-        b716818e (bool) - unknown
-        c7d2cec (uint) - unknown
-        cc3bc69f (bool) - unknown
-        d2554f13 (bool) - unknown
-        da75c3df (string) - game locale (key is crc32('mLang.Str'))
-        e2783c35 (string) - game programmer ID
-        e4d0371 (string) - game programmer name?
-        f2357dbb (hash)
-          73abc186 (string) - unknown, seen as empty
-          d96ea34b (bool) - unknown
-        f4e1a3f4 (int) - unknown
-        fcf9a281 (array[6]) - created timestamp
-          [0] (uint) - year
-          [1] (int) - month
-          [2] (uint) - day
-          [3] (uint) - hour
-          [4] (uint) - minute
-          [5] (uint) - second
-    343f7f9b (array[72])
-      [] (uint) unknown
-    3463e2fa (array[7]) - tutorial level data
-      [] (hash) - seems to be the same as level meta? TODO: check deeper
-    4022b320 (array[72])
-      [] (int) - level file id, -1 if unused
-    79823569 (int) - unknown
-    b2c48b64 ()
+  1042b334 (hash) - lesson final step cache (key is crc32('mFinalStepFileCache'))
+    ? seems to be empty template for a game entry
+  11f309ec (string) - local programmer ID (key is crc32('mLocalAuthorCode.Str'))
+  15e979b2 (hash) - control settings (key is crc32('mConfig'))
+    1785fb3b (string) - unknown, seen as (key is crc32('mHardKeyShortcutConfig.Enum'))
+    5516dd36 (string) - handheld input mode (key is crc32('mHandheldInputModeConfig.Enum'))
+    5c828001 (string) - unknown, seen as (key is crc32('mCanvasZoomConfig.Enum'))
+    9db84991 (string) - unknown, seen as (key is crc32('mCanvasScaleConfig.Enum'))
+    d0b72bb7 (string) - unknown, seen as (key is crc32('mCanvasScrollConfig.Enum'))
+    ded6de0e (string) - unknown, seen as (key is crc32('mCanvasCenterConfig.Enum'))
+    e4b8f89d (string) - unknown, seen as (key is crc32('mSnapConfig.Enum'))
+    eae307cc (string) - tv input mode (key is crc32('mTvInputModeConfig.Enum'))
+  2209e9d9 (array[64]) - user game cache (key is crc32('mMyGameFileCache[]'))
+    [] (hash)
+      29a36d10 (bool) - is game favourite (key is crc32('mFavorite.bool'))
+      4aaddc4f (array[6]) - fcf9a281 (array) - timestamp (key based on either mEditTime or mCreateTime)
+        [0] (uint) - year
+        [1] (int) - month
+        [2] (uint) - day
+        [3] (uint) - hour
+        [4] (uint) - minute
+        [5] (uint) - second
+      4c0ff1a4 (binary) - jpeg thumbnail (key is crc32('mThumbnailImageJPG.Binary'))
+      4f3aa598 (int32) - connection num (key is crc32('mConnectionNum.s32'))
+      62f3087b (string) - game ID (key is crc32('mGameCode.Str'))
+      6404e56c (string) - game name (key is crc32('mName.Str'))
+      79823569 (int) - file version (key is crc32('mVersion.u32'))
+      b2e9bf5a (i32) - share code history length (key is crc32('mShareCodeHistNum.s32'))
+      b716818e (bool) - is file empty (key is crc32('mEmpty.bool'))
+      c7d2cec (u32) - jpeg thumbnail size (key is crc32('mThumbnailImageByteSize.u32'))
+      cc3bc69f (bool) - file lock (key is crc32('mFileLock.bool'))
+      d2554f13 (bool) - was game downloaded (key is crc32('mDownload.bool'))
+      da75c3df (string) - game locale (key is crc32('mLang.Str'))
+      e2783c35 (string) - programmer ID (key is crc32(mAuthorCode.Str))
+      e4d0371 (string) - programmer name (key is crc32('mAuthorName.Str'))
+      f2357dbb (hash) - unknown (key is crc32('mChangeFileKeyThisFile'), debug comment is 'このファイルのキーワー'; 'Keyer for this file')
+        73abc186 (string) - (key is crc32('mText.Str'))
+        d96ea34b (bool) - is used (key is crc32('mUse.bool'))
+      f4e1a3f4 (i32) node num (key is crc32('mNodeNum.s32'))
+      fcf9a281 (array[6]) - fcf9a281 (array) - another timestamp (key based on either mEditTime or mCreateTime)
+        [0] (uint) - year
+        [1] (int) - month
+        [2] (uint) - day
+        [3] (uint) - hour
+        [4] (uint) - minute
+        [5] (uint) - second
+  343f7f9b (array[72]) not sure, seems to have a key for each file (key is crc32('mValueHashCache[].u32')
+    [] (uint) unknown
+  3463e2fa (array[7]) - tutorial level data (key is crc32('mLessonFileCache[]'))
+    [] (hash) - seems to be the same as level meta? TODO: check deeper
+  4022b320 (array[72]) - order index (key is crc32('mOrderIndex[].s32'))
+    [] (int) - level file id, -1 if unused
