@@ -1,0 +1,9 @@
+@import './vars.scss';
+
+.root {
+  @include wrapper;
+  display: grid;
+  grid-gap: 24px;
+  max-width: 100%;
+  grid-template-columns: repeat(auto-fill, minmax(128px, 1fr));
+}

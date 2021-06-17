@@ -1,6 +1,6 @@
 {
-  "name": "game-builder-garage-re",
-  "version": "1.0.0",
+  "name": "game-builder-garage-editor",
+  "version": "0.0.1",
   "scripts": {
     "start": "webpack s --mode=development",
     "dev": "webpack --mode=development",
@@ -10,14 +10,18 @@
   "author": "",
   "devDependencies": {
     "@pmmmwh/react-refresh-webpack-plugin": "^0.4.3",
+    "@svgr/webpack": "^5.5.0",
     "@types/react": "^17.0.11",
     "@types/react-dom": "^17.0.7",
     "@types/react-router-dom": "^5.1.7",
     "css-loader": "^5.2.6",
     "html-webpack-plugin": "^5.3.1",
     "mini-css-extract-plugin": "^1.6.0",
+    "mini-svg-data-uri": "^1.3.3",
     "react-refresh": "^0.10.0",
     "react-refresh-typescript": "^2.0.1",
+    "sass": "^1.35.1",
+    "sass-loader": "^12.1.0",
     "terser-webpack-plugin": "^5.1.3",
     "ts-loader": "^9.2.3",
     "typescript": "^4.3.2",
@@ -31,6 +35,7 @@
     "react-dom": "^17.0.2",
     "react-dropzone": "^11.3.2",
     "react-router-dom": "^5.2.0",
+    "reset-css": "^5.0.1",
     "zustand": "^3.5.2"
   }
 }

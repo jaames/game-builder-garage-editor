@@ -1,0 +1,23 @@
+@import './vars.scss';
+
+$header-size: 64px;
+
+.root {
+  height: $header-size;
+  margin-bottom: 1em
+}
+
+.wrapper {
+  @include wrapper;
+  height: $header-size;
+  display: flex;
+  align-items: center;
+}
+
+.groupLeft {
+  margin-right: auto;
+}
+
+.groupRight {
+  margin-left: auto;
+}

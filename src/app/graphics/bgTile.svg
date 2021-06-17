@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+  <g fill="none" fill-rule="evenodd">
+    <rect width="64" height="64" fill="#FFED52"/>
+    <rect width="64" height="64" x="1" y="1" stroke="#FFD623" stroke-width="2"/>
+    <line x1="33.5" x2="33.5" y1="1.5" y2="64.5" stroke="#FFD623" stroke-linecap="square"/>
+    <line x1="-1.5" x2="70.5" y1="33.5" y2="33.5" stroke="#FFD623" stroke-linecap="square"/>
+  </g>
+</svg>

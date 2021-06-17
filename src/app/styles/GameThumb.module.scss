@@ -1,0 +1,30 @@
+.root {
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  max-width: 256px;
+}
+
+.image {
+  border-radius: 12px;
+  padding-bottom: 100%; // force 1:1 aspect ratio
+  max-height: 256px;
+  background-repeat: no-repeat;
+}
+
+.title + .imge {
+  margin-top: auto;
+}
+
+.title {
+  flex: 1;
+  // color: #FFB833;
+  font-weight: bold;
+  color: #e47e2b;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  max-width: 20ch;
+  margin: 0 auto;
+  margin-bottom: .25em;
+}

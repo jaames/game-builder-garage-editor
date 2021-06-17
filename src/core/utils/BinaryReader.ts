@@ -84,6 +84,50 @@ export class BinaryReader {
     return str;
   }
 
+  public readUtf8(ptr: number): string {
+    let result = '';
+    while (true) {
+      let char = 0;
+      let byte = this.readU8(ptr);
+      // Break string on null bytes
+      if (byte === 0)
+        break;
+      // Single byte char
+      else if (byte < 0x80) {
+        char = byte;
+        ptr += 1;
+      }
+      // Two byte char
+      else if ((byte & 0xe0) == 0xc0) {
+        char = ((byte & 0x1f) << 6) | 
+               ((this.readU8(ptr + 1) & 0x3f) <<  0);
+        ptr += 2;
+      } 
+      // Three byte char
+      else if ((byte & 0xf0) == 0xe0) {
+        char = ((byte & 0x0f) << 12) |
+               ((this.readU8(ptr + 1) & 0x3f) <<  6) |
+               ((this.readU8(ptr + 2) & 0x3f) <<  0);
+        ptr += 3;
+      } 
+      // Four byte char
+      else if ((byte & 0xf8) == 0xf0 && (byte <= 0xf4)) {
+        char = ((byte & 0x07) << 18) |
+               ((this.readU8(ptr + 1) & 0x3f) << 12) |
+               ((this.readU8(ptr + 2) & 0x3f) <<  6) |
+               ((this.readU8(ptr + 3) & 0x3f) <<  0);
+        ptr += 4;
+      } 
+      // Byte is invalid; skip it
+      else {
+        ptr += 1;
+        continue;
+      }
+      result += String.fromCharCode(char);
+    }
+    return result;
+  }
+
   public readWideChars(ptr: number, count: number) {
     const chars = new Uint16Array(this.data.buffer, ptr, count);
     let str = '';

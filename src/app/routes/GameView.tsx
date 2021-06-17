@@ -2,6 +2,12 @@ import React from 'react';
 
 import { useGameFile } from '../store/gameFile';
 
+import { GameThumb } from '../components/GameThumb';
+import { TextureGrid } from '../components/TextureGrid';
+import { TextureThumb } from '../components/TextureThumb';
+
+import styles from '../styles/GameView.module.scss';
+
 interface Props {
   gameIdx: number
 };
@@ -13,16 +19,18 @@ export const GameView: React.FunctionComponent<Props> = (props) => {
   const textures = useGameFile(state => state.textures);
 
   return (
-    <div>
-      <img src={ game.thumbnail.getUrl() } alt="" />
-      <div>{ meta.gameTitle }</div>
-      <div>{ meta.gameId }</div>
-      <div>
-        {textures.map(texture => (
-          <div className="textureItem" key={ texture.id }>
-            <img src={ texture.getUrl() } alt="" />
-          </div>
-        ))}
+    <div className={ styles.root }>
+      <div className={ styles.side }>
+        <GameThumb thumbnail={ game.thumbnail }/>
+        <div>{ meta.gameTitle }</div>
+        <div>{ meta.gameId }</div>
+      </div>
+      <div className={ styles.main }>
+        <TextureGrid>
+          { textures.map(texture => (
+            <TextureThumb texture={ texture } idx={ texture.id } key={ `${ meta.gameId }:tex${ texture.id }` }/>
+          ))}
+        </TextureGrid>
       </div>
     </div>
   )

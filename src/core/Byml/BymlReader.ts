@@ -24,11 +24,6 @@ import {
 } from './BymlTypes';
 
 import {
-  getNode,
-  hasNode,
-} from './bymlUtils';
-
-import {
   BinaryReader,
   assert,
   align
@@ -185,7 +180,6 @@ export class BymlReader extends BinaryReader {
     }
   }
 
-  // TODO: strings are actually utf-8
   private readStringTable(ptr: number) {
     const type = this.readU8(ptr);
     assert(type === BymlType.StringTable, `Expected string table node, got typr ${ type }`);
@@ -193,20 +187,9 @@ export class BymlReader extends BinaryReader {
     const stringList = new Array<string>(size);
     for (let i = 0; i < size; i++) {
       const stringPtr = ptr + this.readU32(ptr + 4 + 4 * i);
-      stringList[i] = this.readString(stringPtr);
+      stringList[i] = this.readUtf8(stringPtr);
     }
     return stringList;
-  }
-
-  private readString(ptr: number) {
-    let result = '';
-    while (true) {
-      const byte = this.readU8(ptr);
-      if (byte === 0) break;
-      ptr += 1;
-      result += String.fromCharCode(byte);
-    }
-    return result;
   }
 
   private readU24(ptr: number) {

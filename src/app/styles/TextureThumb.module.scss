@@ -1,0 +1,18 @@
+.root {
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  background-image: url('../graphics/bgTextureTile.svg');
+  background-size: 6.25%;
+  max-width: 256px;
+}
+
+.image {
+  padding-bottom: 100%; // force 1:1 aspect ratio
+  margin-top: auto;
+  background-repeat: no-repeat;
+  background-size: 100%;
+  image-rendering: auto;
+  image-rendering: crisp-edges;
+  image-rendering: pixelated;
+}
