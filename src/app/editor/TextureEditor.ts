@@ -1,5 +1,6 @@
 import { GameTexture } from '../../core/GameFile';
 import { Pattern, PatternList } from './PatternList';
+import { EditorHistory } from './EditorHistory';
 
 import { ToolBase, PenTip, PenMode } from './toolbox/ToolTypes';
 import { PenTool } from './toolbox/PenTool';
@@ -32,7 +33,9 @@ export class TextureEditor {
     new EraseTool(this),
     new PanTool(this)
   ];
+
   public patterns = PatternList;
+  public history = new EditorHistory(this);
 
   public texture: GameTexture = new GameTexture(); // dummy texture
   public textureWidth = this.texture.width;
@@ -54,7 +57,7 @@ export class TextureEditor {
     this.textureCanvas = document.createElement('canvas');
     this.textureCtx = this.textureCanvas.getContext('2d');
     this.setTexture(this.texture); // default to dummy texture
-    this.setActiveTool(2);
+    this.setActiveTool(0);
   }
 
   public setActiveTool(idx: number) {
@@ -92,6 +95,8 @@ export class TextureEditor {
     this.textureCanvas.height = texture.height;
     this.textureWidth = texture.width;
     this.textureHeight = texture.height;
+    this.history.clear();
+    this.history.commit();
     this.resetView();
   }
 

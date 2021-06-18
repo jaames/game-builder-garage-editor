@@ -25,6 +25,7 @@ export class PenTool extends ToolBase {
 
   public end(x: number, y: number) {
     this.isDown = false;
+    this.editor.history.commit();
   }
 
   public start(x: number, y: number) {
