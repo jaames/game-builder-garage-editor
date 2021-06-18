@@ -3,15 +3,15 @@
   display: flex;
   flex-direction: column;
   background-image: url('../graphics/bgTextureTile.svg');
-  background-size: 6.25%;
+  background-size: 6.25%; // 1 alpha grid for every 2 pixels
   max-width: 256px;
 }
 
 .image {
   padding-bottom: 100%; // force 1:1 aspect ratio
-  margin-top: auto;
   background-repeat: no-repeat;
   background-size: 100%;
+  // make sure texture is rendered cripsly:
   image-rendering: auto;
   image-rendering: crisp-edges;
   image-rendering: pixelated;

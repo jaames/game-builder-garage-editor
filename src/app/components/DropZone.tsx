@@ -14,13 +14,15 @@ export const DropZone: React.FunctionComponent<Props> = ({ onDrop, accept }) => 
     accept
   });
   return (
-    <div className={ styles.root } {...getRootProps()}>
-      <input className={ styles.input } {...getInputProps()} />
-      {
-        isDragActive ?
-          <p>Drop files here ...</p> :
-          <p>Drag &amp; drop some files here, or click to select</p>
-      }
+    <div className={ styles.root }>
+      <div className={ styles.zone } {...getRootProps()}>
+        <input className={ styles.input } {...getInputProps()} />
+        {
+          isDragActive ?
+            <p>Drop files here ...</p> :
+            <p>Drag &amp; drop some files here, or click to select</p>
+        }
+      </div>
     </div>
   );
 }

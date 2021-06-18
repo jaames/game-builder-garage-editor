@@ -2,6 +2,7 @@ import { GameTable, GameTableEntry } from '../../core/GameTable';
 import { assert } from '../../core/utils';
 
 import create from 'zustand';
+import { GameFile } from '../../core/GameFile';
 
 interface State {
   hasData: boolean;
@@ -9,7 +10,7 @@ interface State {
   myGames: GameTableEntry[];
   fileMap: Map<string, File>;
   setFiles: (fileList: File[]) => Promise<void>;
-  getGameFileWithIdx: (idx: number) => [string, File];
+  getGameWithIdx: (idx: number) => Promise<[string, GameFile]>;
 }
 
 export const useSaveData = create<State>((set, get) => ({
@@ -26,9 +27,10 @@ export const useSaveData = create<State>((set, get) => ({
     const myGames = table.userGames;
     set({ fileMap, table, myGames, hasData: true });
   },
-  getGameFileWithIdx: (idx: number): [string, File] => {
+  getGameWithIdx: async (idx: number): Promise<[string, GameFile]> => {
     const filename = `LgcTpbFile_MyGame[${ idx }].bin`;
     const file = get().fileMap.get(filename);
-    return [filename, file];
+    const game = GameFile.fromBuffer(await file.arrayBuffer());
+    return [filename, game];
   }
 }));

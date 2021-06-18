@@ -1,32 +1,39 @@
-import { GameFile, GameMeta, GameTexture } from '../../core/GameFile';
-import { assert } from '../../core/utils';
-
 import create from 'zustand';
 
+import { GameFile, GameMeta, GameTexture } from '../../core/GameFile';
+
+import { useSaveData } from './saveData';
+
 interface State {
+  isGameLoaded: boolean,
   fileIdx: number,
   filename: string,
   game: GameFile,
   meta: GameMeta,
   textures: GameTexture[],
-  loadGameFromFile?: (file: File, fileIdx: number, filename: string) => Promise<any>,
-}
+  loadGameWithIdx?: (idx: number) => Promise<any>
+};
 
 const dummyGame = new GameFile();
 
 export const useGameFile = create<State>((set, get) => ({
+  isGameLoaded: false,
   fileIdx: -1,
   filename: '',
   game: dummyGame,
   meta: dummyGame.meta,
   textures: [],
-  loadGameFromFile: async (file: File, fileIdx: number, filename: string) => {
-    const data = await file.arrayBuffer();
-    const game = GameFile.fromBuffer(data);
+  loadGameWithIdx: async (fileIdx: number) => {
+    const saveData = useSaveData.getState();
+    const [filename, game] = await saveData.getGameWithIdx(fileIdx);
     const meta = game.meta;
     const textures = game.textures;
-    console.log('loaded game: ', game);
-    (window as any).game = game; // for debugging
-    set({ game, meta, textures, fileIdx, filename });
+    set({
+      isGameLoaded: true,
+      game,
+      filename,
+      meta,
+      textures
+    });
   },
 }));

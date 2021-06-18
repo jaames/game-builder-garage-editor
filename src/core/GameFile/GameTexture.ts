@@ -1,5 +1,5 @@
 // RGBA color palette
-const TEXTURE_PALETTE = new Uint32Array(256);
+export const TEXTURE_PALETTE = new Uint32Array(256);
 // transparent
 TEXTURE_PALETTE[0] = 0;
 // grays
@@ -143,8 +143,8 @@ export class GameTexture {
   public pixels: Uint8Array;
   public palette = TEXTURE_PALETTE;
 
-  constructor(pixels: Uint8Array, id: number) {
-    this.pixels = pixels;
+  constructor(pixels?: Uint8Array, id: number = -1) {
+    this.pixels = pixels ? pixels : new Uint8Array(64 * 64);
     this.id = id;
   }
 
@@ -153,8 +153,24 @@ export class GameTexture {
     return this.pixels[ptr];
   }
 
+  public setPixel(x: number, y: number, value: number) {
+    // ignore out-of-bounds pixels
+    if (x >= 0 && y >= 0 && x < this.width && y < this.height) {
+      const ptr = y * this.width + x;
+      this.pixels[ptr] = value;
+    }
+  }
+
   public getPixels() {
     return this.pixels;
+  }
+
+  public setPixels(newPixels: Uint8Array) {
+    this.pixels.set(newPixels);
+  }
+
+  public clearPixels() {
+    this.pixels.fill(0);
   }
 
   public getRgbaPixels() {
@@ -191,6 +207,7 @@ export class GameTexture {
     return canvas;
   }
 
+  // TODO: use gif URLs instead, better than creating a canvas per texture...
   public getUrl() {
     const canvas = this.getCanvas();
     return canvas.toDataURL();

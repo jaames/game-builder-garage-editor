@@ -6,6 +6,7 @@ import { Footer } from './components/Footer';
 
 import { IndexPage } from './routes/IndexPage';
 import { GameView } from './routes/GameView';
+import { TextureEdit } from './routes/TextureEdit';
 
 import './styles/global.scss';
 
@@ -16,9 +17,9 @@ export default function App() {
         <Header/>
         <div className="Main">
           <Switch>
-            <Route exact path="/" component={ IndexPage }/>
+            <Route path="/game/:gameIdx/texture/:textureIdx" component={ TextureEdit }/>
             <Route path="/game/:gameIdx" component={ GameView }/>
-            {/* <Route path="/game/:gameIdx/texture/:texIdx" component={ GameTextureEditor }/> */}
+            <Route exact path="/" component={ IndexPage }/>
           </Switch>
         </div>
         <Footer/>

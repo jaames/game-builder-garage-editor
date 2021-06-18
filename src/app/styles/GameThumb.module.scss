@@ -6,21 +6,18 @@
 }
 
 .image {
-  border-radius: 12px;
   padding-bottom: 100%; // force 1:1 aspect ratio
-  max-height: 256px;
   background-repeat: no-repeat;
-}
-
-.title + .imge {
-  margin-top: auto;
+  background-size: 100%;
+  border-radius: 12px;
+  max-height: 256px;
 }
 
 .title {
   flex: 1;
   // color: #FFB833;
   font-weight: bold;
-  color: #e47e2b;
+  // color: #e47e2b;
   text-align: center;
   display: flex;
   align-items: center;

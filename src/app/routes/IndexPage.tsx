@@ -12,9 +12,6 @@ export const IndexPage: React.FunctionComponent = () => {
 
   const hasData = useSaveData((state) => state.hasData);
   const setSaveData = useSaveData((state) => state.setFiles);
-  const getGameFileWithIdx = useSaveData((state) => state.getGameFileWithIdx);
-  const loadGameFromFile = useGameFile((state) => state.loadGameFromFile);
-
   const myGames = useSaveData((state) => state.myGames);
 
   const history = useHistory();
@@ -24,8 +21,6 @@ export const IndexPage: React.FunctionComponent = () => {
   }, []);
 
   const loadGameWithIdx = useCallback(async (idx) => {
-    const [filename, file] = getGameFileWithIdx(idx);
-    await loadGameFromFile(file, idx, filename);
     history.push(`/game/${idx}`);
   }, []);
 

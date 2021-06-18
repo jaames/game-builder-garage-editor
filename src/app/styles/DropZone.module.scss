@@ -2,6 +2,9 @@
 
 .root {
   @include wrapper;
+}
+
+.zone {
   background: black;
   color: #fff;
   padding: 24px;
