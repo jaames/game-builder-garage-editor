@@ -11,8 +11,8 @@ export class PenTool extends ToolBase {
   public useDrawingCoordSpace = true;
 
   public isDown: boolean = false;
-  public lastX: number = 0;
-  public lastY: number = 0;
+  public lastX: number = -1;
+  public lastY: number = -1;
 
   public move(x: number, y: number) {
     if (this.isDown && (this.lastX !== x || this.lastY !== y)) {
@@ -25,6 +25,8 @@ export class PenTool extends ToolBase {
 
   public end(x: number, y: number) {
     this.isDown = false;
+    this.lastX = -1;
+    this.lastY = -1;
     this.editor.history.commit();
   }
 

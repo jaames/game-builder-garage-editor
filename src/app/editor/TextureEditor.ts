@@ -6,6 +6,8 @@ import { ToolBase, PenTip, PenMode } from './toolbox/ToolTypes';
 import { PenTool } from './toolbox/PenTool';
 import { EraseTool } from './toolbox/EraseTool';
 import { PanTool } from './toolbox/PanTool';
+import { EyedropTool } from './toolbox/EyedropTool';
+import { FillTool } from './toolbox/FillTool';
 
 const VIEW_WIDTH = 512;
 const VIEW_HEIGHT = 512;
@@ -31,7 +33,9 @@ export class TextureEditor {
   public tools: ToolBase[] = [
     new PenTool(this),
     new EraseTool(this),
-    new PanTool(this)
+    new PanTool(this),
+    new EyedropTool(this),
+    new FillTool(this),
   ];
 
   public patterns = PatternList;

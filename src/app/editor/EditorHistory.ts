@@ -28,7 +28,7 @@ export class EditorHistory {
     // remove forward items
     if (this.presentIndex !== -1 && this.presentIndex < stack.length)
       stack = stack.slice(0, this.presentIndex + 1);
-    // add to stack
+    // add current to stack
     stack.push(buffer);
     // remove first item from stack if size is exceeded
     if (stack.length > this.stackSize)

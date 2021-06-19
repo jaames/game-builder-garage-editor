@@ -1,5 +1,6 @@
 // RGBA color palette
 export const TEXTURE_PALETTE = new Uint32Array(256);
+export const TEXTURE_PALETTE_SIZE = 118;
 // transparent
 TEXTURE_PALETTE[0] = 0;
 // grays

@@ -16,7 +16,6 @@ export const TextureEditCanvas: React.FunctionComponent = () => {
         ref={ canvasRef }
         onMouseMove={ (e) => editor.onInputMove(e as any as MouseEvent) }
         onMouseDown={ (e) => editor.onInputDown(e as any as MouseEvent) }
-        // onMouseUp={ editor.onInputUp }
       />
     </div>
   );
