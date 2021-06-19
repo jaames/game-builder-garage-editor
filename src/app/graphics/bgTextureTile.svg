@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+  <g fill="none" fill-rule="evenodd">
+    <rect width="64" height="64" fill="#E1E2E2"/>
+    <rect width="32" height="32" fill="#F4F4F4"/>
+    <rect width="32" height="32" x="32" y="32" fill="#F4F4F4"/>
+  </g>
+</svg>

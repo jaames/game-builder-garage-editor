@@ -1,0 +1,40 @@
+$swatch-size: 24px;
+
+.root {
+  display: grid;
+  grid-gap: 20px;
+  grid-auto-flow: column;
+  grid-template-columns: repeat(5, fit-content(20%));
+  grid-template-rows: repeat(3, fit-content(33.3333%));
+}
+
+.swatchGroup {
+  display: grid;
+  grid-gap: 4px;
+  grid-template-columns: repeat(3, $swatch-size);
+  grid-template-rows: repeat(3, $swatch-size);
+  order: 3;
+}
+
+.swatch {
+  width: $swatch-size;
+  height: $swatch-size;
+  border: 1px #BEBEB4 solid;
+  border-radius: 50%;
+  
+  cursor: pointer;
+}
+
+.swatchGroup:nth-of-type(1) {
+  order: 2;
+  grid-row: span 2;
+  .swatch {
+    grid-column: 3;
+    background-image: url('../graphics/bgTextureTile.svg');
+    background-size: 8px 8px;
+  }
+}
+
+.swatchGroup:nth-of-type(2) {
+  order: 1;
+}

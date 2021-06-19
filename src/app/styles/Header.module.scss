@@ -1,0 +1,41 @@
+@import './vars.scss';
+
+$header-size: 64px;
+
+.root {
+  height: $header-size;
+  margin-bottom: 1em
+}
+
+.wrapper {
+  @include wrapper;
+  height: $header-size;
+  display: flex;
+  align-items: center;
+}
+
+.groupLeft {
+  position: relative;
+  margin-left: -8px;
+  margin-right: auto;
+  display: flex;
+  justify-content: center;
+}
+
+.groupRight {
+  margin-right: -8px;
+  margin-left: auto;
+  display: flex;
+  justify-content: center;
+}
+
+.item {
+  margin: 0 8px;
+}
+
+.backButton {
+  position: absolute;
+  left: -3ch;
+  color: red;
+  font-weight: bold;
+}

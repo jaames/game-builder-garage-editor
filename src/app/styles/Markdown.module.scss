@@ -1,0 +1,79 @@
+@import './vars.scss';
+
+.root {
+  @include wrapper;
+  line-height: 1.5;
+
+  h1, h2, h3, h4, h5 {
+    margin-bottom: .5rem;
+  }
+
+  p, ul, ol, code, table {
+    margin-bottom: .75em;
+  }
+
+  a {
+    border-bottom: .1em currentColor dashed;
+  }
+
+  ul {
+    list-style-type: disc;
+  }
+
+  ol {
+    list-style-type: nth;
+  }
+
+  li {
+    margin-left: 1.5em;
+  }
+
+  details {
+    display: block;
+  }
+
+  summary {
+    display: list-item;
+  }
+
+  strong {
+    font-weight: bolder;
+  }
+
+  i, em {
+    font-style: italic;
+  }
+
+  code, kbd, pre {
+    font-family: monospace,monospace;
+    font-size: 1em;
+  }
+
+  hr {
+    box-sizing: initial;
+    height: 0;
+    overflow: visible;
+  }
+
+  table {
+    border-spacing: 0;
+    border-collapse: collapse;
+    width: max-content;
+    max-width: 100%;
+  }
+
+  th {
+    font-weight: bold;
+  }
+
+  td, th {
+    padding: 0;
+    padding: 6px 13px;
+    border: 1px solid black;
+  }
+
+  details summary {
+    cursor: pointer;
+  }
+
+}

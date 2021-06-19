@@ -1,0 +1,1 @@
+export const align = (ptr: number, size: number) => ptr + (size - ptr % size) % size;

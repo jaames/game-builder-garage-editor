@@ -1,0 +1,16 @@
+@import './vars.scss';
+
+.root {
+  @include wrapper;
+}
+
+.zone {
+  background: black;
+  color: #fff;
+  padding: 24px;
+  border-radius: 14px;
+}
+
+.input {
+
+}
