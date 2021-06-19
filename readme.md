@@ -10,7 +10,7 @@ Current status:
  - Reads game metadata (title, author, ids, etc)
  - Reads+displays game thumbnail image
  - Reads+displays game textures
- - Reads nodon list (currently just nodon type, id, world position, graph position)
- - Reads nodon connections
+ - Reads Nodon list (different Nodon types + their parameters aren't currently supported)
+ - Reads Nodon connections
 
 Please don't submit PRs or issues yet, this code is going to change a lot as the project develops. If you're interested in helping reverse-engineer Game Builder Garage, you can find me on Twitter `@rakujira`, or on Discord `@jaames#9860` -- I will likely post on Twitter when I feel like I've made enough progress for an announcement.

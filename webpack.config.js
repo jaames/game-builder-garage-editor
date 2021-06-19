@@ -26,22 +26,22 @@ module.exports = function(env, argv) {
       filename: 'main.min.js',
     },
     resolve: {
+      extensions: ['.js', '.jsx', '.ts', '.tsx'],
       alias: {
-        // '@core': path.resolve(__dirname, 'src/core/'),
-        // '@app': path.resolve(__dirname, 'src/app/'),
-        // '@components': path.resolve(__dirname, 'src/app/components/'),
-        // '@store': path.resolve(__dirname, 'src/app/store/'),
-        // '@styles': path.resolve(__dirname, 'src/app/styles/'),
-      },
+        '@': path.resolve(__dirname, 'src/'),
+        '@core': path.resolve(__dirname, 'src/core/'),
+        '@app': path.resolve(__dirname, 'src/app/'),
+      }
     },
     module: {
       rules: [
+        // proccess JS / TS with typescript + enable react hot reloading
         {
           test: /\.[jt]sx?$/,
           exclude: /node_modules/,
           use: [
             {
-              loader: require.resolve('ts-loader'),
+              loader: 'ts-loader',
               options: {
                 getCustomTransformers: () => ({
                   before: isDev ? [ReactRefreshTypeScript()] : [],
@@ -50,6 +50,7 @@ module.exports = function(env, argv) {
             },
           ],
         },
+        // enable SCSS + CSS modules
         {
           test: /\.s?css$/,
           use: [
@@ -65,6 +66,11 @@ module.exports = function(env, argv) {
             },
             'sass-loader'
           ],
+        },
+        // import markdown as react components
+        {
+          test: /\.md$/,
+          use: ['babel-loader', 'mdx-loader']
         },
         // convert SVG imports from jsx / tsx into react components
         {

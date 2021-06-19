@@ -8,6 +8,9 @@ import { GameThumbGrid } from '../components/GameThumbGrid';
 import { GameThumb } from '../components/GameThumb';
 import { DropZone } from '../components/DropZone';
 
+import IndexContent from '../markdown/test.md';
+import { MarkdownWrapper } from '../components/MarkdownWrapper';
+
 export const IndexPage: React.FunctionComponent = () => {
 
   const hasData = useSaveData((state) => state.hasData);
@@ -28,10 +31,10 @@ export const IndexPage: React.FunctionComponent = () => {
     <div className="IndexPage">
       { (!hasData) && 
         <div className="DefaultView">
-          <p>
-            Instructions here
-          </p>
-           <DropZone onDrop={ onDrop } accept={['.bin']}></DropZone>
+          <MarkdownWrapper>
+            <IndexContent/>
+          </MarkdownWrapper>
+          <DropZone onDrop={ onDrop } accept={['.bin']}></DropZone>
         </div>
       }
       { hasData && 
