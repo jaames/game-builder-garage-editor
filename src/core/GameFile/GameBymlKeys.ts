@@ -1,69 +1,80 @@
-// TODO: investigate mAuthorName_MaskedCache
-// TODO: investigate mComment
-// TODO: investigate mNodeNum
-
 export const enum Key {
-  // mFileHolder
-  FILE_HOLDER = 'adaf3055',
-  // mFile
-  FILE = 'aa6902d3',
-  // ?
-  VERSION = '79823569',
+  // root node content
+  mVersion = '79823569', // mVersion.u32
+  mFileHolder = 'adaf3055', // mFileHolder
+  // file node
+  mFile = 'aa6902d3', // mFile
+  // file meta (also uses mVersion)
+  mEmpty = 'b716818e', // mEmpty.bool
+  mName = '6404e56c', // mName.Str
+  mGameCode = '62f3087b', // mGameCode.Str
+  mAuthorCode = 'e2783c35', // mAuthorCode.Str
+  mAuthorName = 'e4d0371', // mAuthorName.Str
+  mFavorite = '29a36d10', // mFavorite_bool
+  mFileLock = 'cc3bc69f', // mFileLock.bool
+  mDownload = 'd2554f13', // mDownload.bool
+  mOriginCode = '1235b61b', // mOriginCode.Str
+  mLang = 'da75c3df', // mLang.Str
+  mEditTime = '4aaddc4f', // full original key unknown
+  mCreateTime = 'fcf9a281', // full original key unknown
+  mNodeNum = 'f4e1a3f4', // mNodeNum.s32
+  mConnectionNum = '4f3aa598', // mConnectionNum.s32
+  mThumbnailImageJPG = '4c0ff1a4', // mThumbnailImageJPG.Binary
+  mThumbnailImageByteSize = 'c7d2cec', // mThumbnailImageByteSize.u32
+  mShareCodeHistNum = 'b2e9bf5a', // mShareCodeHistNum.s32
+  mShareCodeHist = '62661e51', // mShareCodeHist[].Str
+  // file content
+  mComment = 'e20a4a95', // mComment[]
+  mCommentRigid = '2eb62a0a', // mCommentRigid[]
+  mPalletColors = '6efa44f5', // mPalletColors (yes, Nintendo misspelled it)
+  mTexture = 'cd9f2f3d', // mTexture[]
+  mNode = 'eff0b992', //  mNode[]
+  mConnection = 'd2a89f4c', // mConnection[]
+  mLastUniqueId = 'd8e6683', // mLastUniqueId.u32
+  mChangeFileKeyTo = 'd8d2c761', // mChangeFileKeyTo[]
+  mChangeFileKeyThisFile = 'f2357dbb', // mChangeFileKeyThisFile
+  mIsSideViewMode = '39ce726f', // mIsSideViewMode.bool
+  mCanvasPos = 'cc66c4f6', // mCanvasPos.V2f
+  mCanvasScale = '83378fc0', // mCanvasScale.f32
+  mArmetRedFlashFrame = '7a4e3d68', // mArmetRedFlashFrame.u32
+  mArmetRedFlashCount = '9fe2289c',  // mArmetRedFlashCount.u32
+  mArmetLuminanceFlashFrame = 'b2276b2', // mArmetLuminanceFlashFrame.u32
+  mArmetLuminanceFlashCount = 'ee8e6346', // mArmetLuminanceFlashCount.u32
+  // string entry
+  mUse = 'd96ea34b', // mUse.bool
+  mText = '73abc186', // mText.Str
+  // texture entry (also uses mUse)
+  mBinary = '3c774805', // mBinary.Binary
+  // favorite palette colors
+  // NOTE: the original keys for these are unknown
+  mPalette_0 = '4ea12842',
+  mPalette_1 = 'e8d623f6',  
+  mPalette_2 = 'd93e396b',  
+  mPalette_3 = '7f4932df',  
+  mPalette_4 = 'baee0c51',  
+  mPalette_5 = '1c9907e5',  
+  mPalette_6 = '2d711d78',  
+  mPalette_7 = '8b0616cc',  
+  mPalette_8 = '7d4e6625',  
 
-  // ?
-  THUMBNAIL = '4c0ff1a4',
-
-  // ?
-  GAME_TITLE = '6404e56c',
-  // mGameCode.Str
-  GAME_ID = '62f3087b',
-  // ?
-  GAME_LOCALE = 'da75c3df',
-  // mOriginCode.Str
-  GAME_ONLINEID = '1235b61b',
-  // mShareCodeHist[].Str
-  GAME_IDLIST = '62661e51',
-  //
-  GAME_NUM_NODON = 'f4e1a3f4',
-  //
-  GAME_NUM_CONNECTIONS = '4f3aa598',
-  //
-  GAME_TIME_MODIFIED = '4aaddc4f',
-  //
-  GAME_TIME_CREATED = 'fcf9a281',
-  // mAuthorName.Str
-  PROGRAMMER_NAME = 'e4d0371',
-  // mAuthorCode.Str
-  PROGRAMMER_ID = 'e2783c35',
-
-  // mPalletColors (yes its spelt like that)
-  PALETTE_COLORS  = '6efa44f5',
-  // mTexture[]
-  LIST_TEXTURES = 'cd9f2f3d',
-  // mConnection[]
-  LIST_CONNECTIONS = 'd2a89f4c',
-  // mNode[]
-  LIST_NODON = 'eff0b992',
-  // ?
-  LIST_COMMENT_NODON_STRINGS = 'e20a4a95',
-  // mCommentRigid[]
-  LIST_TEXT_NODON_STRINGS = '2eb62a0a',
-
-  TEXTURE_PIXELS = '3c774805',
-  TEXTURE_IS_USED = 'd96ea34b',
-
-  CONNECTION_ID = '1d833e74',
-  CONNECTION_FROM = '27c2201a',
-  CONNECTION_TO = '60625aca',
-
-  NODON_TYPE = 'c97982da',
-  NODON_ID = '1d833e74',
-  NODON_DATA = '5c83d3bc',
-  NODON_WORLD_TRANSFORM = 'fb532a17',
-  NODON_GRAPH_POS_FRONT = '2bb4be37',
-  NODON_GRAPH_POS_TOP = 'b0705703',
-
-  STRING_VALUE = '73abc186',
-  STRING_IS_USED = 'd96ea34b',
-
+  // connections
+  mId = '1d833e74', // mId.u32
+  mIdA = '27c2201a', // mIdA.u32
+  mIdB = '60625aca', // mIdB.u32
+  // nodon (also uses mId)
+  mActorType = 'c97982da', // mActorType.Enum
+  mPos = '2bb4be37', // mPos.V2f
+  mZ = '47003162', // mZ.f32
+  mScale = 'b0705703', // mScale.V2f
+  mScaleZ = '8dcc7ee1', // mScaleZ.f32
+  mRotate = '3a4d462d', // mRotate.f32
+  mOrder = 'a6f9c289', // mOrder.s32
+  mProperty = '5c83d3bc', // mProperty
+  mLock = '24a774b8', // mLock.bool
+  // nodon properties
+  mS32 = '34deb31a', // mS32[].s32
+	mU32 = '4349b622', // mU32[].u32
+	mF32 = 'c864d5bf', // mF32[].f32
+	mV3f = 'fb532a17', // mV3f[].V3f
+	mU64 = 'fc6ddc0c', // mU64[].u64
 };

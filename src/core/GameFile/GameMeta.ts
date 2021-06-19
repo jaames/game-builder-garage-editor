@@ -1,13 +1,22 @@
-export interface GameMeta {
-  gameTitle: string,
+export interface GameMetaBasic {
+  isEmpty: boolean,
+  version: number,
+  name: string,
   gameId: string,
-  gameOnlineId: string,
+  authorId: string,
+  authorName: string,
+  isFavorite: boolean,
+  isFileLock: boolean,
+  isDownload: boolean,
+  lang: string,
+  numNodon: number,
+  numConnections: number,
+  editTime: Date,
+  createTime: Date,
+  gameIdHistorySize: number,
+};
+
+export interface GameMetaExtended extends GameMetaBasic {
+  originId: string,
   gameIdHistory: string[],
-  gameLocale: string,
-  programmerName: string,
-  programmerId: string,
-  nodonCount: number;
-  connectionCount: number;
-  created: Date;
-  modified: Date;
 };

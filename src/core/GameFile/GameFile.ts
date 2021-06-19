@@ -1,4 +1,4 @@
-import { GameMeta } from './GameMeta';
+import { GameMetaExtended } from './GameMeta';
 import { GameThumbnail } from './GameThumbnail';
 import { GameConnection } from './GameConnection';
 import { GameTexture } from './GameTexture';
@@ -13,7 +13,7 @@ export class GameFile {
   
   get [Symbol.toStringTag]() { return 'Game Builder Garage Game' };
 
-  public meta: GameMeta | null = null;
+  public meta: GameMetaExtended | null = null;
   public thumbnail: GameThumbnail | null = null;
   public textures: GameTexture[] = [];
   public nodons: GameNodon[] = [];
@@ -35,7 +35,7 @@ export class GameFile {
     game.nodons = reader.getNodons();
     game.textStrings = reader.getTextNodonStrings();
     game.commentStrings = reader.getCommentNodonStrings();
-    game.textureEditorPalette = reader.getTextureEditorPalette();
+    // game.textureEditorPalette = reader.getTextureEditorPalette();
     return game;
   }
 

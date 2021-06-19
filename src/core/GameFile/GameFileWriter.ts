@@ -17,8 +17,8 @@ export class GameFileWriter {
   patchGameNodes(rootNode: BymlNode): BymlNode {
     assert(rootNode.type === BymlType.Hash, 'Root node must be a hash node');
     const projectNode = [...rootNode.hashMap.values()][0];
-    const fileHolder = getNode(projectNode, Key.FILE_HOLDER, BymlType.Hash);
-    const fileNode = getNode(fileHolder,    Key.FILE, BymlType.Hash);
+    const fileHolder = getNode(projectNode, Key.mFileHolder, BymlType.Hash);
+    const fileNode = getNode(fileHolder,    Key.mFile, BymlType.Hash);
     this.patchMetaNodes(fileNode);
     return rootNode;
   }

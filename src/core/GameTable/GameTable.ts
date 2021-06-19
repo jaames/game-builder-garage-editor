@@ -1,13 +1,14 @@
 import { GameTableReader } from './GameTableReader';
-import { GameTableEntry } from './GameTableEntry';
+import { GameMetaBasic } from '../GameFile';
 import { UserSettings } from './UserSettings';
 import { BymlNode } from '../Byml';
 
 export class GameTable {
 
-  public userGames: GameTableEntry[] = [];
-  public tutorialGames: GameTableEntry[] = [];
+  public userGames: GameMetaBasic[] = [];
+  public lessonGames: GameMetaBasic[] = [];
   public order: number[];
+  public fileHashes: number[];
   public userSettings: UserSettings;
 
   public _bymlCache: BymlNode = null;
@@ -16,9 +17,10 @@ export class GameTable {
     const reader = new GameTableReader(buffer);
     const table = new GameTable();
     table.userGames = reader.getUserGameEntries();
-    table.tutorialGames = reader.getTutorialGameEntries();
-    table.userSettings = reader.getUserSettings();
-    table.order = reader.getIdMap();
+    table.lessonGames = reader.getLessonGameEntries();
+    // table.userSettings = reader.getUserSettings();
+    table.fileHashes = reader.getFileHashes();
+    table.order = reader.getOrderIndex();
     table._bymlCache = reader.rootNode;
     return table;
   }

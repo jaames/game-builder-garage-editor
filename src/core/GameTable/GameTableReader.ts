@@ -8,8 +8,7 @@ import {
 
 import { assert } from '../utils';
 
-import { GameThumbnail } from '../GameFile';
-import { GameTableEntry } from './GameTableEntry';
+import { GameThumbnail, GameMetaBasic } from '../GameFile';
 import { UserSettings } from './UserSettings';
 import { Key } from './GameTableBymlKeys';
 
@@ -22,76 +21,99 @@ export class GameTableReader extends BymlReader {
     super(buffer);
     assert(this.rootNode !== null, 'Root node is missing');
     assert(this.rootNode.type === BymlType.Hash, 'Root node must be a hash node');
-    this.dataNode = getNode(this.rootNode, Key.DATA, BymlType.Hash);
+    this.dataNode = getNode(this.rootNode, Key.LgcTpb, BymlType.Hash);
   }
 
-  public getIdMap() {
-    const listNode = getNode(this.dataNode, Key.LIST_ID_MAP, BymlType.Array);
+  public getFileHashes() {
+    const listNode = getNode(this.dataNode, Key.mValueHashCache, BymlType.Array);
+    return listNode.children.map((childNode) => {
+      return childNode.type === BymlType.Uint ? childNode.value : -1;
+    });
+  }
+
+  public getOrderIndex() {
+    const listNode = getNode(this.dataNode, Key.mOrderIndex, BymlType.Array);
     return listNode.children.map((childNode) => {
       return childNode.type === BymlType.Int ? childNode.value : -1;
     });
   }
 
-  public getUserGameEntries(): GameTableEntry[] {
-    const listNode = getNode(this.dataNode, Key.LIST_USER_GAMES, BymlType.Array);
+  public getUserGameEntries(): GameMetaBasic[] {
+    const listNode = getNode(this.dataNode, Key.mMyGameFileCache, BymlType.Array);
     return listNode.children
       .filter((childNode) => this.isGameEntryUsed(childNode))
       .map((childNode) => this.parseGameEntry(childNode));
   }
 
-  public getTutorialGameEntries(): GameTableEntry[] {
-    const listNode = getNode(this.dataNode, Key.LIST_TUTORIAL_GAMES, BymlType.Array);
+  public getLessonGameEntries(): GameMetaBasic[] {
+    const listNode = getNode(this.dataNode, Key.mLessonFileCache, BymlType.Array);
     return listNode.children
       .filter((childNode) => this.isGameEntryUsed(childNode))
       .map((childNode) => this.parseGameEntry(childNode));
   }
 
-  public getUserSettings(): UserSettings {
-    const programmerId = getNode(this.dataNode, Key.USER_PROGRAMMER_ID, BymlType.String).value;
+  // public getTutorialGameEntries(): GameTableEntry[] {
+  //   const listNode = getNode(this.dataNode, Key.LIST_TUTORIAL_GAMES, BymlType.Array);
+  //   return listNode.children
+  //     .filter((childNode) => this.isGameEntryUsed(childNode))
+  //     .map((childNode) => this.parseGameEntry(childNode));
+  // }
 
-    const settingsNode = getNode(this.dataNode,  Key.USER_SETTINGS, BymlType.Hash);
-    const handledAndTabletopControl = getNode(settingsNode, Key.USER_HANDCONTROL, BymlType.String).value;
-    const tvModeControl = getNode(settingsNode, Key.USER_TVCONTROL, BymlType.String).value;
+  // public getUserSettings(): UserSettings {
+  //   const programmerId = getNode(this.dataNode, Key.USER_PROGRAMMER_ID, BymlType.String).value;
 
-    return {
-      programmerId,
-      handledAndTabletopControl,
-      tvModeControl
-    };
-  }
+  //   const settingsNode = getNode(this.dataNode,  Key.USER_SETTINGS, BymlType.Hash);
+  //   const handledAndTabletopControl = getNode(settingsNode, Key.USER_HANDCONTROL, BymlType.String).value;
+  //   const tvModeControl = getNode(settingsNode, Key.USER_TVCONTROL, BymlType.String).value;
+
+  //   return {
+  //     programmerId,
+  //     handledAndTabletopControl,
+  //     tvModeControl
+  //   };
+  // }
 
   public isGameEntryUsed(parent: BymlNode) {
-    return getNode(parent, Key.GAME_ID, BymlType.String).value !== '';
+    return !getNode(parent, Key.mEmpty, BymlType.Bool).value;
   }
 
-  public parseGameEntry(parent: BymlNode, id: number = 0): GameTableEntry {
-    const gameId =         getNode(parent, Key.GAME_ID,         BymlType.String).value;
-    const gameTitle =      getNode(parent, Key.GAME_TITLE,      BymlType.String).value;
-    const gameLocale =     getNode(parent, Key.GAME_LOCALE,     BymlType.String).value;
-    const programmerId =   getNode(parent, Key.PROGRAMMER_ID,   BymlType.String).value;
-    const programmerName = getNode(parent, Key.PROGRAMMER_NAME, BymlType.String).value;
+  public parseGameEntry(dataNode: BymlNode, id: number = 0): GameMetaBasic {
+    const isEmpty =        getNode(dataNode, Key.mEmpty,            BymlType.Bool).value;
+    const version =        getNode(dataNode, Key.mVersion,          BymlType.Uint).value;
+    const name =           getNode(dataNode, Key.mName,             BymlType.String).value;
+    const gameId =         getNode(dataNode, Key.mGameCode,         BymlType.String).value;
+    const authorId =       getNode(dataNode, Key.mAuthorCode,       BymlType.String).value;
+    const authorName =     getNode(dataNode, Key.mAuthorName,       BymlType.String).value;
+    const isFavorite =     getNode(dataNode, Key.mFavorite,         BymlType.Bool).value;
+    const isFileLock =     getNode(dataNode, Key.mFileLock,         BymlType.Bool).value;
+    const isDownload =     getNode(dataNode, Key.mDownload,         BymlType.Bool).value;
+    const lang =           getNode(dataNode, Key.mLang,             BymlType.String).value;
+    const numNodon =       getNode(dataNode, Key.mNodeNum,          BymlType.Int).value;
+    const numConnections = getNode(dataNode, Key.mConnectionNum,    BymlType.Int).value;
+    const idHistSize =     getNode(dataNode, Key.mShareCodeHistNum, BymlType.Int).value;
 
-    const nodonCount =      getNode(parent, Key.GAME_NUM_NODON,       BymlType.Int).value;
-    const connectionCount = getNode(parent, Key.GAME_NUM_CONNECTIONS, BymlType.Int).value;
+    const createTime = this.parseTimestamp(dataNode, Key.mCreateTime);
+    const editTime =   this.parseTimestamp(dataNode, Key.mEditTime);
 
-    const thumbnailData =  getNode(parent, Key.GAME_THUMBNAIL,  BymlType.Binary).value;
-    const modified = this.parseTimestamp(parent, Key.GAME_TIME_MODIFIED);
-    const created =  this.parseTimestamp(parent, Key.GAME_TIME_CREATED);
-    const thumbnail = new GameThumbnail(thumbnailData);
+    // const keyer = getNode(dataNode, Key.mChangeFileKeyThisFile, BymlType.Hash);
+    // console.log(keyer);
+
     return {
-      id: 0,
+      isEmpty,
+      version,
+      name,
       gameId,
-      gameTitle,
-      gameLocale,
-      gameIdHistory: [], // don't think this is present
-      gameOnlineId: '', // don't think this is either
-      programmerId,
-      programmerName,
-      nodonCount,
-      connectionCount,
-      modified,
-      created,
-      thumbnail,
+      authorId,
+      authorName,
+      isFavorite,
+      isFileLock,
+      isDownload,
+      lang,
+      numNodon,
+      numConnections,
+      createTime,
+      editTime,
+      gameIdHistorySize: idHistSize
     };
   }
 

@@ -6,3 +6,4 @@ export * from './GameThumbnail';
 export * from './GameTexture';
 export * from './GameConnection';
 export * from './GameNodon';
+export * from './GameBymlKeys';
