@@ -110,9 +110,9 @@ export class GameFileReader extends BymlReader {
     const paletteNode = getNode(this.fileNode, Key.mPalletColors, BymlType.Hash);
     const result: [string, number, number, number, number][] = [];
     const keyOrder = [
-      Key.mPalette_0, Key.mPalette_1, Key.mPalette_2, 
-      Key.mPalette_3, Key.mPalette_4, Key.mPalette_5, 
-      Key.mPalette_6, Key.mPalette_7, Key.mPalette_8,
+      Key.mPalletColors_0, Key.mPalletColors_1, Key.mPalletColors_2, 
+      Key.mPalletColors_3, Key.mPalletColors_4, Key.mPalletColors_5, 
+      Key.mPalletColors_6, Key.mPalletColors_7, Key.mPalletColors_8,
     ];
     for (let i = 0; i < keyOrder.length; i++) {
       const color = getNode(paletteNode, keyOrder[i], BymlType.Uint).value;

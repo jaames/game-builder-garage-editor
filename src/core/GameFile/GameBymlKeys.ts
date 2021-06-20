@@ -15,8 +15,8 @@ export const enum Key {
   mDownload = 'd2554f13', // mDownload.bool
   mOriginCode = '1235b61b', // mOriginCode.Str
   mLang = 'da75c3df', // mLang.Str
-  mEditTime = '4aaddc4f', // full original key unknown
-  mCreateTime = 'fcf9a281', // full original key unknown
+  mEditTime = '4aaddc4f', // mEditTime.CalendarTime
+  mCreateTime = 'fcf9a281', // mCreateTime.CalendarTime
   mNodeNum = 'f4e1a3f4', // mNodeNum.s32
   mConnectionNum = '4f3aa598', // mConnectionNum.s32
   mThumbnailImageJPG = '4c0ff1a4', // mThumbnailImageJPG.Binary
@@ -45,17 +45,16 @@ export const enum Key {
   mText = '73abc186', // mText.Str
   // texture entry (also uses mUse)
   mBinary = '3c774805', // mBinary.Binary
-  // favorite palette colors
-  // NOTE: the original keys for these are unknown
-  mPalette_0 = '4ea12842',
-  mPalette_1 = 'e8d623f6',  
-  mPalette_2 = 'd93e396b',  
-  mPalette_3 = '7f4932df',  
-  mPalette_4 = 'baee0c51',  
-  mPalette_5 = '1c9907e5',  
-  mPalette_6 = '2d711d78',  
-  mPalette_7 = '8b0616cc',  
-  mPalette_8 = '7d4e6625',  
+  // favorite palette color
+  mPalletColors_0 = '4ea12842', // mPalletColors[0].C4u8
+  mPalletColors_1 = 'e8d623f6', // mPalletColors[1].C4u8
+  mPalletColors_2 = 'd93e396b', // mPalletColors[2].C4u8
+  mPalletColors_3 = '7f4932df', // mPalletColors[3].C4u8
+  mPalletColors_4 = 'baee0c51', // mPalletColors[4].C4u8
+  mPalletColors_5 = '1c9907e5', // mPalletColors[5].C4u8
+  mPalletColors_6 = '2d711d78', // mPalletColors[6].C4u8
+  mPalletColors_7 = '8b0616cc', // mPalletColors[7].C4u8
+  mPalletColors_8 = '7d4e6625', // mPalletColors[8].C4u8
 
   // connections
   mId = '1d833e74', // mId.u32
