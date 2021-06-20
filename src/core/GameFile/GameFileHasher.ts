@@ -146,7 +146,7 @@ export class GameFileHasher {
       throw new Error('Cannot write BYML hash node directly');
     }
     else if (node.type === BymlType.Array) {
-      node.children.reverse().forEach(subNode => this.writeNode(subNode));
+      node.children.forEach(subNode => this.writeNode(subNode));
     }
     else if (node.type === BymlType.String) {
       this.buffer.writeChars(node.value);
