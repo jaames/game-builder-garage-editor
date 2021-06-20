@@ -1,23 +1,53 @@
-import { promises as fs } from 'fs';
+/**
+ * This is a very minimal CLI for debugging, might flesh it out later though
+ */
 
-import { GameFileHasher } from './GameFileHasher';
-import { GameFile } from '../core/GameFile';
+import { promises as fs } from 'fs';
+import { Command } from 'commander';
+const version = require('../../package.json').version;
+
+import { GameFile, GameFileHasher } from '../core/GameFile';
 import { GameTable } from '../core/GameTable';
 
-(async () => {
+const program = new Command();
 
-  for (let i = 0; i < 12; i++) {
-    const filename = `./demofiles/LgcTpbFile_MyGame[${ i }].bin`;
-    const f = await fs.readFile(filename);
+program
+  .version(version); 
+
+program
+  .command('game-hash <source>')
+  .description('attempt to generate a value hash for a given game file')
+  .action(async (source) => {
+    const f = await fs.readFile(source);
     const game = GameFile.fromBuffer(f.buffer);
     const hash = new GameFileHasher();
     hash.update(game);
-    console.log(hash.digest());
-  }
+    console.log(`Value hash for ${source}:`, hash.digest());
+  });
 
-  const tpb = await fs.readFile(`./demofiles/LgcTpb.bin`);
-  const table = GameTable.fromBuffer(tpb.buffer);
+program
+  .command('game-meta <source>')
+  .description('returns the metadata for a given game file')
+  .action(async (source) => {
+    const f = await fs.readFile(source);
+    const game = GameFile.fromBuffer(f.buffer);
+    console.log(game.meta);
+  });
 
-  console.log(table.fileHashes);
+program
+  .command(`table-hashes <source>`)
+  .description('read the value hashes from a LgcTpb.bin file')
+  .action(async (source) => {
+    const f = await fs.readFile(source);
+    const tpb = GameTable.fromBuffer(f.buffer);
+    console.log(`Value hashes from table: `, tpb.fileHashes);
+  });
 
-})();
+program.exitOverride();
+
+try {
+  program.parse(process.argv);
+}
+catch (err) {
+  console.warn(`\nPlease enter a valid command`);
+}

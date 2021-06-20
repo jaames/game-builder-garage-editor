@@ -1,10 +1,9 @@
 import crc32 from 'crc-32';
 
-import { BymlNode, BymlType, getNode } from '../core/Byml';
-import { GameFile, Key } from '../core/GameFile';
-import { BinaryWriter } from '../core/utils';
-
-import { assert } from '../core/utils';
+import { GameFile } from './GameFile';
+import { Key } from './GameBymlKeys';
+import { BymlNode, BymlType, getNode } from '../Byml';
+import { BinaryWriter, assert } from '../utils';
 
 export class GameFileHasher {
 
@@ -34,19 +33,29 @@ export class GameFileHasher {
     this.writeGameExtendedMeta(node);
     // digest nodons
     const nodon = getNode(node, Key.mNode, BymlType.Array);
-    nodon.children.forEach(subNode => this.writeNodonEntry(subNode));
+    for (let i = 0; i < nodon.children.length; i++) {
+      this.writeNodonEntry(nodon.children[i]);
+    }
     // digest connections
     const connections = getNode(node, Key.mConnection, BymlType.Array);
-    connections.children.forEach(subNode => this.writeConnectionEntry(subNode));
+    for (let i = 0; i < connections.children.length; i++) {
+      this.writeConnectionEntry(connections.children[i]);
+    }
     // digest comments
     const comment = getNode(node, Key.mCommentRigid, BymlType.Array);
-    comment.children.forEach(subNode => this.writeStrEntry(subNode));
+    for (let i = 0; i < comment.children.length; i++) {
+      this.writeStrEntry(comment.children[i]);
+    }
     // digest whatever this is
     const changeFileKeyTo = getNode(node, Key.mChangeFileKeyTo, BymlType.Array);
-    changeFileKeyTo.children.forEach(subNode => this.writeStrEntry(subNode));
+    for (let i = 0; i < changeFileKeyTo.children.length; i++) {
+      this.writeStrEntry(changeFileKeyTo.children[i]);
+    }
     // digest textures
     const textures = getNode(node, Key.mTexture, BymlType.Array);
-    textures.children.forEach(subNode => this.writeTextureEntry(subNode));
+    for (let i = 0; i < textures.children.length; i++) {
+      this.writeTextureEntry(textures.children[i]);
+    }
     // digest palette 
     const paletteNode = getNode(node, Key.mPalletColors, BymlType.Hash);
     const keyOrder = [
@@ -62,56 +71,56 @@ export class GameFileHasher {
   writeGameExtendedMeta(node: BymlNode) {
     this.writeGameMeta(node);
     this.writeNode(getNode(node, Key.mLastUniqueId, BymlType.Uint));
-    this.writeNode(getNode(node, Key.mCanvasPos, BymlType.Array));
-    this.writeNode(getNode(node, Key.mCanvasScale, BymlType.Float));
+    this.writeNode(getNode(node, Key.mCanvasPos,    BymlType.Array));
+    this.writeNode(getNode(node, Key.mCanvasScale,  BymlType.Float));
     const commentList = getNode(node, Key.mComment, BymlType.Array);
     commentList.children.forEach(subNode => this.writeStrEntry(subNode));
-    this.writeNode(getNode(node, Key.mIsSideViewMode, BymlType.Bool));
-    this.writeNode(getNode(node, Key.mOriginCode, BymlType.String));
-    this.writeNode(getNode(node, Key.mShareCodeHist, BymlType.Array));
+    this.writeNode(getNode(node, Key.mIsSideViewMode,           BymlType.Bool));
+    this.writeNode(getNode(node, Key.mOriginCode,               BymlType.String));
+    this.writeNode(getNode(node, Key.mShareCodeHist,            BymlType.Array));
     this.writeNode(getNode(node, Key.mArmetLuminanceFlashCount, BymlType.Uint));
-    this.writeNode(getNode(node, Key.mArmetRedFlashCount, BymlType.Uint));
+    this.writeNode(getNode(node, Key.mArmetRedFlashCount,       BymlType.Uint));
     this.writeNode(getNode(node, Key.mArmetLuminanceFlashFrame, BymlType.Uint));
-    this.writeNode(getNode(node, Key.mArmetRedFlashFrame, BymlType.Uint));
+    this.writeNode(getNode(node, Key.mArmetRedFlashFrame,       BymlType.Uint));
   }
 
   writeGameMeta(node: BymlNode) {
-    this.writeNode(getNode(node, Key.mVersion, BymlType.Uint));
-    this.writeNode(getNode(node, Key.mEmpty, BymlType.Bool));
-    this.writeNode(getNode(node, Key.mNodeNum, BymlType.Int));
-    this.writeNode(getNode(node, Key.mConnectionNum, BymlType.Int));
-    this.writeNode(getNode(node, Key.mName, BymlType.String));
-    this.writeStrEntry(getNode(node, Key.mChangeFileKeyThisFile, BymlType.Hash));
-    this.writeNode(getNode(node, Key.mDownload, BymlType.Bool));
-    this.writeNode(getNode(node, Key.mFavorite, BymlType.Bool));
-    this.writeNode(getNode(node, Key.mCreateTime, BymlType.Array));
-    this.writeNode(getNode(node, Key.mEditTime, BymlType.Array));
-    this.writeNode(getNode(node, Key.mFileLock, BymlType.Bool));
+    this.writeNode(getNode(node, Key.mVersion,                BymlType.Uint));
+    this.writeNode(getNode(node, Key.mEmpty,                  BymlType.Bool));
+    this.writeNode(getNode(node, Key.mNodeNum,                BymlType.Int));
+    this.writeNode(getNode(node, Key.mConnectionNum,          BymlType.Int));
+    this.writeNode(getNode(node, Key.mName,                   BymlType.String));
+    this.writeNode(getNode(node, Key.mDownload,               BymlType.Bool));
+    this.writeNode(getNode(node, Key.mFavorite,               BymlType.Bool));
+    this.writeNode(getNode(node, Key.mCreateTime,             BymlType.Array));
+    this.writeNode(getNode(node, Key.mEditTime,               BymlType.Array));
+    this.writeNode(getNode(node, Key.mFileLock,               BymlType.Bool));
     this.writeNode(getNode(node, Key.mThumbnailImageByteSize, BymlType.Uint));
-    this.writeNode(getNode(node, Key.mThumbnailImageJPG, BymlType.Binary));
-    this.writeNode(getNode(node, Key.mGameCode, BymlType.String));
-    this.writeNode(getNode(node, Key.mAuthorCode, BymlType.String));
-    this.writeNode(getNode(node, Key.mAuthorName, BymlType.String));
-    this.writeNode(getNode(node, Key.mShareCodeHistNum, BymlType.Int));
-    this.writeNode(getNode(node, Key.mLang, BymlType.String));
+    this.writeNode(getNode(node, Key.mThumbnailImageJPG,      BymlType.Binary));
+    this.writeNode(getNode(node, Key.mGameCode,               BymlType.String));
+    this.writeNode(getNode(node, Key.mAuthorCode,             BymlType.String));
+    this.writeNode(getNode(node, Key.mAuthorName,             BymlType.String));
+    this.writeNode(getNode(node, Key.mShareCodeHistNum,       BymlType.Int));
+    this.writeNode(getNode(node, Key.mLang,                   BymlType.String));
   }
 
   writeStrEntry(node: BymlNode) {
-    this.writeNode(getNode(node, Key.mUse, BymlType.Bool));
+    this.writeNode(getNode(node, Key.mUse,  BymlType.Bool));
+    this.writeNode(getNode(node, Key.mText, BymlType.String));
     this.writeNode(getNode(node, Key.mText, BymlType.String));
   }
 
   writeTextureEntry(node: BymlNode) {
-    this.writeNode(getNode(node, Key.mUse, BymlType.Bool));
+    this.writeNode(getNode(node, Key.mUse,    BymlType.Bool));
     this.writeNode(getNode(node, Key.mBinary, BymlType.Binary));
   }
   
   writeNodonEntry(node: BymlNode) {
     this.writeNode(getNode(node, Key.mActorType, BymlType.String));
-    this.writeNode(getNode(node, Key.mId, BymlType.Uint));
-    this.writeNode(getNode(node, Key.mPos, BymlType.Array));
-    this.writeNode(getNode(node, Key.mRotate, BymlType.Float));
-    this.writeNode(getNode(node, Key.mScale, BymlType.Array));
+    this.writeNode(getNode(node, Key.mId,        BymlType.Uint));
+    this.writeNode(getNode(node, Key.mPos,       BymlType.Array));
+    this.writeNode(getNode(node, Key.mRotate,    BymlType.Float));
+    this.writeNode(getNode(node, Key.mScale,     BymlType.Array));
 
     const propertyNode = getNode(node, Key.mProperty, BymlType.Hash);
     this.writeNode(getNode(propertyNode, Key.mU32, BymlType.Array));
@@ -120,14 +129,14 @@ export class GameFileHasher {
     this.writeNode(getNode(propertyNode, Key.mV3f, BymlType.Array));
     this.writeNode(getNode(propertyNode, Key.mU64, BymlType.Array));
 
-    this.writeNode(getNode(node, Key.mZ, BymlType.Float));
+    this.writeNode(getNode(node, Key.mZ,      BymlType.Float));
     this.writeNode(getNode(node, Key.mScaleZ, BymlType.Float));
-    this.writeNode(getNode(node, Key.mLock, BymlType.Bool));
-    this.writeNode(getNode(node, Key.mOrder, BymlType.Int));
+    this.writeNode(getNode(node, Key.mLock,   BymlType.Bool));
+    this.writeNode(getNode(node, Key.mOrder,  BymlType.Int));
   }
 
   writeConnectionEntry(node: BymlNode) {
-    this.writeNode(getNode(node, Key.mId, BymlType.Uint));
+    this.writeNode(getNode(node, Key.mId,  BymlType.Uint));
     this.writeNode(getNode(node, Key.mIdA, BymlType.Uint));
     this.writeNode(getNode(node, Key.mIdB, BymlType.Uint));
   }
@@ -137,7 +146,7 @@ export class GameFileHasher {
       throw new Error('Cannot write BYML hash node directly');
     }
     else if (node.type === BymlType.Array) {
-      node.children.forEach(subNode => this.writeNode(subNode));
+      node.children.reverse().forEach(subNode => this.writeNode(subNode));
     }
     else if (node.type === BymlType.String) {
       this.buffer.writeChars(node.value);
