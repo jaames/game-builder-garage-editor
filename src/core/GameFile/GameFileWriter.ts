@@ -3,6 +3,9 @@ import { Key } from './GameBymlKeys';
 import { BymlNode, BymlType, BymlHash, BymlWriter, getNode, hasNode } from '../Byml';
 import { assert } from '../utils';
 
+const SIZE_THUMBNAIL = 0x00500000;
+const SIZE_TEXTURE = 0x00100000;
+
 export class GameFileWriter {
 
   public writer: BymlWriter;

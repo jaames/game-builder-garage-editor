@@ -90,11 +90,15 @@ export class GameFileHasher {
     this.writeNode(getNode(node, Key.mNodeNum,                BymlType.Int));
     this.writeNode(getNode(node, Key.mConnectionNum,          BymlType.Int));
     this.writeNode(getNode(node, Key.mName,                   BymlType.String));
+
     this.writeStrEntry(getNode(node, Key.mChangeFileKeyThisFile, BymlType.Hash))
+
     this.writeNode(getNode(node, Key.mDownload,               BymlType.Bool));
     this.writeNode(getNode(node, Key.mFavorite,               BymlType.Bool));
-    this.writeCalendarDate(getNode(node, Key.mCreateTime,             BymlType.Array));
-    this.writeCalendarDate(getNode(node, Key.mEditTime,               BymlType.Array));
+
+    this.writeCalendarTime(getNode(node, Key.mCreateTime,     BymlType.Array));
+    this.writeCalendarTime(getNode(node, Key.mEditTime,       BymlType.Array));
+
     this.writeNode(getNode(node, Key.mFileLock,               BymlType.Bool));
     this.writeNode(getNode(node, Key.mThumbnailImageByteSize, BymlType.Uint));
     this.writeNode(getNode(node, Key.mThumbnailImageJPG,      BymlType.Binary));
@@ -111,8 +115,8 @@ export class GameFileHasher {
   }
 
   writeTextureEntry(node: BymlNode) {
-    this.writeNode(getNode(node, Key.mBinary, BymlType.Binary));
     this.writeNode(getNode(node, Key.mUse,    BymlType.Bool));
+    this.writeNode(getNode(node, Key.mBinary, BymlType.Binary));
   }
   
   writeNodonEntry(node: BymlNode) {
@@ -141,7 +145,7 @@ export class GameFileHasher {
     this.writeNode(getNode(node, Key.mIdB, BymlType.Uint));
   }
 
-  writeCalendarDate(node: BymlNode) {
+  writeCalendarTime(node: BymlNode) {
     const year =   getNode(node, 0, BymlType.Uint).value;
     const month =  getNode(node, 1, BymlType.Int).value;
     const day =    getNode(node, 2, BymlType.Uint).value;
@@ -149,14 +153,13 @@ export class GameFileHasher {
     const minute = getNode(node, 4, BymlType.Uint).value;
     const second = getNode(node, 5, BymlType.Uint).value;
     const date = new Date(year, month - 1, day, hour, minute, second);
-    const dayOfWeek = date.getDay();
-    this.buffer.writeU32(year)
-    this.buffer.writeU32(month)
-    this.buffer.writeU32(day)
-    this.buffer.writeU32(dayOfWeek)
-    this.buffer.writeU32(hour)
-    this.buffer.writeU32(minute)
-    this.buffer.writeU32(second)
+    this.buffer.writeU32(year);
+    this.buffer.writeU32(month);
+    this.buffer.writeU32(day);
+    this.buffer.writeU32(date.getDay() + 1); // day of  the week
+    this.buffer.writeU32(hour);
+    this.buffer.writeU32(minute);
+    this.buffer.writeU32(second);
   }
 
   writeNode(node: BymlNode) {
@@ -176,7 +179,8 @@ export class GameFileHasher {
       }
     }
     else if (node.type === BymlType.Bool) {
-      this.buffer.writeU32(node.value ? 1 : 0);
+      this.buffer.writeU8(node.value ? 1 : 0); // isn't this u32?
+      // this.buffer.writeU32(node.value ? 1 : 0); // isn't this u32?
     }
     else if (node.type === BymlType.Int) {
       this.buffer.writeI32(node.value);

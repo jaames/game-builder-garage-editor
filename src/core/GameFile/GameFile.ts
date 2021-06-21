@@ -2,7 +2,7 @@ import { GameMetaExtended } from './GameMeta';
 import { GameThumbnail } from './GameThumbnail';
 import { GameConnection } from './GameConnection';
 import { GameTexture } from './GameTexture';
-import { GameNodon } from "./GameNodon";
+import { GameNodon } from './GameNodon';
 
 import { GameFileReader } from './GameFileReader';
 import { GameFileWriter } from './GameFileWriter';

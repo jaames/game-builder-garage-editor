@@ -1,3 +1,4 @@
+// Some of these may be unused or from Labo Toy-Con Garage, which Game Builder Garage is based on
 export enum GameActorType {
   Invalid = 'Invalid',
 	Expander = 'Expander',
@@ -195,4 +196,4 @@ export enum GameActorType {
 	PlzIntegratedEffectNode = 'PlzIntegratedEffectNode',
 	IntegratedSwingedNode = 'IntegratedSwingedNode',
 	IntegratedRotationSpeedNode = 'IntegratedRotationSpeedNode'
-}
+};

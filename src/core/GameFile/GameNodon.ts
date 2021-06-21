@@ -1,4 +1,5 @@
 import { FixedSizeArray } from '../utils';
+import { GameActorType } from './GameActorTypes'; 
 
 export type GameNodonI32Props = FixedSizeArray<number, 5>;
 
@@ -30,7 +31,7 @@ export class GameNodon {
   get [Symbol.toStringTag]() { return 'Nodon' };
 
   public id: number = 0;
-  public type: string = 'Invalid';
+  public type: GameActorType = GameActorType.Invalid;
 
   public canvasPos: [number, number, number] = [0, 0, 0]; // x, y, z
   public canvasScale: [number, number, number] = [0, 0, 0]; // x, y, z

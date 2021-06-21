@@ -1,4 +1,4 @@
-export const enum Key {
+export enum Key {
   // root node content
   mVersion = '79823569', // mVersion.u32
   mFileHolder = 'adaf3055', // mFileHolder

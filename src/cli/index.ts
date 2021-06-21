@@ -6,8 +6,10 @@ import { promises as fs } from 'fs';
 import { Command } from 'commander';
 const version = require('../../package.json').version;
 
-import { GameFile, GameFileHasher } from '../core/GameFile';
-import { GameTable } from '../core/GameTable';
+import { GameFile, GameFileHasher, Key as GameKeys } from '../core/GameFile';
+import { GameTable, Key as TableKeys } from '../core/GameTable';
+
+import { bymlTreeToYaml } from './bymlToYaml';
 
 const program = new Command();
 
@@ -15,32 +17,54 @@ program
   .version(version); 
 
 program
-  .command('game-hash <source>')
-  .description('attempt to generate a value hash for a given game file')
-  .action(async (source) => {
-    const f = await fs.readFile(source);
+  .command('game-hash <input>')
+  .description('attempt to generate a value hash for a given game file (not working)')
+  .action(async (input) => {
+    const f = await fs.readFile(input);
     const game = GameFile.fromBuffer(f.buffer);
     const hash = new GameFileHasher();
     hash.update(game);
-    console.log(`Value hash for ${source}:`, hash.digest());
+    console.log(`Value hash for ${input}:`, hash.digest());
   });
 
 program
-  .command('game-meta <source>')
-  .description('returns the metadata for a given game file')
-  .action(async (source) => {
-    const f = await fs.readFile(source);
+  .command('game-dump <input> <output>')
+  .description('dump game content to a YAML file')
+  .action(async (input, output) => {
+    const f = await fs.readFile(input);
+    const game = GameFile.fromBuffer(f.buffer);
+    const yaml = bymlTreeToYaml(game._bymlCache, GameKeys);
+    await fs.writeFile(output, yaml);
+    console.log(`Wrote game YAML data to ${ output }`);
+  });
+
+program
+  .command('game-meta <input>')
+  .description('returns metadata for a given game file')
+  .action(async (input) => {
+    const f = await fs.readFile(input);
     const game = GameFile.fromBuffer(f.buffer);
     console.log(game.meta);
   });
 
 program
-  .command(`table-hashes <source>`)
-  .description('read the value hashes from a LgcTpb.bin file')
-  .action(async (source) => {
-    const f = await fs.readFile(source);
+  .command(`table-hashes <input>`)
+  .description('read value hashes from a LgcTpb.bin file')
+  .action(async (input) => {
+    const f = await fs.readFile(input);
     const tpb = GameTable.fromBuffer(f.buffer);
     console.log(`Value hashes from table: `, tpb.fileHashes);
+  });
+
+program
+  .command('table-dump <input> <output>')
+  .description('dump table content to a YAML file')
+  .action(async (input, output) => {
+    const f = await fs.readFile(input);
+    const game = GameTable.fromBuffer(f.buffer);
+    const yaml = bymlTreeToYaml(game._bymlCache, TableKeys);
+    await fs.writeFile(output, yaml);
+    console.log(`Wrote table YAML data to ${ output }`);
   });
 
 program.exitOverride();

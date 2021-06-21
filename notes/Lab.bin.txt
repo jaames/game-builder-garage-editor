@@ -1,0 +1,46 @@
+79823569: mVersion.u32
+2d52a38: mSaveDataVersionForDev.u32
+60836842: mBootWarningFinish.bool
+?: mWelcomeMessageIndex
+e240633e: mMenuHistory
+972e49ce: mPlayAppeared
+417602f3: mPlayAppearReserved
+846c7399: mPlayCategoryHistory
+d92cabf5: mLearnCategoryHistory
+65664430: mLearnCategoryAppeared
+ba73eb4f: mLearnCategoryIndicator
+bb78bc43: mLearnCategoryTopicIndicator
+12d81c70: mLearnLastPlateIdx
+54c214a: mReport - lots of data!?!?
+  15cb76f8: mBootCount.s32
+  b1539417: mPlayCount
+  b5c7da60: mLearnCount
+  ?: mHash
+  ?: mLessonTotalFrame
+  ?: mPuzzleTotalFram
+  ?: mPuzzleClear
+  aed4573e: mGuidebookTotalFrame[].s32
+  21b48bd2: mMyGameTotalFrame[].s32
+  ?: mLessonFirstPlayedFlags
+  ?: mPuzzleFirstPlayedFlags
+  ?: mGuidebookFirstPlayedFlag
+  ?: mLessonPlay
+  ?: mPuzzlePlay
+  ?: mGuidebookPlay
+  ?: mPrevBootTime
+  5b757666: mBootDayCount.s32
+  f8f3fc01: mConfigOpenCount.s32
+  9b832b61: mUploadGameCount.s32
+  5ad508f: mGetGameCountFromInternet.s32
+  b06fdb84: mGetGameCountFromLocal.s32 
+  bb84f4a5: mReferOpenCountFromProperty[].s32
+  4a998f9d: mSearchGameIdCount
+  9e115249: mSearchProgrammerIdCount.s32
+  ?: mReferOpenCountFromPlzSeq
+  ?: mReferOpenCountFromProperty
+  ?: mForceMyGameMenuOpenCount
+  ?: mManipulateTouchFrame
+  556eeb07: mManipulateKeyFrames.s32
+  a308e555: mManipulateDpdGyroFrames.s32
+  b6a08910: mManipulateDpdStickFrames.s32
+  46e8d070: mManipulateDpdMouseFrames.s32

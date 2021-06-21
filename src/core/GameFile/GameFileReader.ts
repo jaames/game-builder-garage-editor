@@ -13,6 +13,7 @@ import { GameTexture } from './GameTexture';
 import { GameThumbnail } from './GameThumbnail';
 import { GameMetaExtended } from './GameMeta';
 import { GameConnection } from './GameConnection';
+import { GameActorType } from './GameActorTypes';
 import { 
   GameNodon,
   GameNodonI32Props,
@@ -98,12 +99,10 @@ export class GameFileReader extends BymlReader {
   }
 
   public getThumbnail() {
-    // const thumbnailSize = getNode(this.fileNode, Key.mThumbnailImageByteSize, BymlType.Uint).value;
-    // const thumbnailNode = getNode(this.fileNode, Key.mThumbnailImageJPG, BymlType.Binary);
-    // const buffer = thumbnailNode.value;
-    // return new GameThumbnail(buffer.slice(0, thumbnailSize));
+    const thumbnailSize = getNode(this.fileNode, Key.mThumbnailImageByteSize, BymlType.Uint).value;
     const thumbnailNode = getNode(this.fileNode, Key.mThumbnailImageJPG, BymlType.Binary);
-    return new GameThumbnail(thumbnailNode.value);
+    const buffer = thumbnailNode.value;
+    return new GameThumbnail(buffer.slice(0, thumbnailSize));
   }
 
   public getTextureEditorPalette() {
@@ -184,7 +183,7 @@ export class GameFileReader extends BymlReader {
     const type = getNode(node, Key.mActorType, BymlType.String).value;
     const [nodeId] = this.parseNodonId(id);
     nodon.id = nodeId;
-    nodon.type = type;
+    nodon.type = type as GameActorType;
     // global nodon properties
     const posXY =    this.parseNumberArray(node, Key.mPos);
     const scaleXY =  this.parseNumberArray(node, Key.mScale);
