@@ -6,9 +6,7 @@ import { promises as fs } from 'fs';
 import { Command } from 'commander';
 const version = require('../../package.json').version;
 
-import { GameFile, GameFileHasher, Key as GameKeys } from '../core/GameFile';
-import { GameTable, Key as TableKeys } from '../core/GameTable';
-
+import { GameFile, GameFileHasher, GameKey, GameTable, TableKey } from '../formats';
 import { bymlTreeToYaml } from './bymlToYaml';
 
 const program = new Command();
@@ -33,7 +31,7 @@ program
   .action(async (input, output) => {
     const f = await fs.readFile(input);
     const game = GameFile.fromBuffer(f.buffer);
-    const yaml = bymlTreeToYaml(game._bymlCache, GameKeys);
+    const yaml = bymlTreeToYaml(game._bymlCache, GameKey);
     await fs.writeFile(output, yaml);
     console.log(`Wrote game YAML data to ${ output }`);
   });
@@ -62,7 +60,7 @@ program
   .action(async (input, output) => {
     const f = await fs.readFile(input);
     const game = GameTable.fromBuffer(f.buffer);
-    const yaml = bymlTreeToYaml(game._bymlCache, TableKeys);
+    const yaml = bymlTreeToYaml(game._bymlCache, TableKey);
     await fs.writeFile(output, yaml);
     console.log(`Wrote table YAML data to ${ output }`);
   });

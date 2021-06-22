@@ -18,7 +18,7 @@ module.exports = function(env, argv) {
   return {
     mode: isProd ? 'production' : 'development',
     entry: [
-      './src/index.tsx'
+      './src/app/index.tsx'
     ],
     output: {
       path: `${__dirname}/dist`,
@@ -116,7 +116,7 @@ module.exports = function(env, argv) {
         __VERSION__: JSON.stringify(version),
       }),
       new HtmlWebpackPlugin({
-        template: './src/index.html'
+        template: './src/app/index.html'
       }),
       new MiniCssExtract(),
       isDev && new webpack.HotModuleReplacementPlugin(),

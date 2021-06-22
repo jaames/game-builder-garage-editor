@@ -1,5 +1,5 @@
 import { Document, Scalar, YAMLMap, YAMLSeq } from 'yaml';
-import { BymlNode, BymlType } from '../core/Byml';
+import { BymlNode, BymlType } from '../formats/Byml';
 
 export function bymlTreeToYaml(node: BymlNode, keyEnum: object) {
   const keyMap = Object.fromEntries(Object.entries(keyEnum).map(([key, value]) => [value, key]));
