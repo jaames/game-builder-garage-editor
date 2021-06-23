@@ -50,17 +50,17 @@ export class GifImage extends BinaryWriter {
     colorDepth: 8
   };
 
-  public mimeType = 'gif/image';
+  mimeType = 'gif/image';
   /** Image width */
-  public width: number;
+  width: number;
   /** Image height */
-  public height: number;
+  height: number;
   /** GIF global RGBA color palette. Max 256 colors, alpha channel is ignored */
-  public palette: GifPaletteColor[];
+  palette: GifPaletteColor[];
   /** GIF image settings, such as whether it should loop, the delay between frames, etc */
-  public settings: GifImageSettings;
+  settings: GifImageSettings;
   /** Number of current GIF frames */
-  public frameCount: number = 0;
+  frameCount: number = 0;
 
   private compressor: LzwCompressor;
 
@@ -82,7 +82,7 @@ export class GifImage extends BinaryWriter {
    * Add a frame to the GIF image
    * @param pixels Raw pixels to encode, must be an uncompressed 8bit array of palette indices with a size matching image width * image height
    */
-  public writeFrame(pixels: Uint8Array) {
+  writeFrame(pixels: Uint8Array) {
     if (this.frameCount === 0)
       this.writeFirstFrame(pixels);
     else
@@ -175,7 +175,7 @@ export class GifImage extends BinaryWriter {
     this.compressor.encode(pixels, this);
   }
 
-  public getUrl() {
+  getUrl() {
     const buffer = this.getArrayBuffer();
     const blob = new Blob([buffer], { type: this.mimeType });
     return URL.createObjectURL(blob);
@@ -186,7 +186,7 @@ export class GifImage extends BinaryWriter {
    * 
    * Note: This method does not work outside of browser environments
    */
-  public getImage(): HTMLImageElement {
+  getImage(): HTMLImageElement {
     // assertBrowserEnv();
     const img = new Image(this.width, this.height);
     img.src = this.getUrl();

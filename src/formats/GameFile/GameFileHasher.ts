@@ -7,8 +7,8 @@ import { BinaryWriter, assert } from '../../utils';
 
 export class GameFileHasher {
 
-  public buffer = new BinaryWriter();
-  public rootNode: BymlNode = null;
+  buffer = new BinaryWriter();
+  rootNode: BymlNode = null;
 
   update(game: GameFile) {
     const rootNode = game._bymlCache;

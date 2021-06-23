@@ -3,7 +3,7 @@ import { GameThumbnail } from './GameThumbnail'
 import { GameFileReader } from './GameFileReader';
 import { GameFileWriter } from './GameFileWriter';
 
-import { ActorType, Nodon, Connection, Texture } from '../../objects';
+import { ActorType, NodonBase, Connection, Texture } from '../../objects';
 
 import { BymlNode } from '../Byml';
 
@@ -11,17 +11,18 @@ export class GameFile {
   
   get [Symbol.toStringTag]() { return 'Game Builder Garage Game' };
 
-  public meta: GameMetaExtended | null = null;
-  public thumbnail: GameThumbnail | null = null;
-  public textures: Texture[] = [];
-  public nodons: Nodon[] = [];
-  public connections: Connection[] = [];
-  public textStrings: string[] = [];
-  public commentStrings: string[] = [];
-  public textureEditorPalette: number[][] = [];
+  meta: GameMetaExtended | null = null;
+  thumbnail: GameThumbnail | null = null;
+  textures: Texture[] = [];
+  nodons: NodonBase[] = [];
+  connections: Connection[] = [];
+  textStrings: string[] = [];
+  commentStrings: string[] = [];
+  textureEditorPalette: number[][] = [];
 
-  public _bymlCache: BymlNode; // for reconstructing full data when exporting
+  _bymlCache: BymlNode; // for reconstructing full data when exporting
 
+  // TODO: move this all to GameFileReader, so it just returns a GameFile object itself
   static fromBuffer(buffer: ArrayBuffer) {
     const reader = new GameFileReader(buffer);
     const game = new GameFile();
@@ -31,6 +32,7 @@ export class GameFile {
     game.textures = reader.getTextures();
     game.connections = reader.getConnections();
     game.nodons = reader.getNodons();
+    game.nodons.forEach(nodon => nodon.game = game);
     game.textStrings = reader.getTextNodonStrings();
     game.commentStrings = reader.getCommentNodonStrings();
     // game.textureEditorPalette = reader.getTextureEditorPalette();
@@ -43,7 +45,7 @@ export class GameFile {
     return GameFile.fromBuffer(data);
   }
 
-  public getNodonTypesUsed() {
+  getNodonTypesUsed() {
     const uniques = new Set<ActorType>();
     this.nodons.forEach((nodon) => {
       if (!uniques.has(nodon.type))
@@ -52,25 +54,47 @@ export class GameFile {
     return [...uniques];
   }
 
-  public getNodonWithActorType(type: ActorType) {
+  getNodonWithActorType(type: ActorType) {
     return this.nodons.filter(nodon => nodon.type === type);
   }
 
-  public getWriter() {
+  getNodonWithId(id: number) {
+    return this.nodons.find(nodon => nodon.id === id);
+  }
+
+  getConnectionWithId(id: number) {
+    return this.connections.find(connection => connection.id === id);
+  }
+
+  getConnectionsForNodon(nodon: NodonBase) {
+    const nodonId = nodon.id;
+    const a = this.connections.filter(connection => connection.idA === nodonId);
+    const b = this.connections.filter(connection => connection.idB === nodonId);
+    return [...a, ...b].filter(connection => connection !== undefined);
+  }
+
+  getObjectWithId(id: number): (NodonBase | Connection) {
+    const nodon = this.getNodonWithId(id);
+    if (nodon) return nodon;
+    const connection = this.getConnectionWithId(id);
+    if (connection) return connection;
+  }
+
+  getWriter() {
     return new GameFileWriter(this);
   }
 
-  // public getArrayBuffer() {
+  // getArrayBuffer() {
   //   const writer = this.getWriter();
   //   return writer.getArrayBuffer();
   // }
 
-  // public getBytes() {
+  // getBytes() {
   //   const writer = this.getWriter();
   //   return writer.getBytes();
   // }
 
-  // public saveAs(filename: string) {
+  // saveAs(filename: string) {
   //   const writer = this.getWriter();
   //   writer.saveAs(filename);
   // }

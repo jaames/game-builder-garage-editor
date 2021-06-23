@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "scripts": {
     "cli": "ts-node-cwd --compiler-options '{\"module\":\"commonjs\"}' src/cli/index.ts",
-    "playground": "parcel ./src/index.html",
+    "playground-3d": "parcel ./src/3d.html",
+    "playground-2d": "parcel ./src/2d.html",
     "start": "webpack s --mode=development",
     "dev": "webpack --mode=development",
     "build": "webpack --mode=production"
@@ -21,7 +22,7 @@
     "@types/react": "^17.0.11",
     "@types/react-dom": "^17.0.7",
     "@types/react-router-dom": "^5.1.7",
-    "@types/two.js": "^0.7.4",
+    "@types/three": "^0.129.1",
     "babel-loader": "^8.2.2",
     "css-loader": "^5.2.6",
     "html-webpack-plugin": "^5.3.1",
@@ -45,14 +46,16 @@
     "commander": "^7.2.0",
     "crc-32": "^1.2.0",
     "date-fns": "^2.22.1",
+    "pixi-viewport": "^4.31.0",
+    "pixi.js": "^6.0.4",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-dropzone": "^11.3.2",
     "react-router-dom": "^5.2.0",
     "reset-css": "^5.0.1",
+    "three": "^0.129.0",
+    "three-orbitcontrols-ts": "git+https://git@github.com/nicolaspanel/three-orbitcontrols-ts.git",
     "ts-node": "^10.0.0",
-    "two.js": "^0.7.5",
-    "twojs-ts": "^0.7.0-13",
     "yaml": "^2.0.0-6",
     "zustand": "^3.5.2"
   }

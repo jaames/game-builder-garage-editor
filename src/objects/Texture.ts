@@ -140,23 +140,23 @@ export class Texture {
 
   get [Symbol.toStringTag]() { return 'Texture' };
 
-  public width = 64;
-  public height = 64;
-  public id = -1;
-  public pixels: Uint8Array;
-  public palette = TEXTURE_PALETTE;
+  width = 64;
+  height = 64;
+  id = -1;
+  pixels: Uint8Array;
+  palette = TEXTURE_PALETTE;
 
   constructor(pixels?: Uint8Array, id: number = -1) {
     this.pixels = pixels ? pixels : new Uint8Array(this.width * this.height);
     this.id = id;
   }
 
-  public getPixel(x: number, y: number) {
+  getPixel(x: number, y: number) {
     const ptr = y * this.width + x;
     return this.pixels[ptr];
   }
 
-  public setPixel(x: number, y: number, value: number) {
+  setPixel(x: number, y: number, value: number) {
     // ignore out-of-bounds pixels
     if (x >= 0 && y >= 0 && x < this.width && y < this.height) {
       const ptr = y * this.width + x;
@@ -164,19 +164,19 @@ export class Texture {
     }
   }
 
-  public getPixels() {
+  getPixels() {
     return this.pixels;
   }
 
-  public setPixels(newPixels: Uint8Array) {
+  setPixels(newPixels: Uint8Array) {
     this.pixels.set(newPixels);
   }
 
-  public clearPixels() {
+  clearPixels() {
     this.pixels.fill(0);
   }
 
-  public getRgbaPixels() {
+  getRgbaPixels() {
     const src = this.pixels;
     const dst = new Uint32Array(this.width * this.height);
     const palette = this.palette;
@@ -185,7 +185,7 @@ export class Texture {
     return dst;
   }
 
-  public copyToImageData(imgData: ImageData) {
+  copyToImageData(imgData: ImageData) {
     const palette = new Uint8Array(this.palette.buffer);
     const src = this.pixels;
     const dst = imgData.data;
@@ -199,7 +199,7 @@ export class Texture {
     return imgData;
   }
 
-  public getGif() {
+  getGif() {
     const gif = new GifImage(this.width, this.height, {
       repeat: -1,
     });
@@ -214,34 +214,9 @@ export class Texture {
   }
 
   // TODO: use gif URLs instead, better than creating a canvas per texture...
-  public getUrl() {
+  getUrl() {
     const gif = this.getGif();
     return gif.getUrl();
   }
-
-  // public getImageData(ctx: CanvasRenderingContext2D) {
-  //   const imgData = ctx.createImageData(this.width, this.height);
-  //   const palette = new Uint8Array(this.palette.buffer);
-  //   const src = this.pixels;
-  //   const dst = imgData.data;
-  //   for (let i = 0, len = src.length; i < len; i++) {
-  //     const px = src[i];
-  //     dst[i * 4 + 3] = palette[px * 4 + 0];
-  //     dst[i * 4 + 2] = palette[px * 4 + 1];
-  //     dst[i * 4 + 1] = palette[px * 4 + 2];
-  //     dst[i * 4 + 0] = palette[px * 4 + 3];
-  //   }
-  //   return imgData;
-  // }
-
-  // public getCanvas() {
-  //   const canvas = document.createElement('canvas');
-  //   canvas.width = this.width;
-  //   canvas.height = this.height;
-  //   const ctx = canvas.getContext('2d');
-  //   const imgData = this.getImageData(ctx);
-  //   ctx.putImageData(imgData, 0, 0);
-  //   return canvas;
-  // }
 
 }

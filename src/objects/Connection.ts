@@ -2,18 +2,18 @@ export class Connection {
 
   get [Symbol.toStringTag]() { return 'Nodon Connection' };
 
-  public id = 0;
-  public idA = 0;
-  public idB = 0;
-  public socketA = 0;
-  public socketB = 0;
+  id = 0;
+  idA = 0;
+  idB = 0;
+  portA = 0;
+  portB = 0;
 
-  constructor(id: number, idA: number, socketA: number, idB: number, socketB: number) {
+  constructor(id: number, idA: number, portA: number, idB: number, portB: number) {
     this.id = id;
     this.idA = idA;
     this.idB = idB;
-    this.socketA = socketA;
-    this.socketB = socketB;
+    this.portA = portA;
+    this.portB = portB;
   }
 
 }

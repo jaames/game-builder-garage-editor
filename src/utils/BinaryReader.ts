@@ -1,7 +1,7 @@
 export class BinaryReader {
 
-  public buffer: ArrayBuffer;
-  public le = true;
+  buffer: ArrayBuffer;
+  le = true;
   private data: DataView;
 
   constructor(arrayBuffer: ArrayBuffer) {
@@ -17,51 +17,51 @@ export class BinaryReader {
     return this.data.byteLength;
   }
 
-  public readU8(ptr: number) {
+  readU8(ptr: number) {
     return this.data.getUint8(ptr);
   }
 
-  public readI8(ptr: number) {
+  readI8(ptr: number) {
     return this.data.getInt8(ptr);
   }
 
-  public readU16(ptr: number) {
+  readU16(ptr: number) {
     return this.data.getUint16(ptr, this.le);
   }
 
-  public readI16(ptr: number) {
+  readI16(ptr: number) {
     return this.data.getInt16(ptr, this.le);
   }
 
-  public readU32(ptr: number) {
+  readU32(ptr: number) {
     return this.data.getUint32(ptr, this.le);
   }
 
-  public readI32(ptr: number) {
+  readI32(ptr: number) {
     return this.data.getInt32(ptr, this.le);
   }
 
-  public readU64(ptr: number) {
+  readU64(ptr: number) {
     return this.data.getBigUint64(ptr, this.le);
   }
 
-  public readI64(ptr: number) {
+  readI64(ptr: number) {
     return this.data.getBigInt64(ptr, this.le);
   }
 
-  public readF32(ptr: number) {
+  readF32(ptr: number) {
     return this.data.getFloat32(ptr, this.le);
   }
 
-  public readF64(ptr: number) {
+  readF64(ptr: number) {
     return this.data.getFloat64(ptr, this.le);
   }
 
-  public readBytes(ptr: number, count: number) {
+  readBytes(ptr: number, count: number) {
     return new Uint8Array(this.data.buffer, ptr, count);
   }
 
-  public readHex(ptr: number, count: number, reverse: boolean=false) {
+  readHex(ptr: number, count: number, reverse: boolean=false) {
     const bytes = this.readBytes(ptr, count);
     let hex = [];
     for (let i = 0; i < bytes.length; i++) {
@@ -72,7 +72,7 @@ export class BinaryReader {
     return hex.join('').toUpperCase();
   }
 
-  public readChars(ptr: number, count: number) {
+  readChars(ptr: number, count: number) {
     const chars = this.readBytes(ptr, count);
     let str = '';
     for (let i = 0; i < chars.length; i++) {
@@ -84,7 +84,7 @@ export class BinaryReader {
     return str;
   }
 
-  public readUtf8(ptr: number): string {
+  readUtf8(ptr: number): string {
     let result = '';
     while (true) {
       let char = 0;
@@ -128,7 +128,7 @@ export class BinaryReader {
     return result;
   }
 
-  public readWideChars(ptr: number, count: number) {
+  readWideChars(ptr: number, count: number) {
     const chars = new Uint16Array(this.data.buffer, ptr, count);
     let str = '';
     for (let i = 0; i < chars.length; i++) {

@@ -2,16 +2,16 @@ import { downloadFile } from './downloadFile';
 
 export class BinaryWriter {
   // sizes
-  public pageSize = 2048;
-  public allocSize = 0; // allocated size counting all pages
-  public realSize = 0; // number of bytes actually used
+  pageSize = 2048;
+  allocSize = 0; // allocated size counting all pages
+  realSize = 0; // number of bytes actually used
   // pages
-  public pages: Uint8Array[] = [];
-  public numPages = 0;
+  pages: Uint8Array[] = [];
+  numPages = 0;
   // pointers
-  public pageIdx = 0; // page to write to
-  public pagePtr = 0; // position in page to write to
-  public realPtr = 0; // position in file
+  pageIdx = 0; // page to write to
+  pagePtr = 0; // position in page to write to
+  realPtr = 0; // position in file
   // temp buffers - for writing to file with the help of dataview
   private _tmp32 = new Uint8Array(4);
   private _tmp32View = new DataView(this._tmp32.buffer);
@@ -30,13 +30,13 @@ export class BinaryWriter {
     return this.realPtr;
   }
 
-  public newPage() {
+  newPage() {
     this.pages[this.numPages] = new Uint8Array(this.pageSize);
     this.numPages = this.pages.length;
     this.allocSize = this.numPages * this.pageSize;
   }
 
-  public setPointer(ptr: number) {
+  setPointer(ptr: number) {
     // allocate enough pages to include pointer
     while (ptr >= this.allocSize) {
       this.newPage();
@@ -51,83 +51,83 @@ export class BinaryWriter {
     this.realPtr = ptr;
   }
 
-  public writeByte(value: number) {
+  writeByte(value: number) {
     this.pages[this.pageIdx][this.pagePtr] = value;
     this.setPointer(this.realPtr + 1);
   }
 
-  public writeBytes(bytes: Uint8Array | number[], srcPtr?: number, length?: number) {
+  writeBytes(bytes: Uint8Array | number[], srcPtr?: number, length?: number) {
     for (let l = length || bytes.length, i = srcPtr || 0; i < l; i++)
       this.writeByte(bytes[i]);
   }
 
-  public writeChars(str: string) {
+  writeChars(str: string) {
     for (let i = 0; i < str.length; i++) {
       this.writeByte(str.charCodeAt(i));
     }
   }
 
-  public writeU8(value: number) {
+  writeU8(value: number) {
     this.writeByte(value & 0xFF);
   }
 
-  public writeU16(value: number) {
+  writeU16(value: number) {
     this.writeByte((value >>> 0) & 0xFF);
     this.writeByte((value >>> 8) & 0xFF);
   }
 
-  public writeU32(value: number) {
+  writeU32(value: number) {
     this.writeByte((value >>> 0) & 0xFF);
     this.writeByte((value >>> 8) & 0xFF);
     this.writeByte((value >>> 16) & 0xFF);
     this.writeByte((value >>> 24) & 0xFF);
   }
 
-  public writeI8(value: number) {
+  writeI8(value: number) {
     this.writeByte((value >>> 0) & 0xFF);
   }
 
-  public writeI16(value: number) {
+  writeI16(value: number) {
     this.writeByte((value >>> 0) & 0xFF);
     this.writeByte((value >>> 8) & 0xFF);
   }
 
-  public writeI32(value: number) {
+  writeI32(value: number) {
     this.writeByte((value >>> 0) & 0xFF);
     this.writeByte((value >>> 8) & 0xFF);
     this.writeByte((value >>> 16) & 0xFF);
     this.writeByte((value >>> 24) & 0xFF);
   }
   
-  public writeF32(value: number) {
+  writeF32(value: number) {
     this._tmp32View.setFloat32(0, value, true);
     for (let i = 0; i < 4; i++) {
       this.writeByte(this._tmp32[i]);
     }
   }
 
-  public writeU64(value: bigint) {
+  writeU64(value: bigint) {
     this._tmp64View.setBigUint64(0, value, true);
     for (let i = 0; i < 8; i++) {
       this.writeByte(this._tmp64[i]);
     }
   }
 
-  public writeI64(value: bigint) {
+  writeI64(value: bigint) {
     this._tmp64View.setBigInt64(0, value, true);
     for (let i = 0; i < 8; i++) {
       this.writeByte(this._tmp64[i]);
     }
   }
 
-  public writeF64(value: number) {
+  writeF64(value: number) {
     this._tmp64View.setFloat64(0, value, true);
     for (let i = 0; i < 8; i++) {
       this.writeByte(this._tmp64[i]);
     }
   }
 
-  public getBytes() {
+  getBytes() {
     const bytes = new Uint8Array(this.realSize);
     const numPages = this.numPages;
     for (let i = 0; i < numPages; i++) {
@@ -140,13 +140,13 @@ export class BinaryWriter {
     return bytes;
   }
 
-  public getArrayBuffer() {
+  getArrayBuffer() {
     const bytes = this.getBytes();
     return bytes.buffer;
   }
 
   // TODO: this is just for debugging
-  public saveAs(filename: string, type: string = 'application/octet-stream') {
+  saveAs(filename: string, type: string = 'application/octet-stream') {
     downloadFile(this.getArrayBuffer(), filename, type);
   }
 

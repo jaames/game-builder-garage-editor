@@ -31,7 +31,7 @@ import {
 
 export class BymlReader extends BinaryReader {
 
-  public rootNode: BymlNode = null;
+  rootNode: BymlNode = null;
 
   private hashKeyTable: string[];
   private stringTable: string[];

@@ -8,8 +8,8 @@ const SIZE_TEXTURE = 0x00100000;
 
 export class GameFileWriter {
 
-  public writer: BymlWriter;
-  public game: GameFile;
+  writer: BymlWriter;
+  game: GameFile;
 
   constructor(game: GameFile) {
     this.game = game;

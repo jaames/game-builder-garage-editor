@@ -30,7 +30,7 @@ import {
 
 class PtrPlaceholder {
 
-  public ptr = 0;
+  ptr = 0;
   private writer: BinaryWriter;
 
   constructor(writer: BinaryWriter) {
@@ -57,7 +57,7 @@ class PtrPlaceholder {
 
 export class BymlWriter extends BinaryWriter {
 
-  public rootNode: BymlNode;
+  rootNode: BymlNode;
 
   private hashKeyTable: string[] = [];
   private stringTable: string[] = [];

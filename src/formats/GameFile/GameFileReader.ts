@@ -12,7 +12,6 @@ import { GameMetaExtended } from './GameMeta';
 
 import {
   ActorType,
-  Nodon,
   NodonFactory,
   Connection,
   Texture,
@@ -25,8 +24,8 @@ import { assert } from '../../utils';
 
 export class GameFileReader extends BymlReader {
 
-  public formatVersion: number;
-  public fileNode: BymlHash | null = null;
+  formatVersion: number;
+  fileNode: BymlHash | null = null;
 
   constructor(buffer: ArrayBuffer) {
     super(buffer);
@@ -43,7 +42,7 @@ export class GameFileReader extends BymlReader {
     this.fileNode = fileNode;
   }
 
-  public getMetaData(): GameMetaExtended {
+  getMetaData(): GameMetaExtended {
     const dataNode = this.fileNode;
     const isEmpty =        getNode(dataNode, Key.mEmpty,            BymlType.Bool).value;
     const version =        getNode(dataNode, Key.mVersion,          BymlType.Uint).value;
@@ -99,14 +98,14 @@ export class GameFileReader extends BymlReader {
     };
   }
 
-  public getThumbnail() {
+  getThumbnail() {
     const thumbnailSize = getNode(this.fileNode, Key.mThumbnailImageByteSize, BymlType.Uint).value;
     const thumbnailNode = getNode(this.fileNode, Key.mThumbnailImageJPG, BymlType.Binary);
     const buffer = thumbnailNode.value;
     return new GameThumbnail(buffer.slice(0, thumbnailSize));
   }
 
-  public getTextureEditorPalette() {
+  getTextureEditorPalette() {
     const paletteNode = getNode(this.fileNode, Key.mPalletColors, BymlType.Hash);
     const result: [string, number, number, number, number][] = [];
     const keyOrder = [
@@ -127,7 +126,7 @@ export class GameFileReader extends BymlReader {
     return result;
   }
 
-  public getTextures() {
+  getTextures() {
     const listNode = getNode(this.fileNode, Key.mTexture, BymlType.Array);
     return listNode.children
       .map((textureNode, i) => {
@@ -138,17 +137,17 @@ export class GameFileReader extends BymlReader {
       .filter((texture) => texture !== null);
   }
 
-  public getTextNodonStrings() {
+  getTextNodonStrings() {
     const listRoot = getNode(this.fileNode, Key.mCommentRigid, BymlType.Array);
     return listRoot.children.map((textNode: BymlHash) => this.parseStringEntry(textNode));
   }
 
-  public getCommentNodonStrings() {
+  getCommentNodonStrings() {
     const listRoot = getNode(this.fileNode, Key.mComment, BymlType.Array);
     return listRoot.children.map((textNode: BymlHash) => this.parseStringEntry(textNode));
   }
 
-  public getConnections() {
+  getConnections() {
     const connectionListNode = getNode(this.fileNode, Key.mConnection,    BymlType.Array);
     const connectionNum =      getNode(this.fileNode, Key.mConnectionNum, BymlType.Int).value;
     const connections = [];
@@ -165,7 +164,7 @@ export class GameFileReader extends BymlReader {
     return connections;
   }
 
-  public getNodons() {
+  getNodons() {
     const nodonListNode = getNode(this.fileNode, Key.mNode,    BymlType.Array);
     const nodonNum =      getNode(this.fileNode, Key.mNodeNum, BymlType.Int).value;
     const nodons = [];
