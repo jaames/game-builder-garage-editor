@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    body {
+      padding: 0;
+      margin: 0;
+    }
+    canvas {
+      display: block;
+    }
+
+    #root {
+      display: flex;
+      wdith: 100vw;
+    }
+
+    #root_2d {
+      flex: 1;
+      width: 50%;
+      height: 100vh;
+    }
+
+    #root_3d {
+      flex: 1;
+      width: 50%;
+      height: 100vh;
+    }
+  </style>
+</head>
+<body>
+  <div id="root">
+    <div id="root_2d"></div>
+    <div id="root_3d"></div>
+  </div>
+  <script src="./viewer.ts"></script>
+</body>
+</html>

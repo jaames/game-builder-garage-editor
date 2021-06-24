@@ -3,8 +3,7 @@
   "version": "0.0.1",
   "scripts": {
     "cli": "ts-node-cwd --compiler-options '{\"module\":\"commonjs\"}' src/cli/index.ts",
-    "playground-3d": "parcel ./src/3d.html",
-    "playground-2d": "parcel ./src/2d.html",
+    "viewer": "parcel ./src/viewer.html",
     "start": "webpack s --mode=development",
     "dev": "webpack --mode=development",
     "build": "webpack --mode=production"
@@ -43,6 +42,7 @@
     "webpack-html-plugin": "^0.1.1"
   },
   "dependencies": {
+    "camera-controls": "^1.28.4",
     "commander": "^7.2.0",
     "crc-32": "^1.2.0",
     "date-fns": "^2.22.1",
@@ -54,7 +54,6 @@
     "react-router-dom": "^5.2.0",
     "reset-css": "^5.0.1",
     "three": "^0.129.0",
-    "three-orbitcontrols-ts": "git+https://git@github.com/nicolaspanel/three-orbitcontrols-ts.git",
     "ts-node": "^10.0.0",
     "yaml": "^2.0.0-6",
     "zustand": "^3.5.2"

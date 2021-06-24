@@ -8,3 +8,4 @@ export * from './gbgId';
 export * from './BinaryReader';
 export * from './BinaryWriter';
 export * from './GifImage';
+export * from './downloadFile';
