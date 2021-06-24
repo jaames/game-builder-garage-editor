@@ -39,10 +39,11 @@ export class GameTableReader extends BymlReader {
   }
 
   public getUserGameEntries(): GameMetaBasic[] {
-    console.log(this.getOrderIndex());
-    const listNode = getNode(this.dataNode, Key.mMyGameFileCache, BymlType.Array);
-    return listNode.children
-      .filter((childNode) => this.isGameEntryUsed(childNode))
+    const gameOrder = this.getOrderIndex().slice(0, 64);
+    const gameList = getNode(this.dataNode, Key.mMyGameFileCache, BymlType.Array).children;
+    return gameList
+      .sort((a, b) => gameOrder[gameList.indexOf(b)] + gameOrder[gameList.indexOf(a)])
+      // .filter((childNode) => this.isGameEntryUsed(childNode))
       .map((childNode) => this.parseGameEntry(childNode));
   }
 

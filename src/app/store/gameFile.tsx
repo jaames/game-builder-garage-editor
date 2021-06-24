@@ -12,7 +12,8 @@ interface State {
   game: GameFile,
   meta: GameMetaExtended,
   textures: Texture[],
-  loadGameWithIdx?: (idx: number) => Promise<any>
+  close: () => void
+  loadGameWithIdx: (idx: number) => Promise<any>
 };
 
 const dummyGame = new GameFile();
@@ -24,7 +25,17 @@ export const useGameFile = create<State>((set, get) => ({
   game: dummyGame,
   meta: dummyGame.meta,
   textures: [],
+  close: () => {
+    set({
+      isGameLoaded: false,
+      game: dummyGame,
+      filename: '',
+      meta: dummyGame.meta,
+      textures: dummyGame.textures
+    });
+  },
   loadGameWithIdx: async (fileIdx: number) => {
+    get().close();
     const saveData = useSaveData.getState();
     const [filename, game] = await saveData.getGameWithIdx(fileIdx);
     const meta = game.meta;
