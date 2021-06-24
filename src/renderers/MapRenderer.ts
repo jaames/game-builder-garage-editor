@@ -1,5 +1,17 @@
 /**
  * 3D map renderer with orbit controls
+ * 
+ * TODO: 
+ * resize: https://stackoverflow.com/questions/20290402/three-js-resizing-canvas
+ * render text objects: https://threejs.org/examples/#webgl_geometry_text_shapes
+ * keyboard WASD controls: https://yomotsu.github.io/camera-controls/examples/keyboard.html
+ * manipulation: https://threejs.org/examples/misc_controls_transform.html
+ * snap to direction: https://yomotsu.github.io/camera-controls/examples/fit-and-padding.html
+ * lines showing connections: https://threejs.org/examples/#webgl_lines_fat
+ * sky shader: https://threejs.org/examples/#webgl_shaders_sky
+ * create primitives with chamfers: 
+ *    https://www.danielsieger.com/blog/2021/05/03/generating-primitive-shapes.html
+ *    https://www.danielsieger.com/blog/2021/03/27/generating-spheres.html
  */
 
 import * as THREE from 'three';

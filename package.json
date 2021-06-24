@@ -46,6 +46,7 @@
     "commander": "^7.2.0",
     "crc-32": "^1.2.0",
     "date-fns": "^2.22.1",
+    "gifenc": "^1.0.3",
     "pixi-viewport": "^4.31.0",
     "pixi.js": "^6.0.4",
     "react": "^17.0.2",

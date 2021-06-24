@@ -1,4 +1,4 @@
-import { GifImage } from '../utils';
+import { GIFEncoder } from 'gifenc';
 
 // RGBA color palette
 export const TEXTURE_PALETTE = new Uint32Array(256);
@@ -136,6 +136,12 @@ TEXTURE_PALETTE[115] = 0xbfbb86ff;
 TEXTURE_PALETTE[116] = 0x807e5aff;
 TEXTURE_PALETTE[117] = 0x4d4b32ff;
 
+const TEXTURE_PALETTE_RGB = Array.from(TEXTURE_PALETTE).map(color => [
+  (color >> 24) & 0xFF,
+  (color >> 16) & 0xFF,
+  (color >> 8) & 0xFF,
+]);
+
 export class Texture {
 
   get [Symbol.toStringTag]() { return 'Texture' };
@@ -200,23 +206,21 @@ export class Texture {
   }
 
   getGif() {
-    const gif = new GifImage(this.width, this.height, {
-      repeat: -1,
+    const gif = GIFEncoder();
+    gif.writeFrame(this.pixels, this.width, this.height, {
+      palette: TEXTURE_PALETTE_RGB,
+      transparent: true,
+      transparentIndex: 0
     });
-    gif.palette = Array.from(TEXTURE_PALETTE).map(color => [
-      (color >> 24) & 0xFF,
-      (color >> 16) & 0xFF,
-      (color >> 8) & 0xFF,
-      color & 0xFF,
-    ]);
-    gif.writeFrame(this.pixels);
+    gif.finish();
     return gif;
   }
 
-  // TODO: use gif URLs instead, better than creating a canvas per texture...
   getUrl() {
     const gif = this.getGif();
-    return gif.getUrl();
+    const buffer = gif.buffer;
+    const blob = new Blob([buffer], { type: 'image/gif' });
+    return URL.createObjectURL(blob);
   }
 
 }
