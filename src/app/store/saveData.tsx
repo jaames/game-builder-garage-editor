@@ -1,13 +1,12 @@
-import { GameTable, GameTableEntry } from '../../core/GameTable';
-import { assert } from '../../core/utils';
+import { GameFile, GameTable, GameMetaBasic } from '../../formats';
+import { assert } from '../../utils';
 
 import create from 'zustand';
-import { GameFile } from '../../core/GameFile';
 
 interface State {
   hasData: boolean;
   table: GameTable | undefined;
-  myGames: GameTableEntry[];
+  myGames: GameMetaBasic[];
   fileMap: Map<string, File>;
   setFiles: (fileList: File[]) => Promise<void>;
   getGameWithIdx: (idx: number) => Promise<[string, GameFile]>;

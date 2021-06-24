@@ -1,20 +1,20 @@
 import create from 'zustand';
 
-import { GameTexture } from '../../core/GameFile';
+import { Texture } from '../../objects';
+import { assert } from '../../utils';
 import { TextureEditor } from '../editor';
-import { assert } from '../../core/utils';
 
 import { useGameFile } from './gameFile';
 
 interface State {
   idx: number,
   isTextureLoaded: boolean,
-  texture: GameTexture,
+  texture: Texture,
   editor: TextureEditor,
   loadTextureWithIdx: (idx: number) => void,
 };
 
-const dummyTexture = new GameTexture();
+const dummyTexture = new Texture();
 
 export const useTextureCtx = create<State>((set, get) => ({
   idx: 0,

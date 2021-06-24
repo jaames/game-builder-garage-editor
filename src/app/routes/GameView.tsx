@@ -7,7 +7,7 @@ import { TextureThumb } from '../components/TextureThumb';
 
 import { useGameFile } from '../store/gameFile';
 
-import { gbgIdFormat } from '../../core/utils';
+import { gbgIdFormat } from '../../utils';
 import dateFormat from 'date-fns/format'; 
 
 import styles from '../styles/GameView.module.scss';
@@ -39,19 +39,19 @@ export const GameView: React.FunctionComponent<Props> = (props) => {
         { isGameLoaded && (
           <div>
             <GameThumb thumbnail={ game.thumbnail }/>
-            <div>{ meta.gameTitle }</div>
+            <div>{ meta.name }</div>
             <div>Game ID: { gbgIdFormat(meta.gameId) }</div>
             <div>Favorite: TODO</div>
             <div>Locked: TODO</div>
             <div>Downloaded: TODO</div>
             <div>Game ID history: TODO</div>
-            <div>Programmer Name: { meta.programmerName }</div>
-            <div>Programmer ID: { gbgIdFormat(meta.programmerId) }</div>
-            <div>Created: { dateFormat(meta.created, 'P hh:mm') }</div>
-            <div>Modified: { dateFormat(meta.modified, 'P hh:mm') }</div>
+            <div>Programmer Name: { meta.authorName }</div>
+            <div>Programmer ID: { gbgIdFormat(meta.authorId) }</div>
+            <div>Created: { dateFormat(meta.createTime, 'P hh:mm') }</div>
+            <div>Modified: { dateFormat(meta.editTime, 'P hh:mm') }</div>
             <div>Textures: { textures.length }/128</div>
-            <div>Nodon: { meta.nodonCount }/512</div>
-            <div>Connections: { meta.connectionCount }/1024</div>
+            <div>Nodon: { meta.numNodon }/512</div>
+            <div>Connections: { meta.numConnections }/1024</div>
           </div>
         )}
       </div>

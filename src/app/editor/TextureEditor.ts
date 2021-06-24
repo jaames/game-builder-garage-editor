@@ -1,4 +1,6 @@
-import { GameTexture } from '../../core/GameFile';
+import { Texture } from '../../objects';
+import { assert } from '../../utils';
+
 import { Pattern, PatternList } from './PatternList';
 import { EditorHistory } from './EditorHistory';
 
@@ -22,15 +24,15 @@ export interface ToolState {
 
 export class TextureEditor {
 
-  public activeTool: ToolBase;
-  public toolState: ToolState = {
+  activeTool: ToolBase;
+  toolState: ToolState = {
     color: 9,
     size: 3,
     tip: PenTip.Square,
     mode: PenMode.Free,
     pattern: null,
   };
-  public tools: ToolBase[] = [
+  tools: ToolBase[] = [
     new PenTool(this),
     new EraseTool(this),
     new PanTool(this),
@@ -38,24 +40,25 @@ export class TextureEditor {
     new FillTool(this),
   ];
 
-  public patterns = PatternList;
-  public history = new EditorHistory(this);
+  patterns = PatternList;
+  history = new EditorHistory(this);
 
-  public texture: GameTexture = new GameTexture(); // dummy texture
-  public textureWidth = this.texture.width;
-  public textureHeight = this.texture.height;
-  public textureCanvas: HTMLCanvasElement; // temp canvas for rendering texture to
-  public textureCtx: CanvasRenderingContext2D;
+  texture: Texture = new Texture(); // dummy texture
+  textureWidth = this.texture.width;
+  textureHeight = this.texture.height;
+  textureCanvas: HTMLCanvasElement; // temp canvas for rendering texture to
+  textureCtx: CanvasRenderingContext2D;
+  textureImgData: ImageData;
 
-  public viewWidth: number;
-  public viewHeight: number;
-  public viewOriginX: number;
-  public viewOriginY: number;
-  public viewZoom: number;
+  viewWidth: number;
+  viewHeight: number;
+  viewOriginX: number;
+  viewOriginY: number;
+  viewZoom: number;
 
-  public isMounted: boolean = false;
-  public canvas: HTMLCanvasElement;
-  public ctx: CanvasRenderingContext2D;
+  isMounted: boolean = false;
+  canvas: HTMLCanvasElement;
+  ctx: CanvasRenderingContext2D;
 
   constructor() {
     this.textureCanvas = document.createElement('canvas');
@@ -64,26 +67,26 @@ export class TextureEditor {
     this.setActiveTool(0);
   }
 
-  public setActiveTool(idx: number) {
+  setActiveTool(idx: number) {
     this.activeTool = this.tools[idx];
     this.activeTool.state = this.toolState;
     this.setCursor(this.activeTool.cursor);
   }
 
-  public setToolState(newState: Partial<ToolState>) {
+  setToolState(newState: Partial<ToolState>) {
     this.toolState = { ...this.toolState, ...newState };
     this.activeTool.state = this.toolState;
   }
 
-  public setToolColor(color: number) {
+  setToolColor(color: number) {
     this.setToolState({ color });
   }
 
-  public setCursor(cursor: string) {
+  setCursor(cursor: string) {
     if (this.canvas) this.canvas.style.cursor = cursor;
   }
 
-  public setRenderDst(canvas: HTMLCanvasElement) {
+  setRenderDst(canvas: HTMLCanvasElement) {
     canvas.width = this.viewWidth;
     canvas.height = this.viewHeight;
     this.isMounted = true;
@@ -93,22 +96,23 @@ export class TextureEditor {
     this.render();
   }
 
-  public setTexture(texture: GameTexture) {
+  setTexture(texture: Texture) {
     this.texture = texture;
     this.textureCanvas.width = texture.width;
     this.textureCanvas.height = texture.height;
     this.textureWidth = texture.width;
     this.textureHeight = texture.height;
+    this.textureImgData = this.textureCtx.createImageData(texture.width, texture.height);
     this.history.clear();
     this.history.commit();
     this.resetView();
   }
 
-  public render() {
+  render() {
     if (!this.isMounted) return;
     // draw texture to a temp canvas
-    const imgData = this.texture.getImageData(this.textureCtx);
-    this.textureCtx.putImageData(imgData, 0, 0);
+    this.texture.copyToImageData(this.textureImgData);
+    this.textureCtx.putImageData(this.textureImgData, 0, 0);
     // draw temp canvas to dst, scaled up with image smoothing disabled
     const { textureWidth, textureHeight, viewZoom: viewScale } = this;
     this.ctx.clearRect(0, 0, this.viewWidth, this.viewHeight);
@@ -122,7 +126,7 @@ export class TextureEditor {
     );
   }
 
-  public onInputDown = (e: MouseEvent) => {
+  onInputDown = (e: MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     const [x, y] = this.convertInputCoords(e);
@@ -132,7 +136,7 @@ export class TextureEditor {
     this.render();
   }
 
-  public onInputMove = (e: MouseEvent) => {
+  onInputMove = (e: MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     const [x, y] = this.convertInputCoords(e);
@@ -140,7 +144,7 @@ export class TextureEditor {
     this.render();
   }
 
-  public onInputUp = (e: MouseEvent) => {
+  onInputUp = (e: MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     const [x, y] = this.convertInputCoords(e);
@@ -150,23 +154,23 @@ export class TextureEditor {
     this.render();
   }
 
-  public setZoom(zoom: number) {
+  setZoom(zoom: number) {
     this.viewZoom = zoom;
     this.render();
   }
 
-  public setOrigin(x: number, y: number) {
+  setOrigin(x: number, y: number) {
     this.viewOriginX = x;
     this.viewOriginY = y;
     this.render();
   }
 
   // x and y between 0.0 and 1.0
-  public setOriginNorm(x: number, y: number) {
+  setOriginNorm(x: number, y: number) {
     this.setOrigin(x * this.viewWidth, y * this.viewHeight)
   }
 
-  public resetView() {
+  resetView() {
     this.viewWidth = VIEW_WIDTH;
     this.viewHeight = VIEW_HEIGHT;
     this.viewOriginX = this.viewWidth / 2;

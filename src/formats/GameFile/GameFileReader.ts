@@ -77,6 +77,8 @@ export class GameFileReader extends BymlReader {
     const createTime = this.parseTimestamp(dataNode, Key.mCreateTime);
     const editTime =   this.parseTimestamp(dataNode, Key.mEditTime);
 
+    const thumbnail = this.getThumbnail();
+
     return {
       isEmpty,
       version,
@@ -94,7 +96,8 @@ export class GameFileReader extends BymlReader {
       numConnections,
       createTime,
       editTime,
-      gameIdHistorySize: idHistSize
+      gameIdHistorySize: idHistSize,
+      thumbnail
     };
   }
 

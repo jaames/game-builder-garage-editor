@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { GameThumbnail } from '../../core/GameFile';
+import { GameThumbnail } from '../../formats';
 
 import styles from '../styles/GameThumb.module.scss';
 

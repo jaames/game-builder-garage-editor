@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { GameTexture } from '../../core/GameFile';
+import {Texture } from '../../objects';
 
 import styles from '../styles/TextureThumb.module.scss';
 
 interface Props {
-  texture: GameTexture;
+  texture: Texture;
   idx?: number;
   onClick?: (idx: number) => any;
 }

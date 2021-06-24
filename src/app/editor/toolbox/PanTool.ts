@@ -2,9 +2,9 @@ import { ToolBase } from './ToolTypes';
 
 export class PanTool extends ToolBase {
 
-  public name = 'Pan Tool';
-  public cursor = 'grab';
-  public useDrawingCoordSpace = false;
+  name = 'Pan Tool';
+  cursor = 'grab';
+  useDrawingCoordSpace = false;
 
   private isDown = false;
   private initialInputX = -1;

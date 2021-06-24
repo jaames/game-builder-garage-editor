@@ -45,7 +45,7 @@ export const IndexPage: React.FunctionComponent = () => {
                 key={ gameMeta.gameId }
                 idx={ idx }
                 gameId={ gameMeta.gameId }
-                gameTitle={ gameMeta.gameTitle }
+                gameTitle={ gameMeta.name }
                 thumbnail={ gameMeta.thumbnail }
                 onClick={ idx => loadGameWithIdx(idx) }
               />

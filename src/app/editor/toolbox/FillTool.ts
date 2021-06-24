@@ -1,11 +1,12 @@
 import { ToolBase } from './ToolTypes';
-import { GameTexture } from '../../../core/GameFile';
+import { Texture } from '../../../objects';
+import { assert } from '../../../utils';
 
 export class FillTool extends ToolBase {
 
-  public name = 'Fill Bucket';
-  public cursor = 'crosshair';
-  public useDrawingCoordSpace = true;
+  name = 'Fill Bucket';
+  cursor = 'crosshair';
+  useDrawingCoordSpace = true;
 
   start(x: number, y: number) {
     const texture = this.editor.texture;
@@ -20,7 +21,7 @@ export class FillTool extends ToolBase {
 
   end() {}
 
-  private floodFill4(tex: GameTexture, x: number, y: number, newColor: number, oldColor: number) {
+  private floodFill4(tex: Texture, x: number, y: number, newColor: number, oldColor: number) {
     const w = tex.width;
     const h = tex.height;
     if ((x >= 0) && (x < w) && (y >= 0) && (y < h) && (tex.getPixel(x, y) === oldColor)) {

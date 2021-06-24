@@ -12,6 +12,7 @@
  * create primitives with chamfers: 
  *    https://www.danielsieger.com/blog/2021/05/03/generating-primitive-shapes.html
  *    https://www.danielsieger.com/blog/2021/03/27/generating-spheres.html
+ * passive renderer
  */
 
 import * as THREE from 'three';

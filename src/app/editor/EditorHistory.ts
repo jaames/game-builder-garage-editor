@@ -21,7 +21,7 @@ export class EditorHistory {
     return this.presentIndex < this.stack.length - 1;
   }
 
-  public commit() {
+  commit() {
     let stack = this.stack;
     const buffer = this.allocBuffer();
     buffer.set(this.editor.texture.pixels);
@@ -38,17 +38,17 @@ export class EditorHistory {
     this.stack = stack;
   }
 
-  public undo() {
+  undo() {
     if (this.canUndo)
       this.setCurr(this.presentIndex - 1);
   }
 
-  public redo() {
+  redo() {
     if (this.canRedo)
       this.setCurr(this.presentIndex + 1);
   }
 
-  public clear() {
+  clear() {
     this.stack = [];
     this.presentIndex = -1;
   }

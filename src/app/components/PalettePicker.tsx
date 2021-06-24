@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 
 import styles from '../styles/PalettePicker.module.scss';
 
-import { TEXTURE_PALETTE, TEXTURE_PALETTE_SIZE } from '../../core/GameFile';
+import { TEXTURE_PALETTE, TEXTURE_PALETTE_SIZE } from '../../objects';
 
 const PALETTE_GROUPED: Map<string, number>[] = TEXTURE_PALETTE
   .slice(0, TEXTURE_PALETTE_SIZE)

@@ -1,6 +1,7 @@
 import create from 'zustand';
 
-import { GameFile, GameMeta, GameTexture } from '../../core/GameFile';
+import { GameFile, GameMetaExtended } from '../../formats';
+import { Texture } from '../../objects';
 
 import { useSaveData } from './saveData';
 
@@ -9,8 +10,8 @@ interface State {
   fileIdx: number,
   filename: string,
   game: GameFile,
-  meta: GameMeta,
-  textures: GameTexture[],
+  meta: GameMetaExtended,
+  textures: Texture[],
   loadGameWithIdx?: (idx: number) => Promise<any>
 };
 

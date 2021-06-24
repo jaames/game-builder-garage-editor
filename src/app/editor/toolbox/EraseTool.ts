@@ -4,7 +4,7 @@ export class EraseTool extends PenTool {
 
   name = 'Eraser';
 
-  public getColor() {
+  getColor() {
     return 0;
   }
 

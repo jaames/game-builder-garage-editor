@@ -1,3 +1,5 @@
+import { GameThumbnail } from './GameThumbnail';
+
 export interface GameMetaBasic {
   isEmpty: boolean,
   version: number,
@@ -14,6 +16,7 @@ export interface GameMetaBasic {
   editTime: Date,
   createTime: Date,
   gameIdHistorySize: number,
+  thumbnail: GameThumbnail
 };
 
 export interface GameMetaExtended extends GameMetaBasic {

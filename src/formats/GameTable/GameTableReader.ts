@@ -39,6 +39,7 @@ export class GameTableReader extends BymlReader {
   }
 
   public getUserGameEntries(): GameMetaBasic[] {
+    console.log(this.getOrderIndex());
     const listNode = getNode(this.dataNode, Key.mMyGameFileCache, BymlType.Array);
     return listNode.children
       .filter((childNode) => this.isGameEntryUsed(childNode))
@@ -98,6 +99,11 @@ export class GameTableReader extends BymlReader {
     // const keyer = getNode(dataNode, Key.mChangeFileKeyThisFile, BymlType.Hash);
     // console.log(keyer);
 
+    const thumbnailSize = getNode(dataNode, Key.mThumbnailImageByteSize, BymlType.Uint).value;
+    const thumbnailNode = getNode(dataNode, Key.mThumbnailImageJPG, BymlType.Binary);
+    const buffer = thumbnailNode.value;
+    const thumbnail = new GameThumbnail(buffer.slice(0, thumbnailSize));
+
     return {
       isEmpty,
       version,
@@ -113,7 +119,8 @@ export class GameTableReader extends BymlReader {
       numConnections,
       createTime,
       editTime,
-      gameIdHistorySize: idHistSize
+      gameIdHistorySize: idHistSize,
+      thumbnail
     };
   }
 
