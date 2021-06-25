@@ -15,4 +15,6 @@
   image-rendering: auto;
   image-rendering: crisp-edges;
   image-rendering: pixelated;
+  transition: background .2s;
+  box-shadow: rgba(0, 0, 0, 0.2) 0px 3px 0px 0px;
 }

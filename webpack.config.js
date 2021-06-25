@@ -78,7 +78,16 @@ module.exports = function(env, argv) {
           issuer: {
             and: [/\.[jt]sx?$/],
           },
-          use: ['@svgr/webpack'],
+          use: [
+            {
+              loader: '@svgr/webpack',
+              options: {
+                dimensions: false,
+                removeDimensions: true
+              }
+            }, 
+            'url-loader'
+          ]
         },
         // convert SVG imports from css / scss into inline URLs
         {
@@ -120,7 +129,9 @@ module.exports = function(env, argv) {
       }),
       new MiniCssExtract(),
       isDev && new webpack.HotModuleReplacementPlugin(),
-      isDev && new ReactRefreshWebpackPlugin(),
+      isDev && new ReactRefreshWebpackPlugin({
+        overlay: false,
+      }),
     ].filter(Boolean),
     optimization: {
       minimizer: [new TerserPlugin({

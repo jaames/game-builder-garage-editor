@@ -16,7 +16,8 @@ export interface GameMetaBasic {
   editTime: Date,
   createTime: Date,
   gameIdHistorySize: number,
-  thumbnail: GameThumbnail
+  thumbnail: GameThumbnail,
+  gameIndex?: number
 };
 
 export interface GameMetaExtended extends GameMetaBasic {

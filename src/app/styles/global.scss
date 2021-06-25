@@ -56,6 +56,12 @@ img {
   display: block;
 }
 
+svg {
+  display: block;
+  width: 1em;
+  height: 1em;
+}
+
 .App {
   display: flex;
   flex-direction: column;

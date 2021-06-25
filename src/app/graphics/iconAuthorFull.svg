@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="48px" height="48px" viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>iconAuthorFull</title>
+    <g id="iconAuthorFull" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Group-3" transform="translate(3.000000, 3.000000)">
+            <circle id="Oval" fill="#000000" cx="25" cy="21" r="2"></circle>
+            <circle id="Oval-Copy-8" fill="#000000" cx="17" cy="21" r="2"></circle>
+            <circle id="Oval" stroke="#000000" stroke-width="3" cx="21" cy="21" r="21"></circle>
+            <path d="M9.10225444,13.6177806 C7.76965376,15.7609536 7,18.2905956 7,21 C7,28.7319865 13.2680135,35 21,35 C27.4292312,35 32.8462563,30.6662302 34.4891587,24.7606069" id="Path" stroke="#000000" stroke-width="3" stroke-linecap="round"></path>
+            <path d="M18,27.0798451 C19.0063017,27.6400516 20.0141778,27.9201549 21.0236284,27.9201549 C22.0330789,27.9201549 23.0252028,27.6436897 24,27.0907592" id="Path" stroke="#000000" stroke-width="3" stroke-linecap="round"></path>
+            <path d="M17.5,10.5 C18.5,13 21,14.5 23,15" id="Oval-Copy-6" stroke="#000000" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path>
+            <path d="M26.6726465,12.5504963 C27.5,14 29,15.5 30.6771028,15.7578204" id="Oval-Copy-7" stroke="#000000" stroke-width="3" stroke-linecap="round"></path>
+        </g>
+    </g>
+</svg>

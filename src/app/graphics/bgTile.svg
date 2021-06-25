@@ -2,9 +2,9 @@
 <svg width="64px" height="64px" viewBox="0 0 64 64" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <title>bgTile</title>
     <g id="bgTile" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <rect fill="#FFD42D" x="0" y="0" width="64" height="64"></rect>
-        <rect id="Rectangle" stroke="#FFDC94" stroke-width="2" x="1" y="1" width="64" height="64"></rect>
-        <line x1="33.5" y1="1.5" x2="33.5" y2="64.5" id="Line-Copy" stroke="#FFDC94" stroke-linecap="square"></line>
-        <line x1="-1.5" y1="33.5" x2="70.5" y2="33.5" id="Line-Copy-3" stroke="#FFDC94" stroke-linecap="square"></line>
+        <rect fill="#FFDA39" x="0" y="0" width="64" height="64"></rect>
+        <rect id="Rectangle" stroke="#FFE41A" stroke-width="3" x="1.5" y="1.5" width="64" height="64"></rect>
+        <line x1="33.5" y1="1.5" x2="33.5" y2="64.5" id="Line-Copy" stroke="#FFE41A" stroke-width="2" stroke-linecap="square"></line>
+        <line x1="-1.5" y1="33.5" x2="70.5" y2="33.5" id="Line-Copy-3" stroke="#FFE41A" stroke-width="2" stroke-linecap="square"></line>
     </g>
 </svg>

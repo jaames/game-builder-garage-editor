@@ -19,7 +19,7 @@ const REGEX_ID_FORMATTED = new RegExp(`^[agPG][\\s-][${CHARSET}]{3}[\\s-][${CHAR
 
 // This key is used for ID checksums
 const SERVER_ACCESS_KEY = '97b08aad';
-// Derrive checksum key from server key
+// Derive checksum key from server key
 const CHECKSUM_KEY = (() => {
   let key = 0;
   for (let i = 0; i < 8; i++) {
@@ -102,7 +102,7 @@ export function gbgIdFormat(str: string, sp = ' ') {
   return `${ type }${ sp }${ seg1 }${ sp }${ seg2 }${ sp }${ seg3 }`;
 }
 
-// Parse an ID into its decimal representation, used intrnally and on the online server
+// Parse an ID into its decimal representation, used internally and on the online server
 export function gbgIdParse(str: string) {
   // return null if input doesn't match id format
   if (!gbgIdMatchesRegex(str))
@@ -134,4 +134,3 @@ export function gbgIdIsValid(str: string) {
   const d = decimal & 0xFF;
   return (a ^ b ^ c ^ d ^ CHECKSUM_KEY) === 0;
 }
-

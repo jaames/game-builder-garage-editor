@@ -1,14 +1,11 @@
 import React, { useCallback, useEffect } from 'react';
 import { RouteComponentProps, useHistory } from 'react-router';
 
-import { GameThumb } from '../components/GameThumb';
+import { GameDetails } from '../components/GameDetails';
 import { TextureGrid } from '../components/TextureGrid';
 import { TextureThumb } from '../components/TextureThumb';
 
 import { useGameFile } from '../store/gameFile';
-
-import { gbgIdFormat } from '../../utils';
-import dateFormat from 'date-fns/format'; 
 
 import styles from '../styles/GameView.module.scss';
 
@@ -24,8 +21,13 @@ export const GameView: React.FunctionComponent<Props> = (props) => {
   const textures = useGameFile(state => state.textures);
 
   useEffect(() => {
-    console.log(loadGameWithIdx(gameIdx));
-  }, [gameIdx]);  
+    try {
+      loadGameWithIdx(gameIdx);
+    }
+    catch {
+      history.push('/');
+    }
+  }, [gameIdx]);
 
   const history = useHistory();
 
@@ -37,22 +39,7 @@ export const GameView: React.FunctionComponent<Props> = (props) => {
     <div className={ styles.root }>
       <div className={ styles.side }>
         { isGameLoaded && (
-          <div>
-            <GameThumb thumbnail={ game.thumbnail }/>
-            <div>{ meta.name }</div>
-            <div>Game ID: { gbgIdFormat(meta.gameId) }</div>
-            <div>Favorite: TODO</div>
-            <div>Locked: TODO</div>
-            <div>Downloaded: TODO</div>
-            <div>Game ID history: TODO</div>
-            <div>Programmer Name: { meta.authorName }</div>
-            <div>Programmer ID: { gbgIdFormat(meta.authorId) }</div>
-            <div>Created: { dateFormat(meta.createTime, 'P hh:mm') }</div>
-            <div>Modified: { dateFormat(meta.editTime, 'P hh:mm') }</div>
-            <div>Textures: { textures.length }/128</div>
-            <div>Nodon: { meta.numNodon }/512</div>
-            <div>Connections: { meta.numConnections }/1024</div>
-          </div>
+          <GameDetails game={ game }/>
         )}
       </div>
       <div className={ styles.main }>

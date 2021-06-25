@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="32px" height="32px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>iconAdaptation</title>
+    <g id="iconAdaptation" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <path d="M16,8 L31,12 L28,13 L28,18.167 L29,18 L29.5,24.5 L25.5,24 L26,18.5 L27,18.333 L27,13.333 L16,17 L1,12 L16,8 Z M23.826,16.49911 L24,16.5 L24,21 L8,21 L8,16.5 L8.172,16.49911 L16,19.1081851 L23.826,16.49911 Z" id="adaptation" fill="#000000"></path>
+    </g>
+</svg>

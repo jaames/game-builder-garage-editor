@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>iconConnection</title>
+    <g id="iconConnection" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <path d="M19,8 C21.209139,8 23,9.790861 23,12 C23,14.209139 21.209139,16 19,16 C17.3214931,16 15.8844573,14.9661392 15.2909514,13.5004764 L8.70904859,13.5004764 C8.1155427,14.9661392 6.67850691,16 5,16 C2.790861,16 1,14.209139 1,12 C1,9.790861 2.790861,8 5,8 C6.67888513,8 8.11619029,9.03432675 8.70944966,10.5005144 L15.2905503,10.5005144 C15.8838097,9.03432675 17.3211149,8 19,8 Z" id="Combined-Shape" fill="#000000"></path>
+    </g>
+</svg>

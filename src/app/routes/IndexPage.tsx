@@ -47,7 +47,7 @@ export const IndexPage: React.FunctionComponent = () => {
                 gameId={ gameMeta.gameId }
                 gameTitle={ gameMeta.name }
                 thumbnail={ gameMeta.thumbnail }
-                onClick={ idx => loadGameWithIdx(idx) }
+                onClick={ () => loadGameWithIdx(gameMeta.gameIndex) }
               />
             ))}
           </GameThumbGrid>   

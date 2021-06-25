@@ -43,8 +43,8 @@ export class GameTableReader extends BymlReader {
     const gameList = getNode(this.dataNode, Key.mMyGameFileCache, BymlType.Array).children;
     return gameList
       .sort((a, b) => gameOrder[gameList.indexOf(b)] + gameOrder[gameList.indexOf(a)])
-      // .filter((childNode) => this.isGameEntryUsed(childNode))
-      .map((childNode) => this.parseGameEntry(childNode));
+      .map((childNode, i) => this.parseGameEntry(childNode, i))
+      .filter((gameEntry) => !gameEntry.isEmpty)
   }
 
   public getLessonGameEntries(): GameMetaBasic[] {
@@ -79,7 +79,7 @@ export class GameTableReader extends BymlReader {
     return !getNode(parent, Key.mEmpty, BymlType.Bool).value;
   }
 
-  public parseGameEntry(dataNode: BymlNode, id: number = 0): GameMetaBasic {
+  public parseGameEntry(dataNode: BymlNode, idx: number = 0): GameMetaBasic {
     const isEmpty =        getNode(dataNode, Key.mEmpty,            BymlType.Bool).value;
     const version =        getNode(dataNode, Key.mVersion,          BymlType.Uint).value;
     const name =           getNode(dataNode, Key.mName,             BymlType.String).value;
@@ -121,7 +121,8 @@ export class GameTableReader extends BymlReader {
       createTime,
       editTime,
       gameIdHistorySize: idHistSize,
-      thumbnail
+      thumbnail,
+      gameIndex: idx
     };
   }
 

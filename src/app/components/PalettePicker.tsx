@@ -46,5 +46,3 @@ export const PalettePicker: React.FunctionComponent<Props> = ({ onClick }) => {
     </div>
   );
 }
-
-console.log(PALETTE_GROUPED);

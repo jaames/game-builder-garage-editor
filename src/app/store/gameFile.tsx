@@ -28,6 +28,7 @@ export const useGameFile = create<State>((set, get) => ({
   close: () => {
     set({
       isGameLoaded: false,
+      fileIdx: -1,
       game: dummyGame,
       filename: '',
       meta: dummyGame.meta,
@@ -35,17 +36,21 @@ export const useGameFile = create<State>((set, get) => ({
     });
   },
   loadGameWithIdx: async (fileIdx: number) => {
-    get().close();
-    const saveData = useSaveData.getState();
-    const [filename, game] = await saveData.getGameWithIdx(fileIdx);
-    const meta = game.meta;
-    const textures = game.textures;
-    set({
-      isGameLoaded: true,
-      game,
-      filename,
-      meta,
-      textures
-    });
+    const state = get();
+    if (fileIdx !== state.fileIdx) {
+      state.close();
+      const saveData = useSaveData.getState();
+      const [filename, game] = await saveData.getGameWithIdx(fileIdx);
+      const meta = game.meta;
+      const textures = game.textures;
+      set({
+        isGameLoaded: true,
+        fileIdx,
+        game,
+        filename,
+        meta,
+        textures
+      });
+    }
   },
 }));
