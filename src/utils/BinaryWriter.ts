@@ -2,7 +2,7 @@ import { downloadFile } from './downloadFile';
 
 export class BinaryWriter {
   // sizes
-  pageSize = 2048;
+  pageSize = 2048 * 2;
   allocSize = 0; // allocated size counting all pages
   realSize = 0; // number of bytes actually used
   // pages

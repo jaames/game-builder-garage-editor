@@ -1,0 +1,96 @@
+$icon-color: #f38f1c;
+$icon-disabled-color: #c4cddf;
+$icon-bg: #FFF;
+$icon-disabled-bg: #eaf0f5;
+
+.root {
+
+}
+
+.canvas {
+ 
+}
+
+.controls {
+  max-width: 640px;
+  height: 48px;
+  margin-bottom: 1em;
+  display: flex;
+}
+  
+.history {
+  display: flex;
+  align-items: center;
+  margin-right: auto;
+}
+
+.icon {
+  position: relative;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  border: 3px solid $icon-color;
+  margin: 0 -1.5px;
+  background: $icon-bg;
+  padding: 6px;
+
+  svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  svg *[fill^="#"] {
+    fill: $icon-color;
+  }
+
+  svg *[stroke^="#"] {
+    stroke: $icon-color;
+  }
+}
+
+
+.icon:first-of-type {
+  border-top-left-radius: 24px;
+  border-bottom-left-radius: 24px;
+  padding-left: 10px;
+}
+
+.icon:last-of-type {
+  border-top-right-radius: 24px;
+  border-bottom-right-radius: 24px;
+  padding-right: 10px;
+}
+
+.iconDisabled {
+  background: $icon-disabled-bg;
+  border-color: $icon-disabled-color;
+  z-index: -1;
+
+  svg *[fill^="#"] {
+    fill: $icon-disabled-color;
+  }
+
+  svg *[stroke^="#"] {
+    stroke: $icon-disabled-color;
+  }
+}
+
+.zoomControl {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+
+  svg {
+    cursor: pointer;
+    width: 22px;
+    height: 22px;
+  }
+}
+
+.zoomIndicator {
+  width: 6ch;
+  user-select: none;
+  text-align: center;
+}

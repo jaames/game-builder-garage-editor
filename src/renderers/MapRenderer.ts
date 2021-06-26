@@ -3,6 +3,9 @@
  * 
  * TODO: 
  * resize: https://stackoverflow.com/questions/20290402/three-js-resizing-canvas
+ * use geometry size instead of scaling objects
+ * dispose of objects properly: https://threejs.org/docs/#manual/en/introduction/How-to-dispose-of-objects
+ * textures per face: https://threejsfundamentals.org/threejs/lessons/threejs-textures.html#six
  * render text objects: https://threejs.org/examples/#webgl_geometry_text_shapes
  * keyboard WASD controls: https://yomotsu.github.io/camera-controls/examples/keyboard.html
  * manipulation: https://threejs.org/examples/misc_controls_transform.html
@@ -12,6 +15,7 @@
  * create primitives with chamfers: 
  *    https://www.danielsieger.com/blog/2021/05/03/generating-primitive-shapes.html
  *    https://www.danielsieger.com/blog/2021/03/27/generating-spheres.html
+ * alpha textures with shadows: https://threejs.org/examples/webgl_animation_cloth.html
  * passive renderer
  */
 
@@ -223,9 +227,9 @@ export class MapRenderer {
 
     // world rotation is in degrees
     let [rX, rY, rZ] = nodon.worldRotation;
-    object.rotation.x = degreesToRadians(rX);
-    object.rotation.y = degreesToRadians(-rY); // inverted
-    object.rotation.z = degreesToRadians(rZ);
+    object.rotation.x = degreesToRadians(-rX);
+    object.rotation.y = degreesToRadians(-rY); 
+    object.rotation.z = degreesToRadians(rZ); // inverted z
 
     let [x, y, z] = nodon.worldPosition;
     object.position.x = x;

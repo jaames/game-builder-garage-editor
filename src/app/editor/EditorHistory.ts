@@ -1,4 +1,5 @@
 import { TextureEditor } from './TextureEditor';
+import { useTextureCtx } from '../store/textureCtx';
 
 export class EditorHistory {
 
@@ -10,6 +11,11 @@ export class EditorHistory {
 
   constructor(editor: TextureEditor) {
     this.editor = editor;
+    // TODO: clean up this janky stuff
+    useTextureCtx.setState({
+      undo: () => this.undo(),
+      redo: () => this.redo(),
+    });
     this.clear();
   }
 
@@ -36,6 +42,7 @@ export class EditorHistory {
     // update current index
     this.presentIndex = stack.length - 1;
     this.stack = stack;
+    this.update();
   }
 
   undo() {
@@ -58,6 +65,14 @@ export class EditorHistory {
     this.editor.texture.setPixels(buffer);
     this.editor.render();
     this.presentIndex = idx;
+    this.update();
+  }
+  
+  private update() {
+    useTextureCtx.setState({
+      canRedo: this.canRedo,
+      canUndo: this.canUndo,
+    });
   }
 
   private allocBuffer() {

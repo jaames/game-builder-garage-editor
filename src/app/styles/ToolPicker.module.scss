@@ -1,0 +1,60 @@
+$icon-color: #f38f1c;
+$icon-active-color: #f36b17;
+$icon-bg: #FFF;
+$icon-active-bg: #FFEC00;
+
+.root {
+  display: flex;
+}
+
+.icon {
+  position: relative;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  border: 3px solid $icon-color;
+  margin: 0 -1.5px;
+  background: $icon-bg;
+  padding: 6px;
+
+  svg {
+    width: 30px;
+    height: 30px;
+  }
+
+  svg *[fill^="#"] {
+    fill: $icon-color;
+  }
+
+  svg *[stroke^="#"] {
+    stroke: $icon-color;
+  }
+}
+
+.icon:first-of-type {
+  border-top-left-radius: 24px;
+  border-bottom-left-radius: 24px;
+  padding-left: 10px;
+}
+
+.icon:last-of-type {
+  border-top-right-radius: 24px;
+  border-bottom-right-radius: 24px;
+  padding-right: 10px;
+}
+
+.iconActive {
+  background: $icon-active-bg;
+  border-color: $icon-active-color;
+  z-index: 1;
+
+  svg *[fill^="#"] {
+    fill: $icon-active-color;
+  }
+
+  svg *[stroke^="#"] {
+    stroke: $icon-active-color;
+  }
+}

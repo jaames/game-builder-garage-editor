@@ -34,7 +34,7 @@ export const GameDetails: React.FunctionComponent<GameDetailsProps> = ({ game })
 
   return (
     <div className={ styles.root }>
-      <GameThumb thumbnail={ meta.thumbnail } />
+      <GameThumb thumbnail={ meta.thumbnail } imageOnly={ true }/>
       <h3 className={ styles.title }>{ meta.name }</h3>
       <div className={ styles.body }>
         { meta.isDownload && (
@@ -72,7 +72,8 @@ export const GameDetails: React.FunctionComponent<GameDetailsProps> = ({ game })
             <span className={ styles.stat__counter }>{ meta.numConnections }/1024</span>
           </div>
         </div>
-        { mggUser.result && (
+        {/* TODO: make this look nice */}
+        {/* { mggUser.result && (
           <div className={ styles.mggUser } >
             <a
               className={ styles.mggUser__icon }
@@ -94,7 +95,7 @@ export const GameDetails: React.FunctionComponent<GameDetailsProps> = ({ game })
               <div>{ mggUser.result.socialYouTube }</div>
             </div>
           </div>
-        )}
+        )} */}
       </div>
     </div>
   );

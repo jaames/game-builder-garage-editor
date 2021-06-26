@@ -136,10 +136,11 @@ TEXTURE_PALETTE[115] = 0xbfbb86ff;
 TEXTURE_PALETTE[116] = 0x807e5aff;
 TEXTURE_PALETTE[117] = 0x4d4b32ff;
 
-const TEXTURE_PALETTE_RGB = Array.from(TEXTURE_PALETTE).map(color => [
+const TEXTURE_PALETTE_RGBA = Array.from(TEXTURE_PALETTE).map(color => [
   (color >> 24) & 0xFF,
   (color >> 16) & 0xFF,
   (color >> 8) & 0xFF,
+  color & 0xFF,
 ]);
 
 export class Texture {
@@ -208,7 +209,7 @@ export class Texture {
   getGif() {
     const gif = GIFEncoder();
     gif.writeFrame(this.pixels, this.width, this.height, {
-      palette: TEXTURE_PALETTE_RGB,
+      palette: TEXTURE_PALETTE_RGBA,
       transparent: true,
       transparentIndex: 0
     });

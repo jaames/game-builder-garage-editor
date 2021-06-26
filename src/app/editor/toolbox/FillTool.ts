@@ -1,8 +1,10 @@
-import { ToolBase } from './ToolTypes';
+import { ToolBase, ToolType } from './ToolTypes';
 import { Texture } from '../../../objects';
 import { assert } from '../../../utils';
 
 export class FillTool extends ToolBase {
+
+  static type = ToolType.Fill;
 
   name = 'Fill Bucket';
   cursor = 'crosshair';
@@ -10,7 +12,7 @@ export class FillTool extends ToolBase {
 
   start(x: number, y: number) {
     const texture = this.editor.texture;
-    const newColor = this.state.color;
+    const newColor = this.editor.state.toolColor;
     const oldColor = texture.getPixel(x, y);
     if (newColor === oldColor) return;
     this.floodFill4(texture, x, y, newColor, oldColor);

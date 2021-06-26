@@ -1,3 +1,5 @@
+@import './vars';
+
 .root {
   max-width: 256px;
 }
@@ -19,7 +21,7 @@
 }
 
 .programmer__details {
-  flex: 1;
+  flex: 1.2;
   // margin-left: auto;
 }
 
@@ -32,7 +34,7 @@
 .programmer__name  {
   margin-bottom: .25em;
   font-size: 1.1em;
-  font-weight: bold;
+  font-weight: $font-weight-bold;
 }
 
 .detailItem {
@@ -48,7 +50,7 @@
 }
 
 .detailItem__value {
-  flex: 1;
+  flex: 1.2;
   // margin-left: auto;
   font-variant-numeric: tabular-nums;
   display: flex;

@@ -4,7 +4,8 @@ import { MapRenderer, GraphRenderer } from './renderers';
 // import levelUrl from '../demofiles/lgctpbfile_mygame_14.bin'; // excitebike
 // import levelUrl from '../demofiles/lgctpbfile_mygame_16.bin'; // superhot
 // import levelUrl from '../demofiles/lgctpbfile_mygame_6.bin'; // mariokart
-import levelUrl from '../demofiles/lgctpbfile_mygame_18.bin'; // mario 3d land
+// import levelUrl from '../demofiles/lgctpbfile_mygame_18.bin'; // mario 3d land
+import levelUrl from '../demofiles/test.bin'; // mario 3d land
 
 (async () => {
   const game = await GameFile.fromUrl(levelUrl);

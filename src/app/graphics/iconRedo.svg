@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="28px" height="28px" viewBox="0 0 28 28" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>iconRedo</title>
+    <g id="iconRedo" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <path d="M18.7888544,7.60557281 L27.7888544,3.10557281 C27.9277098,3.03614509 28.0808229,3 28.236068,3 L28.5,3 C28.7761424,3 29,3.22385763 29,3.5 L29,13.5 C29,13.7761424 28.7761424,14 28.5,14 L28.472136,14 C28.1616458,14 27.8554196,13.9277098 27.5777088,13.7888544 L18.7888544,9.39442719 C18.2948759,9.14743794 18.0946515,8.5467649 18.3416408,8.0527864 C18.4384045,7.859259 18.595327,7.70233651 18.7888544,7.60557281 Z" id="Rectangle" fill="#E76414" transform="translate(23.000000, 8.500000) scale(-1, 1) translate(-23.000000, -8.500000) "></path>
+        <path d="M2.5,8.5 L15,8.5 C19.1421356,8.5 22.5,11.8578644 22.5,16 C22.5,20.1421356 19.1421356,23.5 15,23.5 L4.5,23.5 L4.5,23.5" id="Path-5" stroke="#E76414" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" transform="translate(12.500000, 16.000000) scale(-1, 1) translate(-12.500000, -16.000000) "></path>
+    </g>
+</svg>

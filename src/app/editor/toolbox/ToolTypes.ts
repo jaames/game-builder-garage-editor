@@ -1,4 +1,12 @@
-import { TextureEditor, ToolState } from '../TextureEditor';
+import { TextureEditor } from '../TextureEditor';
+
+export enum ToolType {
+  Pen,
+  Eraser,
+  Grabber,
+  EyeDrop,
+  Fill
+};
 
 export enum PenTip {
   Square,
@@ -16,16 +24,16 @@ export enum PenMode {
 
 export abstract class ToolBase {
 
+  static type: ToolType;
+
   abstract name: string
   abstract cursor: string;
 
   useDrawingCoordSpace: boolean;
   editor: TextureEditor;
-  state: ToolState;
 
   constructor(editor: TextureEditor) {
     this.editor = editor;
-    this.state = editor.toolState;
     this.useDrawingCoordSpace = true;
   }
 

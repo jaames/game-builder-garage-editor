@@ -1,44 +1,33 @@
 import { Texture } from '../../objects';
 import { assert } from '../../utils';
 
+import { useTextureCtx, TextureCtxState } from '../store/textureCtx';
+
 import { Pattern, PatternList } from './PatternList';
 import { EditorHistory } from './EditorHistory';
 
-import { ToolBase, PenTip, PenMode } from './toolbox/ToolTypes';
+import { ToolBase, PenTip, PenMode, ToolType } from './toolbox/ToolTypes';
 import { PenTool } from './toolbox/PenTool';
 import { EraseTool } from './toolbox/EraseTool';
 import { PanTool } from './toolbox/PanTool';
 import { EyedropTool } from './toolbox/EyedropTool';
 import { FillTool } from './toolbox/FillTool';
 
-const VIEW_WIDTH = 512;
-const VIEW_HEIGHT = 512;
-
-export interface ToolState {
-  color: number,
-  size: number,
-  tip: PenTip,
-  mode: PenMode,
-  pattern: Pattern | null,
-};
+const VIEW_WIDTH = 64 * 10;
+const VIEW_HEIGHT = 64 * 10;
+const TOOLS = [
+  PenTool,
+  EraseTool,
+  PanTool,
+  EyedropTool,
+  FillTool
+];
 
 export class TextureEditor {
 
+  state: TextureCtxState;
   activeTool: ToolBase;
-  toolState: ToolState = {
-    color: 9,
-    size: 3,
-    tip: PenTip.Square,
-    mode: PenMode.Free,
-    pattern: null,
-  };
-  tools: ToolBase[] = [
-    new PenTool(this),
-    new EraseTool(this),
-    new PanTool(this),
-    new EyedropTool(this),
-    new FillTool(this),
-  ];
+  tools = new Map<ToolType, ToolBase>(TOOLS.map(Tool => [Tool.type, new Tool(this)]));
 
   patterns = PatternList;
   history = new EditorHistory(this);
@@ -64,22 +53,24 @@ export class TextureEditor {
     this.textureCanvas = document.createElement('canvas');
     this.textureCtx = this.textureCanvas.getContext('2d');
     this.setTexture(this.texture); // default to dummy texture
-    this.setActiveTool(0);
+    this.setActiveTool(ToolType.Pen);
+    useTextureCtx.subscribe(this.onStateUpdate);
+    this.state = useTextureCtx.getState();
   }
 
-  setActiveTool(idx: number) {
-    this.activeTool = this.tools[idx];
-    this.activeTool.state = this.toolState;
+  onStateUpdate = (newState: TextureCtxState, prevState: TextureCtxState) => {
+    if ((newState.isTextureLoaded !== prevState.isTextureLoaded) || (newState.texture !== prevState.texture))
+      this.setTexture(newState.texture);
+    if (newState.viewZoom !== prevState.viewZoom)
+      this.setZoom(newState.viewZoom);
+    this.setActiveTool(newState.activeTool);
+    this.state = newState;
+    this.render();
+  }
+
+  setActiveTool(toolType: ToolType) {
+    this.activeTool = this.tools.get(toolType);
     this.setCursor(this.activeTool.cursor);
-  }
-
-  setToolState(newState: Partial<ToolState>) {
-    this.toolState = { ...this.toolState, ...newState };
-    this.activeTool.state = this.toolState;
-  }
-
-  setToolColor(color: number) {
-    this.setToolState({ color });
   }
 
   setCursor(cursor: string) {
@@ -87,11 +78,17 @@ export class TextureEditor {
   }
 
   setRenderDst(canvas: HTMLCanvasElement) {
-    canvas.width = this.viewWidth;
-    canvas.height = this.viewHeight;
+    const dpi = window.devicePixelRatio || 1;
+    const w = this.viewWidth;
+    const h = this.viewHeight;
+    canvas.width = w * dpi;
+    canvas.height = h * dpi;
+    canvas.style.width = `${ w }px`;
+    canvas.style.height = `${ h }px`;
     this.isMounted = true;
     this.canvas = canvas;
     this.ctx = canvas.getContext('2d');
+    this.ctx.scale(dpi, dpi);
     this.setCursor(this.activeTool.cursor);
     this.render();
   }
@@ -110,20 +107,70 @@ export class TextureEditor {
 
   render() {
     if (!this.isMounted) return;
+    const { viewOriginX, viewOriginY, viewWidth, viewHeight, textureWidth, textureHeight, viewZoom } = this;
+    const left = viewOriginX - (textureWidth * viewZoom) / 2;
+    const top = viewOriginY - (textureHeight * viewZoom) / 2;
+    // clear current
+    this.ctx.fillStyle = '#cce';
+    this.ctx.fillRect(0, 0, viewWidth, viewHeight);
+    // bg grid
+    if (this.viewZoom > 4)
+      this.drawBg(); 
     // draw texture to a temp canvas
     this.texture.copyToImageData(this.textureImgData);
     this.textureCtx.putImageData(this.textureImgData, 0, 0);
     // draw temp canvas to dst, scaled up with image smoothing disabled
-    const { textureWidth, textureHeight, viewZoom: viewScale } = this;
-    this.ctx.clearRect(0, 0, this.viewWidth, this.viewHeight);
     this.ctx.imageSmoothingEnabled = false;
     this.ctx.drawImage(
       this.textureCanvas, 
-      this.viewOriginX - (textureWidth * viewScale) / 2,
-      this.viewOriginY - (textureHeight * viewScale) / 2, 
-      textureWidth * viewScale, 
-      textureHeight * viewScale
+      left,
+      top,
+      textureWidth * viewZoom, 
+      textureHeight * viewZoom
     );
+    if (this.viewZoom > 10)
+      this.drawGrid();
+  }
+
+  drawBg() {
+    const { viewOriginX, viewOriginY, textureWidth, textureHeight, viewZoom } = this;
+    const left = viewOriginX - (textureWidth * viewZoom) / 2;
+    const top = viewOriginY - (textureHeight * viewZoom) / 2;
+    const pixelSize = viewZoom;
+    // draw bg
+    this.ctx.fillStyle = '#efefff';
+    for (let y = 0; y < textureHeight; y += 1) {
+      for (let x = 0; x < textureWidth; x += 1) {
+        if ((x + y) % 2 === 0) {
+          this.ctx.fillRect(
+            left + (x * pixelSize),
+            top + (y * pixelSize),
+            pixelSize,
+            pixelSize
+          );
+        }
+      }
+    }
+  }
+
+  drawGrid() {
+    const { viewOriginX, viewOriginY, textureWidth, textureHeight, viewZoom } = this;
+    const left = viewOriginX - (textureWidth * viewZoom) / 2;
+    const top = viewOriginY - (textureHeight * viewZoom) / 2;
+    const pixelSize = viewZoom;
+    this.ctx.strokeStyle = '#889';
+    this.ctx.lineWidth = 1;
+    this.ctx.beginPath();
+    for (let y = 1; y < textureHeight; y += 1) {
+      this.ctx.moveTo(left,                            top + y * pixelSize);
+      this.ctx.lineTo(left + textureWidth * pixelSize, top + y * pixelSize);
+    }
+    for (let x = 1; x < textureWidth; x += 1) {
+      this.ctx.moveTo(left + x * pixelSize, top);
+      this.ctx.lineTo(left + x * pixelSize, top + textureHeight * pixelSize);
+    }
+    this.ctx.closePath();
+    this.ctx.stroke();
   }
 
   onInputDown = (e: MouseEvent) => {
@@ -154,8 +201,9 @@ export class TextureEditor {
     this.render();
   }
 
-  setZoom(zoom: number) {
-    this.viewZoom = zoom;
+  setZoom(viewZoom: number) {
+    useTextureCtx.setState({ viewZoom });
+    this.viewZoom = viewZoom;
     this.render();
   }
 
@@ -175,7 +223,7 @@ export class TextureEditor {
     this.viewHeight = VIEW_HEIGHT;
     this.viewOriginX = this.viewWidth / 2;
     this.viewOriginY = this.viewHeight / 2;
-    this.viewZoom = this.viewWidth / this.textureWidth;
+    this.setZoom(this.viewWidth / this.textureWidth);
     this.render();
   }
 

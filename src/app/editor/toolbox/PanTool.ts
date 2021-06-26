@@ -1,6 +1,8 @@
-import { ToolBase } from './ToolTypes';
+import { ToolBase, ToolType } from './ToolTypes';
 
 export class PanTool extends ToolBase {
+
+  static type = ToolType.Grabber;
 
   name = 'Pan Tool';
   cursor = 'grab';

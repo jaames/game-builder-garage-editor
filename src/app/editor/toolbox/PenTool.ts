@@ -1,4 +1,4 @@
-import { ToolBase, PenTip, PenMode } from './ToolTypes';
+import { ToolBase, ToolType, PenTip, PenMode } from './ToolTypes';
 
 import { Texture } from '../../../objects';
 import { assert } from '../../../utils';
@@ -6,6 +6,8 @@ import { Pattern, PatternList } from '../PatternList';
 import { plotLine, plotRectangle, plotFilledRectangle, plotCircle, plotFilledCircle } from '../plotUtils';
 
 export class PenTool extends ToolBase {
+
+  static type = ToolType.Pen;
 
   name = 'Pen';
   cursor = 'crosshair';
@@ -39,26 +41,28 @@ export class PenTool extends ToolBase {
   }
 
   getColor() {
-    return this.state.color;
+    return this.editor.state.toolColor;
   }
 
   drawPixel(tex: Texture, x: number, y: number) {
     const color = this.getColor();
-    if (this.state.pattern !== null) {
-      const pattern = this.state.pattern;
-      const xMod = x % pattern.width;
-      const yMod = y % pattern.height;
-      const mask = pattern.mask[(yMod * pattern.width) + xMod];
-      if (mask === 1)
-        tex.setPixel(x, y, color);
-    }
-    else
+    // / TODO: make customizable
+    // if (this.state.pattern !== null) { /
+    //   const pattern = this.state.pattern;
+    //   const xMod = x % pattern.width;
+    //   const yMod = y % pattern.height;
+    //   const mask = pattern.mask[(yMod * pattern.width) + xMod];
+    //   if (mask === 1)
+    //     tex.setPixel(x, y, color);
+    // }
+    // else
       tex.setPixel(x, y, color);
   }
 
   drawPoint(tex: Texture, x: number, y: number) {
-    const size = this.state.size;
-    const tip = this.state.tip;
+    const state = this.editor.state;
+    const size = state.toolSize;
+    const tip: PenTip = PenTip.Square; // TODO: make customizable
     // single pixel regardless of shape
     if (size === 1)
       this.drawPixel(tex, x, y);
@@ -69,26 +73,27 @@ export class PenTool extends ToolBase {
       this.drawPixel(tex, x    , y - 1);
       this.drawPixel(tex, x - 1, y - 1);
     }
-    else if (tip === PenTip.Round) {
-      // draw a plus shape
-      if (size === 3) {
-        this.drawPixel(tex, x    , y - 1);
-        this.drawPixel(tex, x - 1, y    );
-        this.drawPixel(tex, x    , y    );
-        this.drawPixel(tex, x + 1, y    );
-        this.drawPixel(tex, x    , y + 1);
-      }
-      // if size is even, treat x,y as bottom-right of center
-      else if (size % 2 === 0) {
-        const r = size / 2;
-        plotFilledCircle((x, y) => this.drawPixel(tex, x, y), x, y, r);
-      }
-      // if size is not even, treat x,y as center
-      else {
-        const r = Math.floor(size / 2);
-        plotFilledCircle((x, y) => this.drawPixel(tex, x, y), x, y, r);
-      }
-    }
+    // TODO: uncomment after fixing plot circle
+    // else if (tip === PenTip.Round) {
+    //   // draw a plus shape
+    //   if (size === 3) {
+    //     this.drawPixel(tex, x    , y - 1);
+    //     this.drawPixel(tex, x - 1, y    );
+    //     this.drawPixel(tex, x    , y    );
+    //     this.drawPixel(tex, x + 1, y    );
+    //     this.drawPixel(tex, x    , y + 1);
+    //   }
+    //   // if size is even, treat x,y as bottom-right of center
+    //   else if (size % 2 === 0) {
+    //     const r = size / 2;
+    //     plotFilledCircle((x, y) => this.drawPixel(tex, x, y), x, y, r);
+    //   }
+    //   // if size is not even, treat x,y as center
+    //   else {
+    //     const r = Math.floor(size / 2);
+    //     plotFilledCircle((x, y) => this.drawPixel(tex, x, y), x, y, r);
+    //   }
+    // }
     else if (tip === PenTip.Square) {
       // if size is even, treat x,y as bottom-right of center
       if (size % 2 === 0) {

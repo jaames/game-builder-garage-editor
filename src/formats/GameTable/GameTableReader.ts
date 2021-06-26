@@ -45,13 +45,17 @@ export class GameTableReader extends BymlReader {
       .sort((a, b) => gameOrder[gameList.indexOf(b)] + gameOrder[gameList.indexOf(a)])
       .map((childNode, i) => this.parseGameEntry(childNode, i))
       .filter((gameEntry) => !gameEntry.isEmpty)
+      .reverse();
   }
 
   public getLessonGameEntries(): GameMetaBasic[] {
-    const listNode = getNode(this.dataNode, Key.mLessonFileCache, BymlType.Array);
-    return listNode.children
-      .filter((childNode) => this.isGameEntryUsed(childNode))
-      .map((childNode) => this.parseGameEntry(childNode));
+    const gameOrder = this.getOrderIndex().slice(64);
+    const gameList = getNode(this.dataNode, Key.mLessonFileCache, BymlType.Array).children;
+    return gameList
+      .sort((a, b) => gameOrder[gameList.indexOf(b)] + gameOrder[gameList.indexOf(a)])
+      .map((childNode, i) => this.parseGameEntry(childNode, i))
+      .filter((gameEntry) => !gameEntry.isEmpty)
+      .reverse();
   }
 
   // public getTutorialGameEntries(): GameTableEntry[] {

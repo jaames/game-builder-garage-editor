@@ -44,21 +44,25 @@ export function plotFilledRectangle(plot: PlotFn, x0: number, y0: number, x1: nu
 }
 
 // bresenham midpoint circle algorithm
+// TODO: fixme, doesn't work for even widths
+// ref: https://observablehq.com/@jheeffer/pixelated-circle
 export function plotCircle(plot: PlotFn, x0: number, y0: number, radius: number) {
-  let x = -radius;
-  let y = 0;
-  let err = 2 - 2 * radius;
+  const r = radius - 1;
+  let x = -r;
+  let y = (r % 1 === 0) ? 0 : 0.5; // non-integer radius, move y half down
+  let err = 2 - 2 * r;
+
   while (x < 0) {
     plot(x0 - x, y0 + y);
     plot(x0 - y, y0 - x);
     plot(x0 + x, y0 - y);
     plot(x0 + y, y0 + x);
-    radius = err;
-    if (radius <= y) {
+
+    if (r <= y) {
       y += 1;
       err += y * 2 + 1;
     }
-    if (radius > x || err > y) {
+    if (r > x || err > y) {
       x += 1;
       err += x * 2 + 1;
     }

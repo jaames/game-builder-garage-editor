@@ -8,7 +8,7 @@ export const Footer: React.FunctionComponent = () => (
     <div className={ styles.body }>
       <div className={ styles.wrapper }>
         <div className={ styles.info }>
-          <h5>Game&nbsp;Builder&nbsp;Garage Save Editor v{__VERSION__}</h5>
+          <h4>Game&nbsp;Builder&nbsp;Garage Save Editor v{__VERSION__}</h4>
           Built by <a className="link" href="//github.com/jaames">Jaames</a>, source code on <a className="link" href="//github.com/jaames/">GitHub</a>
         </div>
         <p className={ styles.disclaimer }>

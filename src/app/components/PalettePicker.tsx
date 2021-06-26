@@ -1,5 +1,7 @@
 import React, { useCallback } from 'react';
 
+import { useTextureCtx } from '../store/textureCtx';
+
 import styles from '../styles/PalettePicker.module.scss';
 
 import { TEXTURE_PALETTE, TEXTURE_PALETTE_SIZE } from '../../objects';
@@ -24,19 +26,19 @@ const PALETTE_GROUPED: Map<string, number>[] = TEXTURE_PALETTE
     return arr;
   }, []);
 
-interface Props {
-  onClick: (idx: number) => void
-};
+export const PalettePicker: React.FunctionComponent = () => {
 
-export const PalettePicker: React.FunctionComponent<Props> = ({ onClick }) => {
+  const toolColor = useTextureCtx(state => state.toolColor);
+  const setColor = useTextureCtx(state => state.setToolColor);
+
   return (
     <div className={ styles.root }>
       { PALETTE_GROUPED.map((group, groupIdx) => (
         <div className={ styles.swatchGroup } key={ groupIdx }>
           { Array.from(group.entries()).map(([color, colorIdx]) => (
             <div 
-              className={ styles.swatch }
-              onClick={ (e) => onClick(colorIdx) }
+              className={ `${ styles.swatch } ${ (toolColor === colorIdx) && styles.swatchActive }` }
+              onClick={ () => setColor(colorIdx) }
               key={ colorIdx }
               style={{ backgroundColor: color }}
             />

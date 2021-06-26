@@ -43,6 +43,12 @@ export const GameView: React.FunctionComponent<Props> = (props) => {
         )}
       </div>
       <div className={ styles.main }>
+        <div>
+          <span>
+            <h4>Textures</h4>
+            <h4>3d</h4>
+          </span>
+        </div>
         <TextureGrid>
           { textures.map(texture => (
             <TextureThumb 

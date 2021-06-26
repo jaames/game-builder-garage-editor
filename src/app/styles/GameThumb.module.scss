@@ -1,5 +1,4 @@
 .root {
-  cursor: pointer;
   display: flex;
   flex-direction: column;
   max-width: 256px;
@@ -12,6 +11,13 @@
   border-radius: 12px;
   max-height: 256px;
   transition: background .2s;
+  filter: brightness(133%); // temp fix for gamma correction
+  // could try an SVG filter instead at some point in the future 
+  // https://developer.mozilla.org/en-US/docs/Web/SVG/Element/feComponentTransfer
+}
+
+.imageHoverable {
+  cursor: pointer;
   box-shadow: rgba(0, 0, 0, 0.2) 0px 7px 0px 0px;
 }
 

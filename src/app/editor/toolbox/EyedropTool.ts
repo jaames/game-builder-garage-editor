@@ -1,6 +1,10 @@
-import { ToolBase } from './ToolTypes';
+import { ToolBase, ToolType } from './ToolTypes';
+
+import { useTextureCtx } from '../../store/textureCtx';
 
 export class EyedropTool extends ToolBase {
+
+  static type = ToolType.EyeDrop;
 
   name = 'Color Picker';
   cursor = 'crosshair';
@@ -8,7 +12,7 @@ export class EyedropTool extends ToolBase {
 
   start(x: number, y: number) {
     const color = this.editor.texture.getPixel(x, y);
-    this.editor.setToolColor(color);
+    useTextureCtx.setState({ toolColor: color });
   }
 
   move() {}

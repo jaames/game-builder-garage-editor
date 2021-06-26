@@ -1,0 +1,16 @@
+@import './vars.scss';
+
+.root {
+  @include wrapper;
+  display: flex;
+  align-items: flex-start;
+  position: relative;
+}
+
+.main {
+  flex: 1;
+}
+
+.side {
+  
+}

@@ -1,12 +1,14 @@
 @import '~reset-css';
+@import './vars';
 
 html, body {
-  font-size: 16px;
-  font-family: sans-serif;
   line-height: 1.25;
   box-sizing: border-box;
   max-width: 100vw;
   overflow-x: hidden;
+  font-family: $global-font-family;
+  font-weight: $font-weight-global;
+  font-size: 16px;
 }
 
 * > * {
@@ -19,7 +21,8 @@ body {
 }
 
 h1, h2, h3, h4, h5 {
-  font-weight: bold;
+  font-family: $header-font-family;
+  font-weight: $font-weight-header;
   margin-bottom: .2em;
 }
 
@@ -50,6 +53,10 @@ a {
 
 .link {
   border-bottom: .1em currentColor dashed;
+}
+
+b, strong {
+  font-weight: $font-weight-bold;
 }
 
 img {

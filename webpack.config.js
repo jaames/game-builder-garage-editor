@@ -130,7 +130,7 @@ module.exports = function(env, argv) {
       new MiniCssExtract(),
       isDev && new webpack.HotModuleReplacementPlugin(),
       isDev && new ReactRefreshWebpackPlugin({
-        overlay: false,
+        // overlay: false,
       }),
     ].filter(Boolean),
     optimization: {

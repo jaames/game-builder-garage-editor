@@ -1,19 +1,20 @@
-$swatch-size: 24px;
+$swatch-size: 26px;
 
 .root {
+  margin-top: 1em;
   display: grid;
-  grid-gap: 20px;
-  grid-auto-flow: column;
-  grid-template-columns: repeat(5, fit-content(20%));
-  grid-template-rows: repeat(3, fit-content(33.3333%));
+  grid-gap: 16px;
+  grid-auto-flow: row;
+  grid-template-columns: repeat(3, fit-content(33.3333%));
+  grid-template-rows: repeat(5, fit-content(20%));
 }
 
 .swatchGroup {
   display: grid;
-  grid-gap: 4px;
+  grid-gap: 8px;
   grid-template-columns: repeat(3, $swatch-size);
   grid-template-rows: repeat(3, $swatch-size);
-  order: 3;
+  order: 1;
 }
 
 .swatch {
@@ -21,20 +22,39 @@ $swatch-size: 24px;
   height: $swatch-size;
   border: 1px #BEBEB4 solid;
   border-radius: 50%;
-  
   cursor: pointer;
+  position: relative;
 }
 
+.swatchActive {
+
+  &::after {
+    z-index: -1;
+    position: absolute;
+    top: -6px;
+    bottom: -6px;
+    left: -6px;
+    right: -6px;
+    border: 2px solid #02DC73;
+    background: #E1FF03;
+    border-radius: 10px;
+    content: ' ';
+    display: block;
+  }
+}
+
+// swatch group with just the transparent color swatch
 .swatchGroup:nth-of-type(1) {
-  order: 2;
-  grid-row: span 2;
+  order: 4;
   .swatch {
-    grid-column: 3;
+    // grid-column: 3;
     background-image: url('../graphics/bgTextureTile.svg');
     background-size: 8px 8px;
   }
 }
 
+// swatch group for greys
 .swatchGroup:nth-of-type(2) {
-  order: 1;
+  order: 3;
+  grid-column: span 1;
 }

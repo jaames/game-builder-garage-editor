@@ -9,6 +9,7 @@ interface Props {
   gameTitle?: string;
   gameId?: string;
   onClick?: (idx: number) => any;
+  imageOnly?: boolean;
 }
 
 export const GameThumb: React.FunctionComponent<Props> = (props) => {
@@ -30,10 +31,10 @@ export const GameThumb: React.FunctionComponent<Props> = (props) => {
 
   return (
     <div className={ styles.root } onClick={ e => props.onClick(props.idx) }>
-      { props.gameTitle && 
+      { (!props.imageOnly) && 
         <h5 className={ styles.title }>{ props.gameTitle }</h5>
       }
-      <div className={ styles.image } style={{ backgroundImage: `url(${ url })` }} />
+      <div className={ `${ styles.image } ${ (!props.imageOnly) && styles.imageHoverable }` } style={{ backgroundImage: `url(${ url })` }} />
     </div>
   );
 }

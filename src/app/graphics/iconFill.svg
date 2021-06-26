@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="40px" height="40px" viewBox="0 0 40 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>iconFill</title>
+    <g id="iconFill" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Group" transform="translate(3.000000, 6.000000)">
+            <path d="M2.12132034,13.8786797 L16,0 L16,0 L29,13 L15.1213203,26.8786797 C13.9497475,28.0502525 12.0502525,28.0502525 10.8786797,26.8786797 L2.12132034,18.1213203 C0.949747468,16.9497475 0.949747468,15.0502525 2.12132034,13.8786797 Z" id="Rectangle" stroke="#E76414" stroke-width="3"></path>
+            <path d="M27.5,7 C31.0898509,7 34,9.91014913 34,13.5 L34,15.3902278 C34,18.3160922 32.7214819,21.0958727 30.5,23 L30.0370264,23.3968345 C29.265576,24.0580777 28.1041484,23.9687371 27.4429052,23.1972867 C27.1570993,22.8638466 27,22.4391666 27,22 L27,20 C27,18.8954305 26.1045695,18 25,18 L24,18 L23.9996407,15.878 L26.8786797,13 L23.9996407,10.12 L24,7 L27.5,7 Z" id="Combined-Shape" fill="#E76414"></path>
+            <line x1="7" y1="1" x2="13" y2="7" id="Rectangle-Copy-10" stroke="#E76414" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></line>
+            <circle id="Oval" stroke="#E76414" stroke-width="3" cx="15.5" cy="9.5" r="2.5"></circle>
+        </g>
+    </g>
+</svg>
