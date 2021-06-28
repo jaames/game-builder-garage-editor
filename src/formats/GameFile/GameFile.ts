@@ -3,7 +3,7 @@ import { GameThumbnail } from './GameThumbnail'
 import { GameFileReader } from './GameFileReader';
 import { GameFileWriter } from './GameFileWriter';
 
-import { ActorType, NodonBase, Connection, Texture } from '../../objects';
+import { ActorType, Nodon, Connection, Texture } from '../../objects';
 
 import { BymlNode } from '../Byml';
 
@@ -14,7 +14,7 @@ export class GameFile {
   meta: GameMetaExtended | null = null;
   thumbnail: GameThumbnail | null = null;
   textures: Texture[] = [];
-  nodons: NodonBase[] = [];
+  nodons: Nodon[] = [];
   connections: Connection[] = [];
   textStrings: string[] = [];
   commentStrings: string[] = [];
@@ -66,14 +66,14 @@ export class GameFile {
     return this.connections.find(connection => connection.id === id);
   }
 
-  getConnectionsForNodon(nodon: NodonBase) {
+  getConnectionsForNodon(nodon: Nodon) {
     const nodonId = nodon.id;
     const a = this.connections.filter(connection => connection.idA === nodonId);
     const b = this.connections.filter(connection => connection.idB === nodonId);
     return [...a, ...b].filter(connection => connection !== undefined);
   }
 
-  getObjectWithId(id: number): (NodonBase | Connection) {
+  getObjectWithId(id: number): (Nodon | Connection) {
     const nodon = this.getNodonWithId(id);
     if (nodon) return nodon;
     const connection = this.getConnectionWithId(id);

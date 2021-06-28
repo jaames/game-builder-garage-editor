@@ -20,7 +20,7 @@ export const DropZone: React.FunctionComponent<Props> = ({ onDrop, accept }) => 
         {
           isDragActive ?
             <p>Drop files here ...</p> :
-            <p>Drag &amp; drop some files here, or click to select</p>
+            <p>Drag &amp; drop savefiles files (LgcTbp.bin, LgcTpbFile[x].bin) here, or click to select</p>
         }
       </div>
     </div>

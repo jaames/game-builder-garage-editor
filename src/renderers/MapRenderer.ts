@@ -2,9 +2,7 @@
  * 3D map renderer with orbit controls
  * 
  * TODO: 
- * resize: https://stackoverflow.com/questions/20290402/three-js-resizing-canvas
- * use geometry size instead of scaling objects
- * dispose of objects properly: https://threejs.org/docs/#manual/en/introduction/How-to-dispose-of-objects
+ * resize: https://stackoverflow.com/questions/20290402/three-js-resizing-canva
  * textures per face: https://threejsfundamentals.org/threejs/lessons/threejs-textures.html#six
  * render text objects: https://threejs.org/examples/#webgl_geometry_text_shapes
  * keyboard WASD controls: https://yomotsu.github.io/camera-controls/examples/keyboard.html
@@ -28,8 +26,20 @@ import CameraControls from 'camera-controls';
 CameraControls.install({ THREE: THREE });
 
 import { GameFile } from '../formats';
-import { NodonBase, ActorType, PlzRigidNode, PlzTpsCamera, PlzFieldConfigNode, NodonColor, PlzRigidNodeShape, PlzFieldConfigNodeShape } from '../objects';
 import { lerp, degreesToRadians, downloadFile } from '../utils';
+
+import { 
+  Nodon,
+  ActorType,
+  NodonRigidShape,
+  NodonRigidColor,
+  // PlzFieldConfigNode,
+  // PlzTpsCameraNode,
+  nodonHasTransform,
+  isPhysicalNode,
+  nodonHasColor,
+  nodonHasShape
+} from '../objects';
 
 export class MapRenderer {
 
@@ -46,13 +56,15 @@ export class MapRenderer {
   clock = new THREE.Clock();
   raycaster = new THREE.Raycaster();
   mousePos = new THREE.Vector2(0, 0);
-  objectMap = new Map<THREE.Object3D, NodonBase>();
+  objectMap = new Map<THREE.Object3D, Nodon>();
 
   isSsaoEnabled = false;
   isShadowEnabled = false;
   shadowQuality = 4; // gbg uses shadowmaps that are roughly 8k, which would be quality 4
 
-  onSelectNodon = (nodon: NodonBase) => {};
+  onSelectNodon = (nodon: Nodon) => {};
+
+  private refs: (THREE.BufferGeometry | THREE.Texture | THREE.Material)[] = [];
 
   constructor(rootEl: HTMLElement) {
     const bounds = rootEl.getBoundingClientRect();
@@ -89,8 +101,6 @@ export class MapRenderer {
 
   loadGame(game: GameFile) {
     this.game = game;
-    this.objectMap.clear();
-    this.scene.clear();
     this.addLights();
     game.nodons.forEach(nodon => this.addNodon(nodon));
     // set defaults view setup
@@ -151,11 +161,11 @@ export class MapRenderer {
   addLights() {
     // rough approximation of gbg's default lighting setup
     // hemi light for shadow + cieling ambient colors - in gbg these are tinted blue and brown respectively
-    const hemiLight = new THREE.HemisphereLight(0xaab5c2, 0xd6cbc7, .75);
+    const hemiLight = new THREE.HemisphereLight(0xaab5c2, 0xd6cbc7, .8);
     hemiLight.position.set(0, 50, 0);
     this.scene.add(hemiLight);
     // key directional light for sideways fill, slightly redish
-    const keyLight = new THREE.DirectionalLight(0xffefef, .2);
+    const keyLight = new THREE.DirectionalLight(0xffefef, .3);
     keyLight.position.set(-1, 1, 1);
     keyLight.position.multiplyScalar(30);
     this.scene.add(keyLight);
@@ -175,89 +185,72 @@ export class MapRenderer {
     shadowLight.shadow.bias = - 0.0;
   }
 
-  addNodon(nodon: NodonBase) {
-    if (nodon.type === ActorType.PlzFieldConfigNode)
-      this.addWorldNodon(nodon as PlzFieldConfigNode);
-    else if (nodon.type === ActorType.PlzTpsCamera)
-      this.addCameraNodon(nodon as PlzTpsCamera);
-    else
-      this.addObjectNodon(nodon);
+  addNodon(nodon: Nodon) {
+    // if (nodon.type === ActorType.PlzFieldConfigNode)
+    //   this.addWorldNodon(nodon as PlzFieldConfigNode);
+    // else if (nodon.type === ActorType.PlzTpsCamera)
+    //   this.addCameraNodon(nodon as PlzTpsCamera);
+    // else
+    this.addObjectNodon(nodon);
   }
 
-  addWorldNodon(nodon: PlzFieldConfigNode) {
-    let [x, y, z] = nodon.size;
-    // TODO: different world types
-    if (nodon.shape === PlzFieldConfigNodeShape.Plane) {
-      const geometry = new THREE.PlaneGeometry(x, z);
-      const material = new THREE.MeshLambertMaterial({ color: 0xfefefe });
+  addWorldNodon(nodon: Nodon) {
+    // let [x, y, z] = nodon.size;
+    // // TODO: different world types
+    // if (nodon.shape === PlzFieldConfigNodeShape.Plane) {
+    //   const geometry = new THREE.PlaneGeometry(x, z);
+    //   const material = new THREE.MeshLambertMaterial({ color: 0xfefefe });
+    //   const object = new THREE.Mesh(geometry, material);
+    //   object.rotation.x = -Math.PI / 2;
+    //   this.objectMap.set(object, nodon);
+    //   this.scene.add(object);
+    // } 
+  }
+
+  addObjectNodon(nodon: Nodon) {
+    if (isPhysicalNode(nodon) && nodonHasTransform(nodon)) {
+      const geometry = this.getNodonGeometry(nodon);
+      const material = this.getNodonMaterial(nodon);
       const object = new THREE.Mesh(geometry, material);
-      object.rotation.x = -Math.PI / 2;
+
+      // world rotation is in degrees
+      let [rX, rY, rZ] = nodon.worldRotation;
+      object.rotation.x = degreesToRadians(-rX);
+      object.rotation.y = degreesToRadians(-rY); 
+      object.rotation.z = degreesToRadians(rZ); // inverted z
+
+      let [x, y, z] = nodon.worldPosition;
+      object.position.x = x;
+      object.position.y = y;
+      object.position.z = -z; // inverted Z
+      object.renderOrder = nodon.canvasSortIndex;
+
+      this.track(geometry);
+      this.track(material);
       this.objectMap.set(object, nodon);
       this.scene.add(object);
-    } 
-  }
-
-  addCameraNodon(nodon: PlzTpsCamera) {
-    // TODO: figure out camera positioning
-    // const camera = new THREE.PerspectiveCamera(nodon.fov, window.innerWidth / window.innerHeight, 0.1, 1000);
-
-    // let [x, y, z] = nodon.offsetDistance;
-    // camera.position.x = x;
-    // camera.position.y = -y;
-    // camera.position.z = -z;
-
-    // let [lookX, lookY, lookZ] = nodon.worldPosition;
-    // camera.lookAt(new THREE.Vector3(lookX, lookY, lookZ));
-
-    // this.controls = new CameraControls(camera, this.renderer.domElement);
-    // this.camera = camera
-  }
-
-  addObjectNodon(nodon: NodonBase) {
-    // dont render certain nodes
-    // TODO: build full list of renderable nodes
-    if (!nodon.type.startsWith('Plz'))
-      return;
-    if (nodon.type.includes('Camera'))
-      return;
-
-    const geometry = this.getNodonGeometry(nodon);
-    const material = this.getNodonMaterial(nodon);
-    const object = new THREE.Mesh(geometry, material);
-
-    // world rotation is in degrees
-    let [rX, rY, rZ] = nodon.worldRotation;
-    object.rotation.x = degreesToRadians(-rX);
-    object.rotation.y = degreesToRadians(-rY); 
-    object.rotation.z = degreesToRadians(rZ); // inverted z
-
-    let [x, y, z] = nodon.worldPosition;
-    object.position.x = x;
-    object.position.y = y;
-    object.position.z = -z; // inverted Z
-
-    let [sX, sY, sZ] = nodon.worldSize;
-    object.scale.x = sX;
-    object.scale.y = sY;
-    object.scale.z = sZ;
-
-    object.renderOrder = nodon.canvasSortIndex;
-
-    this.objectMap.set(object, nodon);
-    this.scene.add(object);
-  }
-
-  getNodonGeometry(nodon: NodonBase) {
-    if (nodon instanceof PlzRigidNode) {
-      if(nodon.shape === PlzRigidNodeShape.Cylinder)
-        return new THREE.CylinderGeometry(.5, .5, 1, 20);
-      if(nodon.shape === PlzRigidNodeShape.Sphere)
-        return new THREE.SphereGeometry(.5, 20, 20);
     }
-    return new THREE.BoxGeometry(1, 1);
   }
 
-  getNodonMaterial(nodon: NodonBase) {
+  getNodonGeometry(nodon: Nodon) {
+    if (nodonHasTransform(nodon)) {
+      const [sX, sY, sZ] = nodon.worldSize;
+      if (nodonHasShape(nodon)) {
+        switch (nodon.shape) {
+          case NodonRigidShape.Cube:
+            return new THREE.BoxGeometry(1 * sX, 1 * sY, 1 * sZ);
+          case NodonRigidShape.Cylinder:
+            return new THREE.CylinderGeometry(.5 * sX, .5 * sX, 1 * sY, 20);
+          case NodonRigidShape.Sphere:
+            return new THREE.SphereGeometry(.5 * sX, 20);
+        }
+      }
+      return new THREE.BoxGeometry(1 * sX, 1 * sY, 1 * sZ);
+    }
+    return new THREE.BoxGeometry(1, 1, 1);
+  }
+
+  getNodonMaterial(nodon: Nodon) {
     const color = this.getNodonColor(nodon);
     return new THREE.MeshStandardMaterial({
       color: color,
@@ -266,25 +259,47 @@ export class MapRenderer {
     });
   }
 
-  getNodonColor(nodon: NodonBase) {
+  getNodonColor(nodon: Nodon) {
     // colors are approximated
-    switch (nodon.colorIdx) {
-      case NodonColor.Black: return 0x141414;
-      case NodonColor.Blue: return 0x0771FF;
-      case NodonColor.Brown: return 0xB97231;
-      case NodonColor.Green: return 0x00AC00;
-      case NodonColor.LightBlue: return 0x00D9FB;
-      case NodonColor.LimeGreen: return 0x53ED00;
-      case NodonColor.Orange: return 0xFF8900;
-      case NodonColor.Pink: return 0xE95BDD;
-      case NodonColor.Purple: return 0xBD00FF;
-      case NodonColor.Red: return 0xFF3C3D;
-      case NodonColor.White: return 0xfefeff;
-      case NodonColor.Yellow: return 0xE4EB00;
-      case NodonColor.Auto: 
-      default:
-        return 0xF7C801;
+    if (nodonHasColor(nodon)) {
+      switch (nodon.color) {
+        case NodonRigidColor.Black: return 0x141414;
+        case NodonRigidColor.Blue: return 0x0771FF;
+        case NodonRigidColor.Brown: return 0xB97231;
+        case NodonRigidColor.Green: return 0x00AC00;
+        case NodonRigidColor.LightBlue: return 0x00D9FB;
+        case NodonRigidColor.LimeGreen: return 0x53ED00;
+        case NodonRigidColor.Orange: return 0xFF8900;
+        case NodonRigidColor.Pink: return 0xE95BDD;
+        case NodonRigidColor.Purple: return 0xBD00FF;
+        case NodonRigidColor.Red: return 0xFF3C3D;
+        case NodonRigidColor.White: return 0xfefeff;
+        case NodonRigidColor.Yellow: return 0xE4EB00;       
+      }
     }
+    return 0xF7C801;
+  }
+
+  track(obj: THREE.BufferGeometry | THREE.Texture | THREE.Material) {
+    this.refs.push(obj);
+  }
+
+  disposeAll() {
+    console.log('dispose');
+    this.refs.forEach(r => {
+      if (r instanceof THREE.Object3D)
+        r.parent.remove(r);
+      r.dispose();
+    });
+    if (this.ssaoPass)
+      (this.ssaoPass as any).dispose(); // TODO: three js types has a typo here?
+    if (this.renderer)
+      this.renderer.dispose();
+    if (this.controls)
+      this.controls.dispose();
+    this.refs = [];
+    this.scene.clear();
+    this.objectMap.clear();
   }
 
   async exportAs(filename: string) {

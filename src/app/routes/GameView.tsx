@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect } from 'react';
-import { RouteComponentProps, useHistory } from 'react-router';
+import { Link, RouteComponentProps, useHistory } from 'react-router-dom';
 
+import { Layout } from '../components/Layout';
 import { GameDetails } from '../components/GameDetails';
 import { TextureGrid } from '../components/TextureGrid';
 import { TextureThumb } from '../components/TextureThumb';
@@ -36,30 +37,37 @@ export const GameView: React.FunctionComponent<Props> = (props) => {
   }, [gameIdx]);
 
   return (
-    <div className={ styles.root }>
-      <div className={ styles.side }>
-        { isGameLoaded && (
-          <GameDetails game={ game }/>
-        )}
-      </div>
-      <div className={ styles.main }>
-        <div>
-          <span>
-            <h4>Textures</h4>
-            <h4>3d</h4>
-          </span>
+    <Layout>
+      <div className={ styles.root }>
+        <div className={ styles.side }>
+          { isGameLoaded && (
+            <GameDetails game={ game }/>
+          )}
         </div>
-        <TextureGrid>
-          { textures.map(texture => (
-            <TextureThumb 
-              texture={ texture }
-              idx={ texture.id }
-              key={ `${ meta.gameId }:tex${ texture.id }` }
-              onClick={ idx => loadTexture(idx) }
-            />
-          ))}
-        </TextureGrid>
+        <div className={ styles.main }>
+          <div style={{ display: 'flex', marginBottom: '1em' }}>
+            <span>
+              <h3>Textures</h3>
+            </span>
+            <span style={{ marginLeft: '12px', color: '#888' }}>
+              <h3><Link to={ `/3d/${ gameIdx }` }>3d View</Link></h3>
+            </span>
+            <span style={{ marginLeft: '12px', color: '#888' }}>
+              <h3><Link to={ `/graph/${ gameIdx }` }>Nodon Graph</Link></h3>
+            </span>
+          </div>
+          <TextureGrid>
+            { textures.map(texture => (
+              <TextureThumb 
+                texture={ texture }
+                idx={ texture.id }
+                key={ `${ meta.gameId }:tex${ texture.id }` }
+                onClick={ idx => loadTexture(idx) }
+              />
+            ))}
+          </TextureGrid>
+        </div>
       </div>
-    </div>
+    </Layout>
   )
 }

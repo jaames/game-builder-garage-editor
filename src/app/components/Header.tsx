@@ -14,7 +14,7 @@ export const Header: React.FunctionComponent = () => {
 
   return (
     <header className={ styles.root }>
-      <div className={ styles.wrapper }>
+      {/* <div className={ styles.wrapper }>
         <div className={ styles.groupLeft }>
           {canGoBack && (
             <span className={ styles.backButton } onClick={ () => history.goBack() }>←</span>
@@ -27,7 +27,7 @@ export const Header: React.FunctionComponent = () => {
             "Download changes" button appears here
           </span>
         </div>
-      </div>
+      </div> */}
     </header>
   );
 }

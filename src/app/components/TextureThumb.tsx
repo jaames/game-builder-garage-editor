@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {Texture } from '../../objects';
 
 import styles from '../styles/TextureThumb.module.scss';
@@ -10,19 +10,15 @@ interface Props {
 }
 
 export const TextureThumb: React.FunctionComponent<Props> = (props) => {
-  const [url, setUrl] = useState<string>('');
+  const [url, setUrl] = useState<string | null>('');
   
   useEffect(() => {
-    if (url) {
-      setUrl('');
-      URL.revokeObjectURL(url);
-    }
-    setUrl(props.texture.getUrl());
+    const url = props.texture.getUrl();
+    setUrl(url);
+
     return () => {
-      if (url) {
-        setUrl('');
-        URL.revokeObjectURL(url);
-      }
+      URL.revokeObjectURL(url);
+      setUrl(null);
     }
   }, [props.texture]);
 

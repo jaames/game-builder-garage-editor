@@ -6,7 +6,7 @@ import * as PIXI from 'pixi.js';
 import { Viewport } from 'pixi-viewport';
 
 import { GameFile } from '../formats';
-import { NodonBase, Connection, ActorType } from '../objects';
+import { Nodon, Connection, ActorType } from '../objects';
 import { lerp } from '../utils';
 
 const COLOR_GRAPH_BG = 0xFFD42D;
@@ -26,10 +26,10 @@ export class GraphRenderer {
 
   game: GameFile = new GameFile(); // dummy game
 
-  private selectedNodon: NodonBase = null
+  private selectedNodon: Nodon = null
 
   private gfxList: PIXI.Graphics[] = [];
-  private nodonGfxMap = new Map<NodonBase, PIXI.Graphics>();
+  private nodonGfxMap = new Map<Nodon, PIXI.Graphics>();
   private nodonPositionMap = new Map<number, [number, number]>();
   private connectionGfxMap = new Map<Connection, PIXI.Graphics>();
 
@@ -81,7 +81,7 @@ export class GraphRenderer {
     game.connections.forEach(connection => this.makeConnectionGfx(connection));
   }
 
-  centerViewToNodon = (nodon: NodonBase) => {
+  centerViewToNodon = (nodon: Nodon) => {
     const [x, y] = this.nodonPositionMap.get(nodon.id);
     this.view.moveCenter(x, y)
   }
@@ -96,7 +96,7 @@ export class GraphRenderer {
     // this.view.addChild(bg);
   }
 
-  makeNodonGfx(nodon: NodonBase) {
+  makeNodonGfx(nodon: Nodon) {
     const gfx = new PIXI.Graphics();
     gfx.name = nodon.id.toString();
     gfx.interactive = true;
@@ -106,7 +106,7 @@ export class GraphRenderer {
     this.updateNodonGfx(nodon);
   }
 
-  updateNodonGfx(nodon: NodonBase) {
+  updateNodonGfx(nodon: Nodon) {
     let [x, y] = nodon.canvasPos;
     let [width, height] = nodon.canvasSize;
     let [scaleX, scaleY] = nodon.canvasScale;
@@ -168,8 +168,9 @@ export class GraphRenderer {
     if (target instanceof PIXI.Graphics) {
       const id = parseInt(target.name);
       const object = this.game.getObjectWithId(id);
-      if (object instanceof NodonBase) {
+      if (object instanceof Nodon) {
         this.selectedNodon = object;
+        console.log('Hit:', object);
         this.view.on('mousemove', this.handleMouseMove);
         this.view.on('mouseup', this.handleMouseUp);
       }

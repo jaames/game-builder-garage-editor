@@ -13,9 +13,9 @@ export class PenTool extends ToolBase {
   cursor = 'crosshair';
   useDrawingCoordSpace = true;
 
-  isDown: boolean = false;
-  lastX: number = -1;
-  lastY: number = -1;
+  private isDown: boolean = false;
+  private lastX: number = -1;
+  private lastY: number = -1;
 
   move(x: number, y: number) {
     if (this.isDown && (this.lastX !== x || this.lastY !== y)) {

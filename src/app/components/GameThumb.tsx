@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useRef, useEffect,  useCallback } from 'react';
 import { GameThumbnail } from '../../formats';
 
 import styles from '../styles/GameThumb.module.scss';
@@ -13,21 +13,17 @@ interface Props {
 }
 
 export const GameThumb: React.FunctionComponent<Props> = (props) => {
-  const [url, setUrl] = useState<string>('');
+  const [url, setUrl] = useState<string | null>('');
   
   useEffect(() => {
-    if (url) {
-      setUrl('');
-      URL.revokeObjectURL(url);
-    }
-    setUrl(props.thumbnail.getUrl());
+    const url = props.thumbnail.getUrl();
+    setUrl(url);
+
     return () => {
-      if (url) {
-        setUrl('');
-        URL.revokeObjectURL(url);
-      }
+      URL.revokeObjectURL(url);
+      setUrl(null);
     }
-  }, [props.gameTitle]);
+  }, [props.thumbnail]);
 
   return (
     <div className={ styles.root } onClick={ e => props.onClick(props.idx) }>

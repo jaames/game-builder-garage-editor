@@ -4,7 +4,7 @@ import styles from '../styles/Footer.module.scss';
 
 export const Footer: React.FunctionComponent = () => (
   <footer className={ styles.root }>
-    <div className={ styles.transition }></div>
+    {/* <div className={ styles.transition }></div>
     <div className={ styles.body }>
       <div className={ styles.wrapper }>
         <div className={ styles.info }>
@@ -16,6 +16,6 @@ export const Footer: React.FunctionComponent = () => (
           This project is not affiliated with or endorsed by Nintendo in any way.
         </p>
       </div>
-    </div>
+    </div> */}
   </footer>
 )

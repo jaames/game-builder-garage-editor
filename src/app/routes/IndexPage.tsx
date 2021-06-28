@@ -2,8 +2,8 @@ import React, { useCallback } from 'react';
 import { useHistory } from 'react-router';
 
 import { useSaveData } from '../store/saveData';
-import { useGameFile } from '../store/gameFile';
 
+import { Layout } from '../components/Layout';
 import { GameThumbGrid } from '../components/GameThumbGrid';
 import { GameThumb } from '../components/GameThumb';
 import { DropZone } from '../components/DropZone';
@@ -28,32 +28,34 @@ export const IndexPage: React.FunctionComponent = () => {
   }, []);
 
   return (
-    <div className="IndexPage">
-      { (!hasData) && 
-        <div className="DefaultView">
-          <MarkdownWrapper>
-            <IndexContent/>
-          </MarkdownWrapper>
-          <DropZone onDrop={ onDrop } accept={['.bin']}></DropZone>
-        </div>
-      }
-      { hasData && 
-        <div className="GameListView">
-          <GameThumbGrid>
-            { myGames.map((gameMeta, idx) => (
-              <GameThumb
-                key={ gameMeta.gameId }
-                idx={ idx }
-                gameId={ gameMeta.gameId }
-                gameTitle={ gameMeta.name }
-                thumbnail={ gameMeta.thumbnail }
-                onClick={ () => loadGameWithIdx(gameMeta.gameIndex) }
-              />
-            ))}
-          </GameThumbGrid>   
-        </div>
-      }
-    </div>
+    <Layout>
+      <div className="IndexPage">
+        { (!hasData) && 
+          <div className="DefaultView">
+            {/* <MarkdownWrapper>
+              <IndexContent/>
+            </MarkdownWrapper> */}
+            <DropZone onDrop={ onDrop } accept={['.bin']}></DropZone>
+          </div>
+        }
+        { hasData && 
+          <div className="GameListView">
+            <GameThumbGrid>
+              { myGames.map((gameMeta, idx) => (
+                <GameThumb
+                  key={ gameMeta.gameId }
+                  idx={ idx }
+                  gameId={ gameMeta.gameId }
+                  gameTitle={ gameMeta.name }
+                  thumbnail={ gameMeta.thumbnail }
+                  onClick={ () => loadGameWithIdx(gameMeta.gameIndex) }
+                />
+              ))}
+            </GameThumbGrid>   
+          </div>
+        }
+      </div>
+    </Layout>
   );
 
 }

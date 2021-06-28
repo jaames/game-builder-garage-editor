@@ -1,9 +1,9 @@
 import React, { useRef, useEffect } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 
-import { ToolType } from '../editor';
 import { useTextureCtx } from '../store/textureCtx';
 
+import { Layout } from '../components/Layout';
 import { TextureEditCanvas } from '../components/TextureEditCanvas';
 import { ToolPicker } from '../components/ToolPicker';
 import { PalettePicker } from '../components/PalettePicker';
@@ -24,14 +24,16 @@ export const TextureEditView: React.FunctionComponent<Props> = (props) => {
   }, [gameIdx, textureIdx]);
 
   return (
-    <div className={ styles.root }>
-      <div className={ styles.main }>
-        <TextureEditCanvas/>
+    <Layout>
+      <div className={ styles.root }>
+        <div className={ styles.main }>
+          <TextureEditCanvas/>
+        </div>
+        <div className={ styles.side }>
+          <ToolPicker/>
+          <PalettePicker/>
+        </div>
       </div>
-      <div className={ styles.side }>
-        <ToolPicker/>
-        <PalettePicker/>
-      </div>
-    </div>
+    </Layout>
   );
 }
