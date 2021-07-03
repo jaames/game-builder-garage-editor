@@ -31,8 +31,8 @@ import { lerp, degreesToRadians, downloadFile } from '../utils';
 import { 
   Nodon,
   ActorType,
-  NodonRigidShape,
-  NodonRigidColor,
+  NodonShape,
+  NodonColor,
   // PlzFieldConfigNode,
   // PlzTpsCameraNode,
   nodonHasTransform,
@@ -239,11 +239,11 @@ export class MapRenderer {
       const [sX, sY, sZ] = nodon.worldSize;
       if (nodonHasShape(nodon)) {
         switch (nodon.shape) {
-          case NodonRigidShape.Cube:
+          case NodonShape.Cube:
             return new THREE.BoxGeometry(1 * sX, 1 * sY, 1 * sZ);
-          case NodonRigidShape.Cylinder:
+          case NodonShape.Cylinder:
             return new THREE.CylinderGeometry(.5 * sX, .5 * sX, 1 * sY, 20);
-          case NodonRigidShape.Sphere:
+          case NodonShape.Sphere:
             return new THREE.SphereGeometry(.5 * sX, 20);
         }
       }
@@ -265,18 +265,18 @@ export class MapRenderer {
     // colors are approximated
     if (nodonHasColor(nodon)) {
       switch (nodon.color) {
-        case NodonRigidColor.Black: return 0x141414;
-        case NodonRigidColor.Blue: return 0x0771FF;
-        case NodonRigidColor.Brown: return 0xB97231;
-        case NodonRigidColor.Green: return 0x00AC00;
-        case NodonRigidColor.LightBlue: return 0x00D9FB;
-        case NodonRigidColor.LimeGreen: return 0x53ED00;
-        case NodonRigidColor.Orange: return 0xFF8900;
-        case NodonRigidColor.Pink: return 0xE95BDD;
-        case NodonRigidColor.Purple: return 0xBD00FF;
-        case NodonRigidColor.Red: return 0xFF3C3D;
-        case NodonRigidColor.White: return 0xfefeff;
-        case NodonRigidColor.Yellow: return 0xE4EB00;       
+        case NodonColor.Black: return 0x141414;
+        case NodonColor.Blue: return 0x0771FF;
+        case NodonColor.Brown: return 0xB97231;
+        case NodonColor.Green: return 0x00AC00;
+        case NodonColor.LightBlue: return 0x00D9FB;
+        case NodonColor.LimeGreen: return 0x53ED00;
+        case NodonColor.Orange: return 0xFF8900;
+        case NodonColor.Pink: return 0xE95BDD;
+        case NodonColor.Purple: return 0xBD00FF;
+        case NodonColor.Red: return 0xFF3C3D;
+        case NodonColor.White: return 0xfefeff;
+        case NodonColor.Yellow: return 0xE4EB00;       
       }
     }
     return 0xF7C801;

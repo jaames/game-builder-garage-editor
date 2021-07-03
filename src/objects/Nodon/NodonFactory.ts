@@ -67,8 +67,39 @@ import {
   PlzCommentRigidNode,
   PlzFancyRigidNode,
   PlzTextureNode,
-} from './PhysicalNodon';
+  PlzIntegratedEffectNode,
+  PlzTouchSensorNode,
+  PlzJointSingleAxisSliderNode,
+  PlzBreakSensorNode,
+  PlzJointSliderNode,
+  PlzBrokenSensorNode,
+  PlzJointHingeNode,
+  PlzGrabSensorNode,
+  PlzRopeNode,
+  PlzPositionSensorNode,
+  PlzGeneratorFewNode,
+  PlzGeneratorNode,
+  PlzGeneratorManyNode,
+  PlzSpeedSensorNode,
+  PlzBindCommanderNode,
+  PlzAccelerationSensorNode,
+  PlzObjWarpEnterNode,
+  PlzObjWarpExitNode,
+  PlzAngleSensorNode,
+  PlzRotationSensorNode,
+  PlzPullForceNode,
+  PlzEasyCamera,
+  PlzFieldConfigNode,
+  PlzTpsCamera,
+  PlzHeadNode,
+  PlzHandNode,
+  PlzCameraPositionNode,
+  PlzCameraLookAtNode,
+  PlzCameraDirectionNode,
+  PlzCameraViewAngleNode,
+} from './ObjectNodon';
 
+// return the appropriate nodon class for a given nodon type
 export function NodonFactory(type: ActorType): Nodon {
   switch (type) {
 
@@ -169,7 +200,7 @@ export function NodonFactory(type: ActorType): Nodon {
     case ActorType.EmitIrLedNode:
       return new EmitIrLedNode(); 
 
-    // Physical Nodon (visible within the world)
+    // Object Nodon
     case ActorType.PlzHumanNode:
       return new PlzHumanNode();
     case ActorType.PlzCarNode:
@@ -192,9 +223,70 @@ export function NodonFactory(type: ActorType): Nodon {
       return new PlzFancyRigidNode();
     case ActorType.PlzTextureNode:
       return new PlzTextureNode();
+    case ActorType.PlzIntegratedEffectNode:
+      return new PlzIntegratedEffectNode(); 
+    case ActorType.PlzTouchSensorNode:
+      return new PlzTouchSensorNode(); 
+    case ActorType.PlzJointSingleAxisSliderNode:
+      return new PlzJointSingleAxisSliderNode(); 
+    case ActorType.PlzBreakSensorNode:
+      return new PlzBreakSensorNode(); 
+    case ActorType.PlzJointSliderNode:
+      return new PlzJointSliderNode(); 
+    case ActorType.PlzBrokenSensorNode:
+      return new PlzBrokenSensorNode(); 
+    case ActorType.PlzJointHingeNode:
+      return new PlzJointHingeNode(); 
+    case ActorType.PlzGrabSensorNode:
+      return new PlzGrabSensorNode(); 
+    case ActorType.PlzRopeNode:
+      return new PlzRopeNode(); 
+    case ActorType.PlzPositionSensorNode:
+      return new PlzPositionSensorNode(); 
+    case ActorType.PlzGeneratorFewNode:
+      return new PlzGeneratorFewNode(); 
+    case ActorType.PlzGeneratorNode:
+      return new PlzGeneratorNode(); 
+    case ActorType.PlzGeneratorManyNode:
+      return new PlzGeneratorManyNode(); 
+    case ActorType.PlzSpeedSensorNode:
+      return new PlzSpeedSensorNode(); 
+    case ActorType.PlzBindCommanderNode:
+      return new PlzBindCommanderNode(); 
+    case ActorType.PlzAccelerationSensorNode:
+      return new PlzAccelerationSensorNode(); 
+    case ActorType.PlzObjWarpEnterNode:
+      return new PlzObjWarpEnterNode(); 
+    case ActorType.PlzObjWarpExitNode:
+      return new PlzObjWarpExitNode(); 
+    case ActorType.PlzAngleSensorNode:
+      return new PlzAngleSensorNode(); 
+    case ActorType.PlzRotationSensorNode:
+      return new PlzRotationSensorNode(); 
+    case ActorType.PlzPullForceNode:
+      return new PlzPullForceNode(); 
+    case ActorType.PlzEasyCamera:
+      return new PlzEasyCamera(); 
+    case ActorType.PlzFieldConfigNode:
+      return new PlzFieldConfigNode(); 
+    case ActorType.PlzTpsCamera:
+      return new PlzTpsCamera(); 
+    case ActorType.PlzHeadNode:
+      return new PlzHeadNode(); 
+    case ActorType.PlzHandNode:
+      return new PlzHandNode(); 
+    case ActorType.PlzCameraPositionNode:
+      return new PlzCameraPositionNode(); 
+    case ActorType.PlzCameraLookAtNode:
+      return new PlzCameraLookAtNode(); 
+    case ActorType.PlzCameraDirectionNode:
+      return new PlzCameraDirectionNode(); 
+    case ActorType.PlzCameraViewAngleNode:
+      return new PlzCameraViewAngleNode(); 
 
     // fallback to basic nodon type
-    default: 
+    default:
+      console.warn(`Unknown Nodon Type: ${ type }`);
       return new Nodon(type);
   }
 }

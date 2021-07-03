@@ -277,7 +277,7 @@ export class CommentNode extends Nodon {
     super(ActorType.CommentNode);
   }
 
-  // TODO: settings
+  // TODO: i32[0] is comment string idx
 
 }
 
