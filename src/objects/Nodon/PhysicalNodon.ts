@@ -1,20 +1,6 @@
-import { Mixin } from 'ts-mixer';
 import { ActorType } from './ActorTypes';
 import { Nodon, NodonVec3 } from './NodonBase';
-
-export const PHYSICAL_NODON_TYPES = [
-  ActorType.PlzHumanNode,
-  ActorType.PlzCarNode,
-  ActorType.PlzUfoNode,
-  ActorType.PlzRigidNode,
-  ActorType.PlzMoveRigidNode,
-  ActorType.PlzRotateRigidNode,
-  ActorType.PlzStretchRigidNode,
-  ActorType.PlzScoreRigidNode,
-  ActorType.PlzCommentRigidNode,
-  ActorType.PlzFancyRigidNode,
-  ActorType.PlzTextureNode,
-];
+import { NodonSettingType, nodonSetting } from './NodonSettings';
 
 export enum NodonRigidColor {
   Auto = 0,
@@ -38,31 +24,106 @@ export enum NodonRigidShape {
   Sphere
 };
 
+export enum NodonRigidMaterial {
+  Normal = 0,
+  Bouncy,
+  Slippery,
+  Floaty,
+  ZeroGravity
+};
+
+export interface NodonWithTransform extends Nodon {
+  hasTransform: boolean;
+  worldSize: NodonVec3;
+  worldPosition: NodonVec3;
+  worldRotation: NodonVec3;
+};
+
+export interface NodonWithColor extends Nodon {
+  hasColor: boolean;
+  color: NodonRigidColor;
+};
+
+export interface NodonWithShape extends Nodon {
+  hasShape: boolean;
+  shape: NodonRigidShape;
+};
+
+export interface NodonWithMaterial extends Nodon {
+  hasMaterial: boolean;
+  material: NodonRigidMaterial;
+};
+
+export const PHYSICAL_NODON_TYPES = [
+  ActorType.PlzHumanNode,
+  ActorType.PlzCarNode,
+  ActorType.PlzUfoNode,
+  ActorType.PlzRigidNode,
+  ActorType.PlzMoveRigidNode,
+  ActorType.PlzRotateRigidNode,
+  ActorType.PlzStretchRigidNode,
+  ActorType.PlzScoreRigidNode,
+  ActorType.PlzCommentRigidNode,
+  ActorType.PlzFancyRigidNode,
+  ActorType.PlzTextureNode,
+];
+
 export function isPhysicalNode(nodon: Nodon) {
   return PHYSICAL_NODON_TYPES.includes(nodon.type);
 }
 
-export function nodonHasTransform(nodon: Nodon): nodon is NodonTransformMixin {
+export function nodonHasTransform(nodon: Nodon): nodon is NodonWithTransform {
   return nodon.hasOwnProperty('hasTransform');
 }
 
-export function nodonHasColor(nodon: Nodon): nodon is NodonColorMixin {
+export function nodonHasColor(nodon: Nodon): nodon is NodonWithColor {
   return nodon.hasOwnProperty('hasColor');
 }
 
-export function nodonHasShape(nodon: Nodon): nodon is NodonShapeMixin {
+export function nodonHasShape(nodon: Nodon): nodon is NodonWithShape {
   return nodon.hasOwnProperty('hasShape');
 }
 
-export class NodonTransformMixin extends Nodon {
+export function nodonHasMaterial(nodon: Nodon): nodon is NodonWithMaterial {
+  return nodon.hasOwnProperty('hasMaterial');
+}
+
+export class PlzHumanNode extends Nodon implements NodonWithTransform, NodonWithColor {
+
+  label = 'Person';
+  hasColor = true;
   hasTransform =  true;
 
+  constructor() {
+    super(ActorType.PlzHumanNode);
+  }
+
+  @nodonSetting({
+    type: NodonSettingType.Enum,
+    label: 'Color',
+    enum: NodonRigidColor
+  })
+  get color() { return this.props.u32[2] as NodonRigidColor }
+  set color(value: NodonRigidColor) { this.props.u32[2] = value }
+
+  @nodonSetting({
+    type: NodonSettingType.Size,
+    label: 'Size'
+  })
   get worldSize() { return this.props.vec3[0] }
   set worldSize(value: NodonVec3) { this.props.vec3[0] = value }
 
+  @nodonSetting({
+    type: NodonSettingType.Position,
+    label: 'Position'
+  })
   get worldPosition() { return this.props.vec3[1] }
   set worldPosition(value: NodonVec3) { this.props.vec3[1] = value }
 
+  @nodonSetting({
+    type: NodonSettingType.Rotation,
+    label: 'Rotation'
+  })
   get worldRotation() { 
     return [this.props.f32[0], this.props.f32[1], this.props.f32[2]]
   }
@@ -73,153 +134,482 @@ export class NodonTransformMixin extends Nodon {
   }
 }
 
-export class NodonColorMixin extends Nodon {
-  hasColor = true;
+export class PlzCarNode extends Nodon implements NodonWithTransform, NodonWithColor {
 
+  label = 'Car';
+  hasColor = true;
+  hasTransform =  true;
+
+  constructor() {
+    super(ActorType.PlzCarNode);
+  }
+  
+  @nodonSetting({
+    type: NodonSettingType.Enum,
+    label: 'Color',
+    enum: NodonRigidColor
+  })
+  get color() { return this.props.u32[2] as NodonRigidColor }
+  set color(value: NodonRigidColor) {  this.props.u32[2] = value }
+
+  @nodonSetting({
+    type: NodonSettingType.Size,
+    label: 'Size'
+  })
+  get worldSize() { return this.props.vec3[0] }
+  set worldSize(value: NodonVec3) { this.props.vec3[0] = value }
+
+  @nodonSetting({
+    type: NodonSettingType.Position,
+    label: 'Position'
+  })
+  get worldPosition() { return this.props.vec3[1] }
+  set worldPosition(value: NodonVec3) { this.props.vec3[1] = value }
+
+  @nodonSetting({
+    type: NodonSettingType.Rotation,
+    label: 'Rotation'
+  })
+  get worldRotation() { 
+    return [this.props.f32[0], this.props.f32[1], this.props.f32[2]]
+  }
+  set worldRotation(value: NodonVec3) {
+    this.props.f32[0] = value[0];
+    this.props.f32[1] = value[1];
+    this.props.f32[2] = value[2];
+  }
+}
+
+export class PlzUfoNode extends Nodon implements NodonWithTransform, NodonWithColor {
+
+  label = 'UFO';
+  hasColor = true;
+  hasTransform = true;
+
+  constructor() {
+    super(ActorType.PlzUfoNode);
+  }
+
+  @nodonSetting({
+    type: NodonSettingType.Enum,
+    label: 'Color',
+    enum: NodonRigidColor
+  })
+  get color() {return this.props.u32[2] as NodonRigidColor }
+  set color(value: NodonRigidColor) { this.props.u32[2] = value }
+
+  @nodonSetting({
+    type: NodonSettingType.Size,
+    label: 'Size'
+  })
+  get worldSize() { return this.props.vec3[0] }
+  set worldSize(value: NodonVec3) { this.props.vec3[0] = value }
+
+  @nodonSetting({
+    type: NodonSettingType.Position,
+    label: 'Position'
+  })
+  get worldPosition() { return this.props.vec3[1] }
+  set worldPosition(value: NodonVec3) { this.props.vec3[1] = value }
+
+  @nodonSetting({
+    type: NodonSettingType.Rotation,
+    label: 'Rotation'
+  })
+  get worldRotation() { 
+    return [this.props.f32[0], this.props.f32[1], this.props.f32[2]]
+  }
+  set worldRotation(value: NodonVec3) {
+    this.props.f32[0] = value[0];
+    this.props.f32[1] = value[1];
+    this.props.f32[2] = value[2];
+  }
+}
+
+export class PlzRigidNode extends Nodon implements NodonWithTransform, NodonWithColor, NodonWithShape, NodonWithMaterial {
+
+  label = 'Object';
+  hasColor = true;
+  hasShape = true;
+  hasMaterial = true;
+  hasTransform =  true;
+
+  constructor() {
+    super(ActorType.PlzRigidNode);
+  }
+
+  @nodonSetting({
+    type: NodonSettingType.Enum,
+    label: 'Shape',
+    enum: NodonRigidShape
+  })
+  get shape() { return this.props.i32[0] as NodonRigidShape }
+  set shape(value: NodonRigidShape) { this.props.i32[0] = value }
+
+  @nodonSetting({
+    type: NodonSettingType.Enum,
+    label: 'Color',
+    enum: NodonRigidColor
+  })
+  get color() { return this.props.u32[2] as NodonRigidColor }
+  set color(value: NodonRigidColor) { this.props.u32[2] = value }
+
+  @nodonSetting({
+    type: NodonSettingType.Enum,
+    label: 'Material',
+    enum: NodonRigidMaterial
+  })
+  get material() { return this.props.i32[1] as NodonRigidMaterial }
+  set material(value: NodonRigidMaterial) { this.props.i32[1] = value }
+
+  @nodonSetting({
+    type: NodonSettingType.Size,
+    label: 'Size'
+  })
+  get worldSize() { return this.props.vec3[0] }
+  set worldSize(value: NodonVec3) { this.props.vec3[0] = value }
+
+  @nodonSetting({
+    type: NodonSettingType.Position,
+    label: 'Position'
+  })
+  get worldPosition() { return this.props.vec3[1] }
+  set worldPosition(value: NodonVec3) { this.props.vec3[1] = value }
+
+  @nodonSetting({
+    type: NodonSettingType.Rotation,
+    label: 'Rotation'
+  })
+  get worldRotation() { 
+    return [this.props.f32[0], this.props.f32[1], this.props.f32[2]]
+  }
+  set worldRotation(value: NodonVec3) {
+    this.props.f32[0] = value[0];
+    this.props.f32[1] = value[1];
+    this.props.f32[2] = value[2];
+  }
+}
+
+export class PlzMoveRigidNode extends Nodon implements NodonWithTransform, NodonWithColor, NodonWithShape {
+
+  label = 'Moving Object';
+  hasColor = true;
+  hasShape = true;
+  hasTransform =  true;
+
+  constructor() {
+    super(ActorType.PlzMoveRigidNode);
+  }
+
+  @nodonSetting({
+    type: NodonSettingType.Enum,
+    label: 'Color',
+    enum: NodonRigidColor
+  })
   get color() { 
     return this.props.u32[2] as NodonRigidColor;
   }
   set color(value: NodonRigidColor) {
     this.props.u32[2] = value;
   }
-  get colorName() {
-    return NodonRigidColor[this.color];
-  }
-}
 
-export class NodonShapeMixin extends Nodon {
-  hasShape = true;
-
-  get shape() {
-    return this.props.i32[0] as NodonRigidShape;
-  }
-  set shape(value: NodonRigidShape) {
-    this.props.i32[0] = value;
-  }
-  get shapeName() {
-    return NodonRigidShape[this.shape];
-  }
-}
-
-export class PlzHumanNode extends Mixin(Nodon, NodonTransformMixin, NodonColorMixin) {
-
-  label = 'Person';
-
-  constructor() {
-    super(ActorType.PlzHumanNode);
-  }
-}
-
-export class PlzCarNode extends Mixin(Nodon, NodonTransformMixin, NodonColorMixin) {
-
-  label = 'Car';
-
-  constructor() {
-    super(ActorType.PlzCarNode);
-  }
-}
-
-export class PlzUfoNode extends Mixin(Nodon, NodonTransformMixin, NodonColorMixin) {
-
-  label = 'UFO';
-
-  constructor() {
-    super(ActorType.PlzUfoNode);
-  }
-}
-
-export class PlzRigidNode extends Mixin(Nodon, NodonTransformMixin, NodonColorMixin, NodonShapeMixin) {
-
-  label = 'Object';
-
-  constructor() {
-    super(ActorType.PlzRigidNode);
-  }
-}
-
-export class PlzMoveRigidNode extends Mixin(Nodon, NodonTransformMixin, NodonColorMixin) {
-
-  label = 'Moving Object';
-
-  constructor() {
-    super(ActorType.PlzMoveRigidNode);
-  }
-
-  hasShape = true;
-
+  @nodonSetting({
+    type: NodonSettingType.Enum,
+    label: 'Shape',
+    enum: NodonRigidShape
+  })
   get shape() {
     return this.props.i32[1] as NodonRigidShape;
   }
   set shape(value: NodonRigidShape) {
     this.props.i32[1] = value;
   }
-  get shapeName() {
-    return NodonRigidShape[this.shape];
+
+  @nodonSetting({
+    type: NodonSettingType.Size,
+    label: 'Size'
+  })
+  get worldSize() { return this.props.vec3[0] }
+  set worldSize(value: NodonVec3) { this.props.vec3[0] = value }
+
+  @nodonSetting({
+    type: NodonSettingType.Position,
+    label: 'Position'
+  })
+  get worldPosition() { return this.props.vec3[1] }
+  set worldPosition(value: NodonVec3) { this.props.vec3[1] = value }
+
+  @nodonSetting({
+    type: NodonSettingType.Rotation,
+    label: 'Rotation'
+  })
+  get worldRotation() { 
+    return [this.props.f32[0], this.props.f32[1], this.props.f32[2]]
+  }
+  set worldRotation(value: NodonVec3) {
+    this.props.f32[0] = value[0];
+    this.props.f32[1] = value[1];
+    this.props.f32[2] = value[2];
   }
 }
 
-export class PlzRotateRigidNode extends Mixin(Nodon, NodonTransformMixin, NodonColorMixin) {
+export class PlzRotateRigidNode extends Nodon implements NodonWithTransform, NodonWithColor, NodonWithShape {
 
   label = 'Rotating Object';
+  hasColor = true;
+  hasShape = true;
+  hasTransform =  true;
 
   constructor() {
     super(ActorType.PlzRotateRigidNode);
   }
 
-  hasShape = true;
+  @nodonSetting({
+    type: NodonSettingType.Enum,
+    label: 'Color',
+    enum: NodonRigidColor
+  })
+  get color() { return this.props.u32[2] as NodonRigidColor }
+  set color(value: NodonRigidColor) { this.props.u32[2] = value }
 
-  get shape() {
-    return this.props.i32[1] as NodonRigidShape;
+  @nodonSetting({
+    type: NodonSettingType.Enum,
+    label: 'Shape',
+    enum: NodonRigidShape
+  })
+  get shape() { return this.props.i32[1] as NodonRigidShape }
+  set shape(value: NodonRigidShape) { this.props.i32[1] = value }
+
+  @nodonSetting({
+    type: NodonSettingType.Size,
+    label: 'Size'
+  })
+  get worldSize() { return this.props.vec3[0] }
+  set worldSize(value: NodonVec3) { this.props.vec3[0] = value }
+
+  @nodonSetting({
+    type: NodonSettingType.Position,
+    label: 'Position'
+  })
+  get worldPosition() { return this.props.vec3[1] }
+  set worldPosition(value: NodonVec3) { this.props.vec3[1] = value }
+
+  @nodonSetting({
+    type: NodonSettingType.Rotation,
+    label: 'Rotation'
+  })
+  get worldRotation() { 
+    return [this.props.f32[0], this.props.f32[1], this.props.f32[2]]
   }
-  set shape(value: NodonRigidShape) {
-    this.props.i32[1] = value;
-  }
-  get shapeName() {
-    return NodonRigidShape[this.shape];
+  set worldRotation(value: NodonVec3) {
+    this.props.f32[0] = value[0];
+    this.props.f32[1] = value[1];
+    this.props.f32[2] = value[2];
   }
 }
 
-export class PlzStretchRigidNode extends Mixin(Nodon, NodonTransformMixin, NodonColorMixin, NodonShapeMixin) {
+export class PlzStretchRigidNode extends Nodon implements NodonWithTransform, NodonWithColor, NodonWithShape {
 
   label = 'Extending Object';
+  hasShape = true;
+  hasColor = true;
+  hasTransform =  true;
 
   constructor() {
     super(ActorType.PlzStretchRigidNode);
   }
+
+  @nodonSetting({
+    type: NodonSettingType.Enum,
+    label: 'Shape',
+    enum: NodonRigidShape
+  })
+  get shape() { 
+    return this.props.i32[0] as NodonRigidShape;
+  }
+  set shape(value: NodonRigidShape) {
+    this.props.i32[0] = value;
+  }
+
+  @nodonSetting({
+    type: NodonSettingType.Enum,
+    label: 'Color',
+    enum: NodonRigidColor
+  })
+  get color() { 
+    return this.props.u32[2] as NodonRigidColor;
+  }
+  set color(value: NodonRigidColor) {
+    this.props.u32[2] = value;
+  }
+
+  @nodonSetting({
+    type: NodonSettingType.Size,
+    label: 'Size'
+  })
+  get worldSize() { return this.props.vec3[0] }
+  set worldSize(value: NodonVec3) { this.props.vec3[0] = value }
+
+  @nodonSetting({
+    type: NodonSettingType.Position,
+    label: 'Position'
+  })
+  get worldPosition() { return this.props.vec3[1] }
+  set worldPosition(value: NodonVec3) { this.props.vec3[1] = value }
+
+  @nodonSetting({
+    type: NodonSettingType.Rotation,
+    label: 'Rotation'
+  })
+  get worldRotation() { 
+    return [this.props.f32[0], this.props.f32[1], this.props.f32[2]]
+  }
+  set worldRotation(value: NodonVec3) {
+    this.props.f32[0] = value[0];
+    this.props.f32[1] = value[1];
+    this.props.f32[2] = value[2];
+  }
 }
 
-export class PlzScoreRigidNode extends Mixin(Nodon, NodonTransformMixin, NodonColorMixin) {
+export class PlzScoreRigidNode extends Nodon implements NodonWithTransform, NodonWithColor {
 
   label = 'Number Object';
+  hasColor = true;
+  hasTransform =  true;
 
   constructor() {
     super(ActorType.PlzScoreRigidNode);
   }
+
+  @nodonSetting({
+    type: NodonSettingType.Enum,
+    label: 'Color',
+    enum: NodonRigidColor
+  })
+  get color() { return this.props.u32[2] as NodonRigidColor }
+  set color(value: NodonRigidColor) { this.props.u32[2] = value }
+
+  @nodonSetting({
+    type: NodonSettingType.Size,
+    label: 'Size'
+  })
+  get worldSize() { return this.props.vec3[0] }
+  set worldSize(value: NodonVec3) { this.props.vec3[0] = value }
+
+  @nodonSetting({
+    type: NodonSettingType.Position,
+    label: 'Position'
+  })
+  get worldPosition() { return this.props.vec3[1] }
+  set worldPosition(value: NodonVec3) { this.props.vec3[1] = value }
+
+  @nodonSetting({
+    type: NodonSettingType.Rotation,
+    label: 'Rotation'
+  })
+  get worldRotation() { 
+    return [this.props.f32[0], this.props.f32[1], this.props.f32[2]]
+  }
+  set worldRotation(value: NodonVec3) {
+    this.props.f32[0] = value[0];
+    this.props.f32[1] = value[1];
+    this.props.f32[2] = value[2];
+  }
 }
 
-export class PlzCommentRigidNode extends Mixin(Nodon, NodonTransformMixin, NodonColorMixin) {
+export class PlzCommentRigidNode extends Nodon implements NodonWithTransform, NodonWithColor {
 
   label = 'Text';
+  hasColor = true;
+  hasTransform =  true;
 
   constructor() {
     super(ActorType.PlzCommentRigidNode);
   }
+
+  @nodonSetting({
+    type: NodonSettingType.Enum,
+    label: 'Color',
+    enum: NodonRigidColor
+  })
+  get color() { return this.props.u32[2] as NodonRigidColor }
+  set color(value: NodonRigidColor) { this.props.u32[2] = value }
+
+  @nodonSetting({
+    type: NodonSettingType.Size,
+    label: 'Size'
+  })
+  get worldSize() { return this.props.vec3[0] }
+  set worldSize(value: NodonVec3) { this.props.vec3[0] = value }
+
+  @nodonSetting({
+    type: NodonSettingType.Position,
+    label: 'Position'
+  })
+  get worldPosition() { return this.props.vec3[1] }
+  set worldPosition(value: NodonVec3) { this.props.vec3[1] = value }
+
+  @nodonSetting({
+    type: NodonSettingType.Rotation,
+    label: 'Rotation'
+  })
+  get worldRotation() { 
+    return [this.props.f32[0], this.props.f32[1], this.props.f32[2]]
+  }
+  set worldRotation(value: NodonVec3) {
+    this.props.f32[0] = value[0];
+    this.props.f32[1] = value[1];
+    this.props.f32[2] = value[2];
+  }
 }
 
-export class PlzFancyRigidNode extends Mixin(Nodon, NodonTransformMixin) {
+export class PlzFancyRigidNode extends Nodon implements NodonWithTransform {
 
   label = 'Fancy Object';
+  hasTransform =  true;
 
   constructor() {
     super(ActorType.PlzFancyRigidNode);
   }
 
   // TODO: map out object types
+  // @nodonSetting({
+  //   type: NodonSettingType.Enum,
+  //   label: 'Object'
+  //   enum: ...
+  // })
   get objectType() { 
     return this.props.u32[2];
   }
   set objectType(value: number) {
     this.props.u32[2] = value;
+  }
+
+  @nodonSetting({
+    type: NodonSettingType.Size,
+    label: 'Size'
+  })
+  get worldSize() { return this.props.vec3[0] }
+  set worldSize(value: NodonVec3) { this.props.vec3[0] = value }
+
+  @nodonSetting({
+    type: NodonSettingType.Position,
+    label: 'Position'
+  })
+  get worldPosition() { return this.props.vec3[1] }
+  set worldPosition(value: NodonVec3) { this.props.vec3[1] = value }
+
+  @nodonSetting({
+    type: NodonSettingType.Rotation,
+    label: 'Rotation'
+  })
+  get worldRotation() {
+    return [this.props.f32[0], this.props.f32[1], this.props.f32[2]];
+  }
+  set worldRotation(value: NodonVec3) {
+    this.props.f32[0] = value[0];
+    this.props.f32[1] = value[1];
+    this.props.f32[2] = value[2];
   }
 }
 
@@ -241,8 +631,4 @@ export class PlzTextureNode extends Nodon {
 
   get position() { return this.props.vec3[1] }
   set position(value: NodonVec3) { this.props.vec3[1] = value }
-
-  getTexture() {
-    return this.game.textures[this.textureIdx];
-  }
 }

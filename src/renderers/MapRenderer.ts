@@ -125,6 +125,8 @@ export class MapRenderer {
       // look up nodon tied to object
       const nodon = this.objectMap.get(object);
       console.log('Hit:', nodon);
+      console.log('Props:', nodon.props);
+      console.log('Settings:', nodon.getSettingValues());
       this.onSelectNodon(nodon);
     }
   }

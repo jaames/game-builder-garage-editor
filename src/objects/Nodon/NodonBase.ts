@@ -1,6 +1,7 @@
 import { FixedSizeArray } from '../../utils';
 import { GameFile } from '../../formats';
 import { ActorType } from './ActorTypes';
+import { NodonSettingMap } from './NodonSettings';
 
 export type NodonI32Props = FixedSizeArray<number, 5>;
 
@@ -45,8 +46,10 @@ export class Nodon {
   // canvas z-index
   canvasSortIndex: number = 0;
   // can node be edited
-  isLocked: boolean = false;
-  // nodon properties -- these are used differently for storing individual nodon properties
+  isLocked: boolean = false
+  // human-friendly nodon property accessors
+  settings: NodonSettingMap<this>;
+  // nodon properties -- these are used internally for storing individual nodon properties
   props: NodonProps = {
     i32: [0, 0, 0, 0, 0],
     u32: [0, 0, 0, 0, 0],
@@ -82,5 +85,14 @@ export class Nodon {
 
   getConnectedNodonsWithActorType(actorType: ActorType) {
     return this.getConnectedNodons().filter(nodon => nodon.type === actorType);
+  }
+
+  getSettingValues() {
+    if (!this.settings)
+      return {};
+    return Object.fromEntries(
+      Object.entries(this.settings)
+      .map(([key, setting]) => [setting.label, (this as any)[key]])
+    );
   }
 }

@@ -171,6 +171,8 @@ export class GraphRenderer {
       if (object instanceof Nodon) {
         this.selectedNodon = object;
         console.log('Hit:', object);
+        console.log('Props:', object.props);
+        console.log('Settings:', object.getSettingValues());
         this.view.on('mousemove', this.handleMouseMove);
         this.view.on('mouseup', this.handleMouseUp);
       }

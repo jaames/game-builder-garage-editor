@@ -17,10 +17,12 @@ export interface GameMetaBasic {
   createTime: Date,
   gameIdHistorySize: number,
   thumbnail: GameThumbnail,
-  gameIndex?: number
+  gameIndex?: number,
 };
 
 export interface GameMetaExtended extends GameMetaBasic {
   originId: string,
   gameIdHistory: string[],
+  swapGameThisKey: string,
+  swapGameTargetKeys: string[],
 };

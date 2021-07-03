@@ -65,15 +65,14 @@ export class GameFileReader extends BymlReader {
       const stringNode =  getNode(idHistArray, i, BymlType.String);
       gameIdHistory.push(stringNode.value);
     }
-
-    // const keyer = getNode(dataNode, Key.mChangeFileKeyThisFile, BymlType.Hash);
-    // console.log(keyer);
-
-    // const changeFileKeyTo = getNode(dataNode, Key.mChangeFileKeyTo, BymlType.Array);
-    // console.log(changeFileKeyTo.children.map(node => {
-    //   return getNode(node, Key.mText, BymlType.String).value
-    // }));
-
+    // keys for the "swap game" nodon
+    const swapGameThisKeyNode =    getNode(dataNode,            Key.mChangeFileKeyThisFile, BymlType.Hash);
+    const swapGameThisKey =        getNode(swapGameThisKeyNode, Key.mText,                  BymlType.String).value;
+    const swapGameTargetKeysNode = getNode(dataNode,            Key.mChangeFileKeyTo,       BymlType.Array).children;
+    const swapGameTargetKeys = swapGameTargetKeysNode
+      .map(node => getNode(node, Key.mText, BymlType.String).value)
+      .filter(value => value !== '');
+    // timestamps
     const createTime = this.parseTimestamp(dataNode, Key.mCreateTime);
     const editTime =   this.parseTimestamp(dataNode, Key.mEditTime);
 
@@ -97,7 +96,9 @@ export class GameFileReader extends BymlReader {
       createTime,
       editTime,
       gameIdHistorySize: idHistSize,
-      thumbnail
+      thumbnail,
+      swapGameThisKey,
+      swapGameTargetKeys
     };
   }
 

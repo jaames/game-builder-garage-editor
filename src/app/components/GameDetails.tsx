@@ -58,6 +58,16 @@ export const GameDetails: React.FunctionComponent<GameDetailsProps> = ({ game })
         </GameDetailItem>
         <GameDetailItem name="Created" value={ dateFormat(meta.createTime, 'P hh:mm') }/>
         <GameDetailItem name="Updated" value={ dateFormat(meta.editTime, 'P hh:mm') }/>
+        { meta.swapGameThisKey && (
+          <GameDetailItem name="Swap Key" value={ meta.swapGameThisKey }/>
+        )}
+        { (meta.swapGameTargetKeys.length > 0) && (
+          <GameDetailItem name="Target Keys">
+            { meta.swapGameTargetKeys.map((key) => (
+              <div>{ key }</div>
+            ))}
+          </GameDetailItem>
+        )}
         <div className={ styles.statList }>
           <div className={ styles.stat }>
             <IconTexture className={ styles.stat__icon }/>
