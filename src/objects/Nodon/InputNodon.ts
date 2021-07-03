@@ -1,10 +1,12 @@
 import { ActorType } from './ActorTypes';
-import { Nodon } from './NodonBase';
+import { Nodon, NodonCategory, NodonTag } from './NodonBase';
 import { NodonSettingType, nodonSetting } from './NodonSettings';
 
 export class ConstantNode extends Nodon {
 
   label = 'Constant';
+
+  category = NodonCategory.Input;
 
   constructor() {
     super(ActorType.ConstantNode);
@@ -23,6 +25,8 @@ export class ConstantNode extends Nodon {
 export class ButtonPressedNode extends Nodon {
 
   label = 'Button';
+  
+  category = NodonCategory.Input;
 
   constructor() {
     super(ActorType.ButtonPressedNode);
@@ -34,6 +38,8 @@ export class ButtonPressedNode extends Nodon {
 export class StickTiltedNode extends Nodon {
 
   label = 'Stick';
+
+  category = NodonCategory.Input;
 
   constructor() {
     super(ActorType.StickTiltedNode);
@@ -60,6 +66,8 @@ export class IsTouchNode extends Nodon {
 
   label = 'If Touched';
 
+  category = NodonCategory.Input;
+
   constructor() {
     super(ActorType.IsTouchNode);
   }
@@ -71,6 +79,8 @@ export class TouchPositionNode extends Nodon {
 
   label = 'Touch Position';
 
+  category = NodonCategory.Input;
+
   constructor() {
     super(ActorType.TouchPositionNode);
   }
@@ -79,6 +89,8 @@ export class TouchPositionNode extends Nodon {
 export class IntegratedSwingedNode extends Nodon {
 
   label = 'Shake';
+
+  category = NodonCategory.Input;
 
   constructor() {
     super(ActorType.IntegratedSwingedNode);
@@ -107,6 +119,8 @@ export class IntegratedAxisAngleNode extends Nodon {
 
   label = 'Tilt';
 
+  category = NodonCategory.Input;
+
   constructor() {
     super(ActorType.IntegratedAxisAngleNode);
   }
@@ -131,6 +145,8 @@ export class IntegratedAxisAngleNode extends Nodon {
 export class IntegratedSurfaceUpwardNode extends Nodon {
 
   label = 'If Face Up';
+
+  category = NodonCategory.Input;
 
   constructor() {
     super(ActorType.IntegratedSurfaceUpwardNode);
@@ -157,6 +173,8 @@ export class IntegratedRotationSpeedNode extends Nodon {
 
   label = 'Rotation Speed';
 
+  category = NodonCategory.Input;
+
   constructor() {
     super(ActorType.IntegratedRotationSpeedNode);
   }
@@ -182,6 +200,8 @@ export class FoundIrMarkerNode extends Nodon {
 
   label = 'IR Motion Camera';
 
+  category = NodonCategory.Input;
+
   constructor() {
     super(ActorType.FoundIrMarkerNode);
   }
@@ -193,6 +213,8 @@ export class PlzObjBreakCountNode extends Nodon {
 
   label = 'IR Motion Camera';
 
+  category = NodonCategory.Input;
+
   constructor() {
     super(ActorType.PlzObjBreakCountNode);
   }
@@ -203,6 +225,8 @@ export class PlzObjBreakCountNode extends Nodon {
 export class OnStartNode extends Nodon {
 
   label = 'On Start';
+
+  category = NodonCategory.Input;
 
   constructor() {
     super(ActorType.OnStartNode);

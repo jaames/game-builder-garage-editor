@@ -1,10 +1,12 @@
 import { ActorType } from './ActorTypes';
-import { Nodon } from './NodonBase';
+import { Nodon, NodonCategory, NodonTag } from './NodonBase';
 import { NodonSettingType, nodonSetting } from './NodonSettings';
 
 export class TpbPlaySoundNode extends Nodon {
 
   label = 'Play Sound';
+
+  category = NodonCategory.Output;
 
   constructor() {
     super(ActorType.TpbPlaySoundNode);
@@ -17,6 +19,8 @@ export class TpbPlayBgmNode extends Nodon {
 
   label = 'Background Music';
 
+  category = NodonCategory.Output;
+
   constructor() {
     super(ActorType.TpbPlayBgmNode);
   }
@@ -27,6 +31,8 @@ export class TpbPlayBgmNode extends Nodon {
 export class VibrateNode extends Nodon {
 
   label = 'Vibration';
+
+  category = NodonCategory.Output;
 
   constructor() {
     super(ActorType.VibrateNode);
@@ -48,6 +54,8 @@ export class PlzGravityNode extends Nodon {
 
   label = 'Reduce Gravity';
 
+  category = NodonCategory.Output;
+
   constructor() {
     super(ActorType.PlzGravityNode);
   }
@@ -56,6 +64,8 @@ export class PlzGravityNode extends Nodon {
 export class PlzPlaySpeedNode extends Nodon {
 
   label = 'Slow Time';
+
+  category = NodonCategory.Output;
 
   constructor() {
     super(ActorType.PlzPlaySpeedNode);
@@ -66,6 +76,8 @@ export class PlzResetNode extends Nodon {
 
   label = 'Retry';
 
+  category = NodonCategory.Output;
+
   constructor() {
     super(ActorType.PlzResetNode);
   }
@@ -75,6 +87,8 @@ export class PlzExitNode extends Nodon {
 
   label = 'End Game';
 
+  category = NodonCategory.Output;
+
   constructor() {
     super(ActorType.PlzExitNode);
   }
@@ -83,6 +97,8 @@ export class PlzExitNode extends Nodon {
 export class PlzChangeFileNode extends Nodon {
 
   label = 'Swap Game';
+
+  category = NodonCategory.Output;
 
   constructor() {
     super(ActorType.PlzChangeFileNode);
@@ -95,6 +111,8 @@ export class GaugeNode extends Nodon {
 
   label = 'Marker Display';
 
+  category = NodonCategory.Output;
+
   constructor() {
     super(ActorType.GaugeNode);
   }
@@ -105,6 +123,8 @@ export class GaugeNode extends Nodon {
 export class Move2dNode extends Nodon {
 
   label = '2D Marker Display';
+
+  category = NodonCategory.Output;
 
   constructor() {
     super(ActorType.Move2dNode);
@@ -133,6 +153,8 @@ export class AlwaysOnNode extends Nodon {
 
   label = 'Continuous Marker Display';
 
+  category = NodonCategory.Output;
+
   constructor() {
     super(ActorType.AlwaysOnNode);
   }
@@ -143,6 +165,8 @@ export class AlwaysOnNode extends Nodon {
 export class EmitIrLedNode extends Nodon {
 
   label = 'IR Light';
+
+  category = NodonCategory.Output;
 
   constructor() {
     super(ActorType.EmitIrLedNode);

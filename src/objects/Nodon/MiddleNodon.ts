@@ -1,5 +1,5 @@
 import { ActorType } from './ActorTypes';
-import { Nodon } from './NodonBase';
+import { Nodon, NodonCategory, NodonTag } from './NodonBase';
 import { NodonSettingType, nodonSetting } from './NodonSettings';
 
 export enum CalculationNodeMethod {
@@ -12,6 +12,8 @@ export enum CalculationNodeMethod {
 export class CalculationNode extends Nodon {
 
   label = 'Calculator';
+
+  category = NodonCategory.Middle;
 
   constructor() {
     super(ActorType.CalculationNode);
@@ -29,6 +31,8 @@ export class CalculationNode extends Nodon {
 export class MappingNode extends Nodon {
 
   label = 'Map';
+
+  category = NodonCategory.Middle;
 
   constructor() {
     super(ActorType.MappingNode);
@@ -69,6 +73,8 @@ export class QuantizationNode extends Nodon {
 
   label = 'Digitize';
 
+  category = NodonCategory.Middle;
+
   constructor() {
     super(ActorType.QuantizationNode);
   }
@@ -87,6 +93,8 @@ export class SquareRootNode extends Nodon {
 
   label = 'Square Root';
 
+  category = NodonCategory.Middle;
+
   constructor() {
     super(ActorType.SquareRootNode);
   }
@@ -95,6 +103,8 @@ export class SquareRootNode extends Nodon {
 export class AbsoluteValueNode extends Nodon {
 
   label = 'Absolute Value';
+
+  category = NodonCategory.Middle;
 
   constructor() {
     super(ActorType.AbsoluteValueNode);
@@ -105,6 +115,8 @@ export class NegationNode extends Nodon {
 
   label = 'Inversion';
 
+  category = NodonCategory.Middle;
+
   constructor() {
     super(ActorType.NegationNode);
   }
@@ -113,6 +125,8 @@ export class NegationNode extends Nodon {
 export class TriggerNode extends Nodon {
 
   label = 'Trigger From 0';
+
+  category = NodonCategory.Middle;
 
   constructor() {
     super(ActorType.TriggerNode);
@@ -123,6 +137,8 @@ export class AtanNode extends Nodon {
 
   label = 'Position -> Angle';
 
+  category = NodonCategory.Middle;
+
   constructor() {
     super(ActorType.AtanNode);
   }
@@ -131,6 +147,8 @@ export class AtanNode extends Nodon {
 export class TrigonometricNode extends Nodon {
 
   label = 'Angle -> Position';
+
+  category = NodonCategory.Middle;
 
   constructor() {
     super(ActorType.TrigonometricNode);
@@ -141,6 +159,8 @@ export class AngleDistanceNode extends Nodon {
 
   label = 'Angle Difference';
 
+  category = NodonCategory.Middle;
+
   constructor() {
     super(ActorType.AngleDistanceNode);
   }
@@ -149,6 +169,8 @@ export class AngleDistanceNode extends Nodon {
 export class ComparisonNode extends Nodon {
 
   label = 'Comparison';
+
+  category = NodonCategory.Middle;
 
   constructor() {
     super(ActorType.ComparisonNode);
@@ -161,6 +183,8 @@ export class AndNode extends Nodon {
 
   label = 'AND';
 
+  category = NodonCategory.Middle;
+
   constructor() {
     super(ActorType.AndNode);
   }
@@ -170,6 +194,8 @@ export class AndNode extends Nodon {
 export class NotNode extends Nodon {
 
   label = 'NOT';
+
+  category = NodonCategory.Middle;
 
   constructor() {
     super(ActorType.NotNode);
@@ -181,6 +207,8 @@ export class FlagNode extends Nodon {
 
   label = 'Flag';
 
+  category = NodonCategory.Middle;
+
   constructor() {
     super(ActorType.FlagNode);
   }
@@ -190,6 +218,8 @@ export class FlagNode extends Nodon {
 export class TpbCounterNode extends Nodon {
 
   label = 'Counter';
+
+  category = NodonCategory.Middle;
 
   constructor() {
     super(ActorType.TpbCounterNode);
@@ -212,6 +242,8 @@ export class IntegerRandomNode extends Nodon {
 
   label = 'Random';
 
+  category = NodonCategory.Middle;
+
   constructor() {
     super(ActorType.IntegerRandomNode);
   }
@@ -232,6 +264,8 @@ export class IntegerRandomNode extends Nodon {
 export class TimerNode extends Nodon {
 
   label = 'Timer';
+
+  category = NodonCategory.Middle;
 
   constructor() {
     super(ActorType.TimerNode);
@@ -261,6 +295,8 @@ export class SpoitNode extends Nodon {
 
   label = 'Target';
 
+  category = NodonCategory.Middle;
+
   constructor() {
     super(ActorType.SpoitNode);
   }
@@ -272,6 +308,8 @@ export class SpoitNode extends Nodon {
 export class CommentNode extends Nodon {
 
   label = 'Comment';
+
+  category = NodonCategory.MiddleLayout;
 
   constructor() {
     super(ActorType.CommentNode);
@@ -286,6 +324,8 @@ export class WireWarpInNode extends Nodon {
 
   label = 'Wormhole Entrance';
 
+  category = NodonCategory.MiddleLayout;
+
   constructor() {
     super(ActorType.WireWarpInNode);
   }
@@ -298,6 +338,8 @@ export class WireWarpInNode extends Nodon {
 export class WireWarpOutNode extends Nodon {
 
   label = 'Wormhole Exit';
+
+  category = NodonCategory.MiddleLayout;
 
   constructor() {
     super(ActorType.WireWarpOutNode);

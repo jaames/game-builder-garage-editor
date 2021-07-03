@@ -1,5 +1,5 @@
 import { ActorType } from './ActorTypes';
-import { Nodon, NodonVec3 } from './NodonBase';
+import { Nodon, NodonVec3, NodonCategory, NodonTag } from './NodonBase';
 import { NodonSettingType, nodonSetting } from './NodonSettings';
 
 export enum NodonColor {
@@ -100,6 +100,8 @@ export class PlzHumanNode extends Nodon implements NodonWithTransform, NodonWith
   hasColor = true;
   hasTransform =  true;
 
+  category = NodonCategory.Object;
+
   constructor() {
     super(ActorType.PlzHumanNode);
   }
@@ -109,8 +111,8 @@ export class PlzHumanNode extends Nodon implements NodonWithTransform, NodonWith
     label: 'Color',
     enum: NodonColor
   })
-  get color() { return this.props.u32[2] as NodonColor }
-  set color(value: NodonColor) { this.props.u32[2] = value }
+  get color() { return this.props.i32[2] as NodonColor }
+  set color(value: NodonColor) { this.props.i32[2] = value }
 
   @nodonSetting({
     type: NodonSettingType.Size,
@@ -146,6 +148,8 @@ export class PlzCarNode extends Nodon implements NodonWithTransform, NodonWithCo
   hasColor = true;
   hasTransform =  true;
 
+  category = NodonCategory.Object;
+
   constructor() {
     super(ActorType.PlzCarNode);
   }
@@ -155,8 +159,8 @@ export class PlzCarNode extends Nodon implements NodonWithTransform, NodonWithCo
     label: 'Color',
     enum: NodonColor
   })
-  get color() { return this.props.u32[2] as NodonColor }
-  set color(value: NodonColor) {  this.props.u32[2] = value }
+  get color() { return this.props.i32[2] as NodonColor }
+  set color(value: NodonColor) {  this.props.i32[2] = value }
 
   @nodonSetting({
     type: NodonSettingType.Size,
@@ -192,6 +196,8 @@ export class PlzUfoNode extends Nodon implements NodonWithTransform, NodonWithCo
   hasColor = true;
   hasTransform = true;
 
+  category = NodonCategory.Object;
+
   constructor() {
     super(ActorType.PlzUfoNode);
   }
@@ -201,8 +207,8 @@ export class PlzUfoNode extends Nodon implements NodonWithTransform, NodonWithCo
     label: 'Color',
     enum: NodonColor
   })
-  get color() {return this.props.u32[2] as NodonColor }
-  set color(value: NodonColor) { this.props.u32[2] = value }
+  get color() {return this.props.i32[2] as NodonColor }
+  set color(value: NodonColor) { this.props.i32[2] = value }
 
   @nodonSetting({
     type: NodonSettingType.Size,
@@ -239,6 +245,8 @@ export class PlzRigidNode extends Nodon implements NodonWithTransform, NodonWith
   hasShape = true;
   hasMaterial = true;
   hasTransform =  true;
+
+  category = NodonCategory.Object;
 
   constructor() {
     super(ActorType.PlzRigidNode);
@@ -303,6 +311,8 @@ export class PlzMoveRigidNode extends Nodon implements NodonWithTransform, Nodon
   hasShape = true;
   hasTransform =  true;
 
+  category = NodonCategory.Object;
+
   constructor() {
     super(ActorType.PlzMoveRigidNode);
   }
@@ -313,10 +323,10 @@ export class PlzMoveRigidNode extends Nodon implements NodonWithTransform, Nodon
     enum: NodonColor
   })
   get color() { 
-    return this.props.u32[2] as NodonColor;
+    return this.props.u32[3] as NodonColor;
   }
   set color(value: NodonColor) {
-    this.props.u32[2] = value;
+    this.props.u32[3] = value;
   }
 
   @nodonSetting({
@@ -366,6 +376,8 @@ export class PlzRotateRigidNode extends Nodon implements NodonWithTransform, Nod
   hasShape = true;
   hasTransform =  true;
 
+  category = NodonCategory.Object;
+
   constructor() {
     super(ActorType.PlzRotateRigidNode);
   }
@@ -375,8 +387,12 @@ export class PlzRotateRigidNode extends Nodon implements NodonWithTransform, Nod
     label: 'Color',
     enum: NodonColor
   })
-  get color() { return this.props.u32[2] as NodonColor }
-  set color(value: NodonColor) { this.props.u32[2] = value }
+  get color() { 
+    return this.props.u32[3] as NodonColor;
+  }
+  set color(value: NodonColor) {
+    this.props.u32[3] = value;
+  }
 
   @nodonSetting({
     type: NodonSettingType.Enum,
@@ -421,6 +437,8 @@ export class PlzStretchRigidNode extends Nodon implements NodonWithTransform, No
   hasColor = true;
   hasTransform =  true;
 
+  category = NodonCategory.Object;
+
   constructor() {
     super(ActorType.PlzStretchRigidNode);
   }
@@ -443,10 +461,10 @@ export class PlzStretchRigidNode extends Nodon implements NodonWithTransform, No
     enum: NodonColor
   })
   get color() { 
-    return this.props.u32[2] as NodonColor;
+    return this.props.u32[1] as NodonColor;
   }
   set color(value: NodonColor) {
-    this.props.u32[2] = value;
+    this.props.u32[1] = value;
   }
 
   @nodonSetting({
@@ -483,6 +501,8 @@ export class PlzScoreRigidNode extends Nodon implements NodonWithTransform, Nodo
   hasColor = true;
   hasTransform =  true;
 
+  category = NodonCategory.Object;
+
   constructor() {
     super(ActorType.PlzScoreRigidNode);
   }
@@ -492,8 +512,8 @@ export class PlzScoreRigidNode extends Nodon implements NodonWithTransform, Nodo
     label: 'Color',
     enum: NodonColor
   })
-  get color() { return this.props.u32[2] as NodonColor }
-  set color(value: NodonColor) { this.props.u32[2] = value }
+  get color() { return this.props.u32[1] as NodonColor }
+  set color(value: NodonColor) { this.props.u32[1] = value }
 
   @nodonSetting({
     type: NodonSettingType.Size,
@@ -529,6 +549,8 @@ export class PlzCommentRigidNode extends Nodon implements NodonWithTransform, No
   hasColor = true;
   hasTransform =  true;
 
+  category = NodonCategory.Object;
+
   constructor() {
     super(ActorType.PlzCommentRigidNode);
   }
@@ -538,8 +560,8 @@ export class PlzCommentRigidNode extends Nodon implements NodonWithTransform, No
     label: 'Color',
     enum: NodonColor
   })
-  get color() { return this.props.u32[2] as NodonColor }
-  set color(value: NodonColor) { this.props.u32[2] = value }
+  get color() { return this.props.u32[1] as NodonColor }
+  set color(value: NodonColor) { this.props.u32[1] = value }
 
   @nodonSetting({
     type: NodonSettingType.Size,
@@ -573,6 +595,8 @@ export class PlzFancyRigidNode extends Nodon implements NodonWithTransform {
 
   label = 'Fancy Object';
   hasTransform =  true;
+
+  category = NodonCategory.Object;
 
   constructor() {
     super(ActorType.PlzFancyRigidNode);
@@ -623,6 +647,8 @@ export class PlzTextureNode extends Nodon {
 
   label = 'Texture';
 
+  category = NodonCategory.Object;
+
   constructor() {
     super(ActorType.PlzTextureNode);
   }
@@ -643,6 +669,8 @@ export class PlzIntegratedEffectNode extends Nodon {
 
   label = 'Effect';
 
+  category = NodonCategory.Object;
+
   constructor() {
     super(ActorType.PlzIntegratedEffectNode);
   }
@@ -654,6 +682,8 @@ export class PlzTouchSensorNode extends Nodon {
 
   label = 'Touch Sensor';
 
+  category = NodonCategory.Object;
+
   constructor() {
     super(ActorType.PlzTouchSensorNode);
   }
@@ -664,6 +694,8 @@ export class PlzTouchSensorNode extends Nodon {
 export class PlzJointSingleAxisSliderNode extends Nodon {
 
   label = 'Slide Connector';
+
+  category = NodonCategory.Object;
 
   constructor() {
     super(ActorType.PlzJointSingleAxisSliderNode);
@@ -715,6 +747,8 @@ export class PlzBreakSensorNode extends Nodon {
 
   label = 'Destroying Sensor';
 
+  category = NodonCategory.Object;
+
   constructor() {
     super(ActorType.PlzBreakSensorNode);
   }
@@ -725,6 +759,8 @@ export class PlzBreakSensorNode extends Nodon {
 export class PlzJointSliderNode extends Nodon {
 
   label = 'Free Slide Connector';
+
+  category = NodonCategory.Object;
 
   constructor() {
     super(ActorType.PlzJointSliderNode);
@@ -737,6 +773,8 @@ export class PlzBrokenSensorNode extends Nodon {
 
   label = 'Destroyed Sensor';
 
+  category = NodonCategory.Object;
+
   constructor() {
     super(ActorType.PlzBrokenSensorNode);
   }
@@ -747,6 +785,8 @@ export class PlzBrokenSensorNode extends Nodon {
 export class PlzJointHingeNode extends Nodon {
 
   label = 'Hinge Connector';
+
+  category = NodonCategory.Object;
 
   constructor() {
     super(ActorType.PlzJointHingeNode);
@@ -798,6 +838,8 @@ export class PlzGrabSensorNode extends Nodon {
 
   label = 'Grabbed Sensor';
 
+  category = NodonCategory.Object;
+
   constructor() {
     super(ActorType.PlzGrabSensorNode);
   }
@@ -808,6 +850,8 @@ export class PlzGrabSensorNode extends Nodon {
 export class PlzRopeNode extends Nodon {
 
   label = 'Rope Connector';
+
+  category = NodonCategory.Object;
 
   constructor() {
     super(ActorType.PlzRopeNode);
@@ -833,10 +877,10 @@ export class PlzRopeNode extends Nodon {
     max: 10,
   })
   get length() { 
-    return this.props.f32[2];
+    return this.props.f32[3];
   }
   set length(value) {
-    this.props.f32[2] = value;
+    this.props.f32[3] = value;
   }
   // TODO: more settings
 }
@@ -844,6 +888,8 @@ export class PlzRopeNode extends Nodon {
 export class PlzPositionSensorNode extends Nodon {
 
   label = 'Location Sensor';
+
+  category = NodonCategory.Object;
 
   constructor() {
     super(ActorType.PlzPositionSensorNode);
@@ -856,6 +902,8 @@ export class PlzGeneratorFewNode extends Nodon {
 
   label = 'Launch Object (1)';
 
+  category = NodonCategory.Object;
+
   constructor() {
     super(ActorType.PlzGeneratorFewNode);
   }
@@ -866,6 +914,8 @@ export class PlzGeneratorFewNode extends Nodon {
 export class PlzGeneratorNode extends Nodon {
 
   label = 'Launch Object (10)';
+
+  category = NodonCategory.Object;
 
   constructor() {
     super(ActorType.PlzGeneratorNode);
@@ -878,6 +928,8 @@ export class PlzGeneratorManyNode extends Nodon {
 
   label = 'Launch Object (100)';
 
+  category = NodonCategory.Object;
+
   constructor() {
     super(ActorType.PlzGeneratorManyNode);
   }
@@ -888,6 +940,8 @@ export class PlzGeneratorManyNode extends Nodon {
 export class PlzSpeedSensorNode extends Nodon {
 
   label = 'Speed Sensor';
+
+  category = NodonCategory.Object;
 
   constructor() {
     super(ActorType.PlzSpeedSensorNode);
@@ -900,6 +954,8 @@ export class PlzBindCommanderNode extends Nodon {
 
   label = 'Destroy Object';
 
+  category = NodonCategory.Object;
+
   constructor() {
     super(ActorType.PlzBindCommanderNode);
   }
@@ -910,6 +966,8 @@ export class PlzBindCommanderNode extends Nodon {
 export class PlzAccelerationSensorNode extends Nodon {
 
   label = 'Acceleration Sensor';
+
+  category = NodonCategory.Object;
 
   constructor() {
     super(ActorType.PlzAccelerationSensorNode);
@@ -922,6 +980,8 @@ export class PlzObjWarpEnterNode extends Nodon {
 
   label = 'Teleport Object Entrance';
 
+  category = NodonCategory.Object;
+
   constructor() {
     super(ActorType.PlzObjWarpEnterNode);
   }
@@ -932,6 +992,8 @@ export class PlzObjWarpEnterNode extends Nodon {
 export class PlzObjWarpExitNode extends Nodon {
 
   label = 'Teleport Object Exit';
+
+  category = NodonCategory.Object;
 
   constructor() {
     super(ActorType.PlzObjWarpExitNode);
@@ -944,6 +1006,8 @@ export class PlzAngleSensorNode extends Nodon {
 
   label = 'Angle Sensor';
 
+  category = NodonCategory.Object;
+
   constructor() {
     super(ActorType.PlzAngleSensorNode);
   }
@@ -954,6 +1018,8 @@ export class PlzAngleSensorNode extends Nodon {
 export class PlzRotationSensorNode extends Nodon {
 
   label = 'Rotation Speed Sensor';
+
+  category = NodonCategory.Object;
 
   constructor() {
     super(ActorType.PlzRotationSensorNode);
@@ -966,6 +1032,8 @@ export class PlzPullForceNode extends Nodon {
 
   label = 'Attract Object';
 
+  category = NodonCategory.Object;
+
   constructor() {
     super(ActorType.PlzPullForceNode);
   }
@@ -976,6 +1044,8 @@ export class PlzPullForceNode extends Nodon {
 export class PlzEasyCamera extends Nodon {
 
   label = 'Game Screen';
+
+  category = NodonCategory.Object;
 
   constructor() {
     super(ActorType.PlzEasyCamera);
@@ -994,6 +1064,8 @@ export enum PlzFieldConfigNodeShape {
 export class PlzFieldConfigNode extends Nodon {
 
   label = 'World';
+
+  category = NodonCategory.Object;
 
   constructor() {
     super(ActorType.PlzFieldConfigNode);
@@ -1015,6 +1087,8 @@ export class PlzFieldConfigNode extends Nodon {
 export class PlzTpsCamera extends Nodon {
 
   label = 'Camera';
+
+  category = NodonCategory.Object;
 
   constructor() {
     super(ActorType.PlzTpsCamera);
@@ -1049,6 +1123,8 @@ export class PlzHeadNode extends Nodon {
 
   label = 'Head';
 
+  category = NodonCategory.Object;
+
   constructor() {
     super(ActorType.PlzHeadNode);
   }
@@ -1059,6 +1135,8 @@ export class PlzHeadNode extends Nodon {
 export class PlzHandNode extends Nodon {
 
   label = 'Hand';
+
+  category = NodonCategory.Object;
 
   constructor() {
     super(ActorType.PlzHandNode);
@@ -1071,6 +1149,8 @@ export class PlzCameraPositionNode extends Nodon {
 
   label = 'Camera Position';
 
+  category = NodonCategory.Object;
+
   constructor() {
     super(ActorType.PlzCameraPositionNode);
   }
@@ -1081,6 +1161,8 @@ export class PlzCameraPositionNode extends Nodon {
 export class PlzCameraLookAtNode extends Nodon {
 
   label = 'Camera Target';
+
+  category = NodonCategory.Object;
 
   constructor() {
     super(ActorType.PlzCameraLookAtNode);
@@ -1093,6 +1175,8 @@ export class PlzCameraDirectionNode extends Nodon {
 
   label = 'Camera Direction';
 
+  category = NodonCategory.Object;
+
   constructor() {
     super(ActorType.PlzCameraDirectionNode);
   }
@@ -1101,6 +1185,8 @@ export class PlzCameraDirectionNode extends Nodon {
 export class PlzCameraViewAngleNode extends Nodon {
 
   label = 'Camera Field Of View';
+
+  category = NodonCategory.Object;
 
   constructor() {
     super(ActorType.PlzCameraViewAngleNode);
@@ -1112,10 +1198,10 @@ export class PlzCameraViewAngleNode extends Nodon {
     min: 10,
     max: 120,
   })
-  get stiffness() { 
+  get fov() { 
     return this.props.f32[0];
   }
-  set stiffness(value) {
+  set fov(value) {
     this.props.f32[0] = value;
   }
 }

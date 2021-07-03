@@ -6,7 +6,7 @@ import * as PIXI from 'pixi.js';
 import { Viewport } from 'pixi-viewport';
 
 import { GameFile } from '../formats';
-import { Nodon, Connection, ActorType } from '../objects';
+import { Nodon, Connection, ActorType, NodonCategory } from '../objects';
 import { lerp } from '../utils';
 
 const COLOR_GRAPH_BG = 0xFFD42D;
@@ -14,6 +14,15 @@ const COLOR_GRAPH_GRID_LINE = 0xFFDC94;
 
 const COLOR_NODON = 0xFF9946;
 const COLOR_CONNECTION = 0xFD73A6;
+
+const NODON_COLOR_MAP: Record<NodonCategory, number> = {
+  [NodonCategory.Unknown]:        0xFF9946,
+  [NodonCategory.Input]:        0xFE0D4C,
+  [NodonCategory.Middle]:       0x00D59A,
+  [NodonCategory.MiddleLayout]: 0x7A94B0,
+  [NodonCategory.Output]:       0x27B8FF,
+  [NodonCategory.Object]:       0xFF9946,
+};
 
 const SIZE_GRAPH_GRID_UNIT = 12;
 
@@ -100,6 +109,12 @@ export class GraphRenderer {
     const gfx = new PIXI.Graphics();
     gfx.name = nodon.id.toString();
     gfx.interactive = true;
+    const text = new PIXI.Text('');
+    text.anchor.set(.5, 1);
+    text.style.fill = 0xffffff;
+    text.name = 'text';
+    text.rotation = Math.PI;
+    gfx.addChild(text);
     this.nodonGfxMap.set(nodon, gfx);
     this.view.addChild(gfx);
     this.gfxList.push(gfx)
@@ -118,13 +133,16 @@ export class GraphRenderer {
     height *= scaleY * SIZE_GRAPH_GRID_UNIT;
     const gfx = this.nodonGfxMap.get(nodon);
     const lineWidth = lerp(16, 4, this.zoomLevel / 4);
+    const color = NODON_COLOR_MAP[nodon.category];
+    const text = gfx.getChildByName('text') as PIXI.Text;
+    text.text = nodon.label;
     gfx.clear();
     gfx.position.x = x;
     gfx.position.y = y;
     gfx.rotation = Math.PI - nodon.canvasRotate; // inverted
     gfx.zIndex = nodon.canvasSortIndex;
-    gfx.lineStyle(lineWidth, COLOR_NODON, 1);
-    gfx.beginFill(COLOR_NODON, .01);
+    gfx.lineStyle(lineWidth, color, 1);
+    gfx.beginFill(color, .01);
     if (this.zoomLevel < .25)
       gfx.drawRect(-width / 2, -height / 2, width, height);
     else 
@@ -173,6 +191,8 @@ export class GraphRenderer {
         console.log('Hit:', object);
         console.log('Props:', object.props);
         console.log('Settings:', object.getSettingValues());
+        console.log('Connections:', object.getConnections());
+        console.log('Connected Nodon:', object.getConnectedNodons());
         this.view.on('mousemove', this.handleMouseMove);
         this.view.on('mouseup', this.handleMouseUp);
       }

@@ -23,16 +23,32 @@ export interface NodonProps {
   u64: NodonU64Props
 };
 
+export enum NodonCategory {
+  Unknown = 0,
+  Input,
+  Middle,
+  MiddleLayout,
+  Output,
+  Object,
+};
+
+export enum NodonTag {
+
+};
+
 export class Nodon {
-  // return label when cast to string constant
   get [Symbol.toStringTag]() { return this.label };
-  // actor type
+
   type: ActorType = ActorType.Invalid;
-  // label
+  
   label: string = '';
-  // parent game
+
+  category: NodonCategory = NodonCategory.Unknown;
+
+  tag: NodonTag[] = [];
+
   game: GameFile | null = null;
-  // unique id
+
   id: number = 0;
   // canvas position - increments by 100 for every grid unit
   // range is -96000 to 96000
