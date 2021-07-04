@@ -1,5 +1,7 @@
 export * from './ActorTypes';
 export * from './NodonBase';
+export * from './NodonSettingDescriptor';
+export * from './NodonPortDescriptor';
 export * from './NodonFactory';
 export * from './InputNodon';
 export * from './MiddleNodon';

@@ -1,6 +1,7 @@
 import { ActorType } from './ActorTypes';
 import { Nodon, NodonVec3, NodonCategory, NodonTag } from './NodonBase';
-import { NodonSettingType, nodonSetting } from './NodonSettings';
+import { NodonSettingType, nodonSetting } from './NodonSettingDescriptor';
+import { NodonPortMap, NodonPortType } from './NodonPortDescriptor';
 
 export enum NodonColor {
   Auto = 0,
@@ -247,6 +248,15 @@ export class PlzRigidNode extends Nodon implements NodonWithTransform, NodonWith
   hasTransform =  true;
 
   category = NodonCategory.Object;
+
+  ports: NodonPortMap = {
+    [NodonPortType.Upper]: {
+      portId: 1
+    },
+    [NodonPortType.Lower]: {
+      portId: 2
+    }
+  }
 
   constructor() {
     super(ActorType.PlzRigidNode);
@@ -649,18 +659,41 @@ export class PlzTextureNode extends Nodon {
 
   category = NodonCategory.Object;
 
+  ports: NodonPortMap = {
+    visible: {
+      portId: 0,
+      label: 'Visible'
+    },
+    [NodonPortType.Lower]: {
+      portId: 1
+    }
+  }
+
   constructor() {
     super(ActorType.PlzTextureNode);
   }
-  get textureIdx() { return this.props.i32[0] }
-  set textureIdx(value: number) { this.props.i32[0] = value }
+
+  @nodonSetting({
+    type: NodonSettingType.Texture,
+    label: 'Texture'
+  })
+  get texture() { return this.props.i32[0] }
+  set texture(value: number) { this.props.i32[0] = value }
 
   get textureFaceFlags() { return this.props.u32[0] }
   set textureFaceFlags(value: number) { this.props.u32[0] = value }
 
+  @nodonSetting({
+    type: NodonSettingType.Size,
+    label: 'Size'
+  })
   get size() { return this.props.vec3[0] }
   set size(value: NodonVec3) { this.props.vec3[0] = value }
 
+  @nodonSetting({
+    type: NodonSettingType.Position,
+    label: 'Position'
+  })
   get position() { return this.props.vec3[1] }
   set position(value: NodonVec3) { this.props.vec3[1] = value }
 }
@@ -852,6 +885,15 @@ export class PlzRopeNode extends Nodon {
   label = 'Rope Connector';
 
   category = NodonCategory.Object;
+
+  ports: NodonPortMap = {
+    [NodonPortType.Upper]: {
+      portId: 1
+    },
+    [NodonPortType.Lower]: {
+      portId: 2
+    }
+  }
 
   constructor() {
     super(ActorType.PlzRopeNode);

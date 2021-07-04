@@ -284,9 +284,7 @@ export function NodonFactory(type: ActorType): Nodon {
     case ActorType.PlzCameraViewAngleNode:
       return new PlzCameraViewAngleNode(); 
 
-    // fallback to basic nodon type
     default:
-      console.warn(`Unknown Nodon Type: ${ type }`);
-      return new Nodon(type);
+      throw new Error(`Unknown Nodon Type: ${ type }`);
   }
 }

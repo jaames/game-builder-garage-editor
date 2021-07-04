@@ -192,10 +192,24 @@ export class Texture {
     return dst;
   }
 
-  copyToImageData(imgData: ImageData) {
+  getRgbaPixelsAsUint8() {
+    const src = this.pixels;
+    const dst = new Uint8Array(this.width * this.height * 4);
     const palette = new Uint8Array(this.palette.buffer);
+    for (let i = 0, len = src.length; i < len; i++) {
+      const px = src[i];
+      dst[i * 4 + 3] = palette[px * 4 + 0];
+      dst[i * 4 + 2] = palette[px * 4 + 1];
+      dst[i * 4 + 1] = palette[px * 4 + 2];
+      dst[i * 4 + 0] = palette[px * 4 + 3];
+    }
+    return dst;
+  }
+
+  copyToImageData(imgData: ImageData) {
     const src = this.pixels;
     const dst = imgData.data;
+    const palette = new Uint8Array(this.palette.buffer);
     for (let i = 0, len = src.length; i < len; i++) {
       const px = src[i];
       dst[i * 4 + 3] = palette[px * 4 + 0];

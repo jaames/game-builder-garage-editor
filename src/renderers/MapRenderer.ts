@@ -38,7 +38,9 @@ import {
   nodonHasTransform,
   isPhysicalNode,
   nodonHasColor,
-  nodonHasShape
+  nodonHasShape,
+  PlzTextureNode,
+  NodonWithTransform
 } from '../objects';
 
 export class MapRenderer {
@@ -127,6 +129,8 @@ export class MapRenderer {
       console.log('Hit:', nodon);
       console.log('Props:', nodon.props);
       console.log('Settings:', nodon.getSettingValues());
+      console.log('Parent:', nodon.getParentNodons());
+      console.log('Child:', nodon.getChildNodons());
       this.onSelectNodon(nodon);
     }
   }
@@ -254,11 +258,31 @@ export class MapRenderer {
 
   getNodonMaterial(nodon: Nodon) {
     const color = this.getNodonColor(nodon);
+    const texture = this.getNodonTextures(nodon as NodonWithTransform)[0];
     return new THREE.MeshStandardMaterial({
       color: color,
       roughness: .8,
+      map: texture,
+      transparent: true,
+      alphaTest: 0.5,
       // shininess: .2
     });
+  }
+
+  getNodonTextures(nodon: NodonWithTransform) {
+    return nodon
+      .getParentNodonsWithType(ActorType.PlzTextureNode)
+      .map((textureNodon: PlzTextureNode) => {
+        const src = this.game.textures[textureNodon.texture];
+        const texture = new THREE.DataTexture(src.getRgbaPixelsAsUint8(), src.width, src.height, THREE.RGBAFormat);
+        texture.repeat.x = nodon.worldSize[0] / textureNodon.size[1];
+        texture.repeat.y = nodon.worldSize[2] / textureNodon.size[2];
+        texture.wrapS = THREE.RepeatWrapping;
+        texture.wrapT = THREE.RepeatWrapping;
+        texture.magFilter = THREE.LinearFilter;
+        texture.minFilter = THREE.LinearFilter;
+        return texture;
+      });
   }
 
   getNodonColor(nodon: Nodon) {

@@ -1,7 +1,8 @@
 import { FixedSizeArray } from '../../utils';
 import { GameFile } from '../../formats';
 import { ActorType } from './ActorTypes';
-import { NodonSettingMap } from './NodonSettings';
+import { NodonSettingMap } from './NodonSettingDescriptor';
+import { NodonPortMap, NodonPortType } from './NodonPortDescriptor';
 
 export type NodonI32Props = FixedSizeArray<number, 5>;
 
@@ -38,18 +39,24 @@ export enum NodonTag {
 
 export class Nodon {
   get [Symbol.toStringTag]() { return this.label };
+  
+  game: GameFile | null = null;
+
+  id: number = 0;
 
   type: ActorType = ActorType.Invalid;
-  
+
   label: string = '';
 
   category: NodonCategory = NodonCategory.Unknown;
 
-  tag: NodonTag[] = [];
+  tags: NodonTag[] = [];
 
-  game: GameFile | null = null;
+  // human-friendly nodon property accessors
+  settings: NodonSettingMap<this>;
 
-  id: number = 0;
+  ports: NodonPortMap = {};
+  
   // canvas position - increments by 100 for every grid unit
   // range is -96000 to 96000
   canvasPos: [number, number, number] = [0, 0, 0]; // x, y, z
@@ -63,8 +70,6 @@ export class Nodon {
   canvasSortIndex: number = 0;
   // can node be edited
   isLocked: boolean = false
-  // human-friendly nodon property accessors
-  settings: NodonSettingMap<this>;
   // nodon properties -- these are used internally for storing individual nodon properties
   props: NodonProps = {
     i32: [0, 0, 0, 0, 0],
@@ -81,11 +86,60 @@ export class Nodon {
 
   constructor(type: ActorType = ActorType.Invalid) {
     this.type = type;
-    if (!this.label) this.label = type;
   }
 
   getConnections() {
     return this.game.getConnectionsForNodon(this);
+  }
+
+  getConnectionsToPort(portType: keyof NodonPortMap) {
+    const port = this.ports[portType];
+    if (port !== undefined) {
+      const portId = port.portId;
+      const connections = this.getConnections();
+      return connections.filter(connection => {
+        if (connection.idA === this.id && connection.portA === portId)
+          return true;
+        else if (connection.idB === this.id && connection.portB === portId)
+          return true;
+      });
+    }
+    return null;
+  }
+
+  getNodonsConnectedToPort(portType: keyof NodonPortMap) {
+    const port = this.ports[portType];
+    if (port !== undefined) {
+      const portId = port.portId;
+      const connections = this.getConnections();
+      return connections
+        .map(connection => {
+          if (connection.idA === this.id && connection.portA === portId)
+            return this.game.getNodonWithId(connection.idB);
+          else if (connection.idB === this.id && connection.portB === portId)
+            return this.game.getNodonWithId(connection.idA);
+          else
+            return null;
+        })
+        .filter(connection => connection !== null);
+    }
+    return [];
+  }
+
+  getParentNodons() {
+    return this.getNodonsConnectedToPort(NodonPortType.Upper);
+  }
+
+  getParentNodonsWithType(type: ActorType) {
+    return this.getParentNodons().filter(nodon => nodon.type === type);
+  }
+
+  getChildNodons() {
+    return this.getNodonsConnectedToPort(NodonPortType.Lower);
+  }
+
+  getChildNodonsWithType(type: ActorType) {
+    return this.getChildNodons().filter(nodon => nodon.type === type);
   }
 
   getConnectedNodons() {

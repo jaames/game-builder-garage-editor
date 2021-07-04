@@ -1,6 +1,7 @@
 import { ActorType } from './ActorTypes';
 import { Nodon, NodonCategory, NodonTag } from './NodonBase';
-import { NodonSettingType, nodonSetting } from './NodonSettings';
+import { NodonSettingType, nodonSetting } from './NodonSettingDescriptor';
+import { NodonPortMap, NodonPortType } from './NodonPortDescriptor';
 
 export enum CalculationNodeMethod {
   Add = 0,

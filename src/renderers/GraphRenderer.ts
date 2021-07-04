@@ -192,7 +192,8 @@ export class GraphRenderer {
         console.log('Props:', object.props);
         console.log('Settings:', object.getSettingValues());
         console.log('Connections:', object.getConnections());
-        console.log('Connected Nodon:', object.getConnectedNodons());
+        console.log('Parent:', object.getParentNodons());
+        console.log('Children:', object.getChildNodons());
         this.view.on('mousemove', this.handleMouseMove);
         this.view.on('mouseup', this.handleMouseUp);
       }

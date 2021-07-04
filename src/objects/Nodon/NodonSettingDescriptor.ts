@@ -10,6 +10,7 @@ export const enum NodonSettingType {
   Size,
   Position,
   Rotation,
+  Texture
 };
 
 export interface NodonSettingDescriptorBase {
@@ -51,6 +52,10 @@ export interface NodonSettingRotationDescriptor extends NodonSettingDescriptorBa
   type: NodonSettingType.Rotation,
 };
 
+export interface NodonSettingTextureDescriptor extends NodonSettingDescriptorBase {
+  type: NodonSettingType.Texture,
+};
+
 export type NodonSettingDescriptor = 
   | NodonSettingNumberDescriptor
   | NodonSettingRangeDescriptor
@@ -59,6 +64,7 @@ export type NodonSettingDescriptor =
   | NodonSettingSizeDescriptor
   | NodonSettingPositionDescriptor
   | NodonSettingRotationDescriptor
+  | NodonSettingTextureDescriptor
 ;
 
 export function nodonSetting(options: NodonSettingDescriptor) {

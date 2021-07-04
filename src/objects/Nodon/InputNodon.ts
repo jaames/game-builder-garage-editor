@@ -1,12 +1,21 @@
 import { ActorType } from './ActorTypes';
 import { Nodon, NodonCategory, NodonTag } from './NodonBase';
-import { NodonSettingType, nodonSetting } from './NodonSettings';
+import { NodonSettingType, nodonSetting } from './NodonSettingDescriptor';
+import { NodonPortMap, NodonPortType, NodonPortDirection } from './NodonPortDescriptor';
 
 export class ConstantNode extends Nodon {
 
   label = 'Constant';
 
   category = NodonCategory.Input;
+
+  ports: NodonPortMap = {
+    constant: {
+      portId: 1,
+      label: 'Constant',
+      direction: NodonPortDirection.Out
+    },
+  }
 
   constructor() {
     super(ActorType.ConstantNode);
@@ -28,6 +37,14 @@ export class ButtonPressedNode extends Nodon {
   
   category = NodonCategory.Input;
 
+  ports: NodonPortMap = {
+    pressed: {
+      portId: 1,
+      label: 'If Pressed',
+      direction: NodonPortDirection.Out
+    },
+  }
+
   constructor() {
     super(ActorType.ButtonPressedNode);
   }
@@ -40,6 +57,14 @@ export class StickTiltedNode extends Nodon {
   label = 'Stick';
 
   category = NodonCategory.Input;
+
+  ports: NodonPortMap = {
+    amount: {
+      portId: 1,
+      label: 'Amount Tilted',
+      direction: NodonPortDirection.Out
+    },
+  }
 
   constructor() {
     super(ActorType.StickTiltedNode);
@@ -67,6 +92,14 @@ export class IsTouchNode extends Nodon {
   label = 'If Touched';
 
   category = NodonCategory.Input;
+
+  ports: NodonPortMap = {
+    touched: {
+      portId: 1,
+      label: 'If Touched',
+      direction: NodonPortDirection.Out
+    },
+  }
 
   constructor() {
     super(ActorType.IsTouchNode);
