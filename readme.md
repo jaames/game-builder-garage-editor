@@ -1,16 +1,38 @@
-Experimental savedata editor for Nintendo's [Game Builder Garage](https://www.nintendo.co.uk/Games/Nintendo-Switch-download-software/Game-Builder-Garage-1964648.html).
+Web-based, experimental savedata editor/viewer for Nintendo's [Game Builder Garage](https://www.nintendo.co.uk/Games/Nintendo-Switch-download-software/Game-Builder-Garage-1964648.html)
 
-This is super early, but I've already made a lot of progress and expect to be able to pull off some pretty neat stuff -- like texture edits, 3D level export, and so on.
+### Status 
 
-Written in Typescript since I would like to create web-based tools around the game.
+**Currently on hold due to lack of interest and an [issue regarding file hashes](https://github.com/jaames/game-builder-garage-editor/issues/2) that prevents games from being able to be uploaded online.**
 
-Current status:
- - Parses user-generated level files extracted from the game's savedata
- - Exports edited level files (!!!)
- - Reads game metadata (title, author, ids, etc)
- - Reads+displays game thumbnail image
- - Reads+displays game textures
- - Reads Nodon list (different Nodon types + their parameters aren't currently supported)
- - Reads Nodon connections
+Implemented:
+ - Full level file parser, reads metadata, textures, nodon, connections, etc
+ - Partial level file exporter
+ - Texture editor
+ - Nodon graph viewer (pretty basic, doesn't support ports or settings yet)
+ - 3d world viewer (also basic, doesn't map textures properly, doesn't support connectors or customised world lighting)
+
+### Screenshots
+
+Game information view, also showing all the textures used:
+
+![](https://github.com/jaames/game-builder-garage-editor/blob/main/img/gameview.png?raw=true)
+
+Texture editor with various tools:
+
+![](https://github.com/jaames/game-builder-garage-editor/blob/main/img/textureedit.png)
+
+Basic Nodon graph view --  connection ports and settings aren't currently mapped, so not too useful:
+
+![](https://github.com/jaames/game-builder-garage-editor/blob/main/img/graphview.png)
+
+3D world viewer, texture's currently aren't quite mapped correctly in all directions:
+
+![](https://github.com/jaames/game-builder-garage-editor/blob/main/img/3dview.png)
+
+glTF exporter so levels can be brought into other 3D software:
+
+![](https://github.com/jaames/game-builder-garage-editor/blob/main/img/blender.png)
+
+----
 
 Please don't submit PRs or issues yet, this code is going to change a lot as the project develops. If you're interested in helping reverse-engineer Game Builder Garage, you can find me on Twitter `@rakujira`, or on Discord `@jaames#9860` -- I will likely post on Twitter when I feel like I've made enough progress for an announcement.
