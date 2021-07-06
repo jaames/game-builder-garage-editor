@@ -2,7 +2,7 @@ Web-based, experimental savedata editor/viewer for Nintendo's [Game Builder Gara
 
 ### Status 
 
-**Currently on hold due to lack of interest and an [issue regarding file hashes](https://github.com/jaames/game-builder-garage-editor/issues/2) that prevents games from being able to be uploaded online.**
+**Currently on hold due to lack of interest and an [issue regarding file hashes](https://github.com/jaames/game-builder-garage-editor/issues/2) that prevents games from being uploaded online.**
 
 Implemented:
  - Full level file parser, reads metadata, textures, nodon, connections, etc
@@ -25,7 +25,7 @@ Basic Nodon graph view --  connection ports and settings aren't currently mapped
 
 ![](https://github.com/jaames/game-builder-garage-editor/blob/main/img/graphview.png)
 
-3D world viewer, texture's currently aren't quite mapped correctly in all directions:
+3D world viewer, textures currently aren't quite mapped correctly in all directions:
 
 ![](https://github.com/jaames/game-builder-garage-editor/blob/main/img/3dview.png)
 
