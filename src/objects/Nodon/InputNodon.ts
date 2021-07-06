@@ -244,7 +244,7 @@ export class FoundIrMarkerNode extends Nodon {
 
 export class PlzObjBreakCountNode extends Nodon {
 
-  label = 'IR Motion Camera';
+  label = 'Object Break';
 
   category = NodonCategory.Input;
 

@@ -263,8 +263,8 @@ export class MapRenderer {
       color: color,
       roughness: .8,
       map: texture,
-      transparent: true,
-      alphaTest: 0.5,
+      // transparent: true,
+      // alphaTest: 0.5,
       // shininess: .2
     });
   }
@@ -274,13 +274,13 @@ export class MapRenderer {
       .getParentNodonsWithType(ActorType.PlzTextureNode)
       .map((textureNodon: PlzTextureNode) => {
         const src = this.game.textures[textureNodon.texture];
+        // TODO: optimise by putting textures in a Map and just copy them to tweak repeat etx
         const texture = new THREE.DataTexture(src.getRgbaPixelsAsUint8(), src.width, src.height, THREE.RGBAFormat);
+        // TODO: repeat depends on whether texture is facing x, y, or z
         texture.repeat.x = nodon.worldSize[0] / textureNodon.size[1];
         texture.repeat.y = nodon.worldSize[2] / textureNodon.size[2];
         texture.wrapS = THREE.RepeatWrapping;
         texture.wrapT = THREE.RepeatWrapping;
-        texture.magFilter = THREE.LinearFilter;
-        texture.minFilter = THREE.LinearFilter;
         return texture;
       });
   }

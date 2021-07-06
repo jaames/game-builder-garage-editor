@@ -16,7 +16,7 @@ const COLOR_NODON = 0xFF9946;
 const COLOR_CONNECTION = 0xFD73A6;
 
 const NODON_COLOR_MAP: Record<NodonCategory, number> = {
-  [NodonCategory.Unknown]:        0xFF9946,
+  [NodonCategory.Unknown]:      0xFF9946,
   [NodonCategory.Input]:        0xFE0D4C,
   [NodonCategory.Middle]:       0x00D59A,
   [NodonCategory.MiddleLayout]: 0x7A94B0,
