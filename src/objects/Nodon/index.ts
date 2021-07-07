@@ -1,4 +1,5 @@
 export * from './ActorTypes';
+export * from './ActorCost';
 export * from './NodonBase';
 export * from './NodonSettingDescriptor';
 export * from './NodonPortDescriptor';

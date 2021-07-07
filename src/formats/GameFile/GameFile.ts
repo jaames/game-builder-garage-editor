@@ -1,11 +1,20 @@
+import { BymlNode } from '../Byml';
 import { GameMetaExtended } from './GameMeta';
 import { GameThumbnail } from './GameThumbnail'
 import { GameFileReader } from './GameFileReader';
 import { GameFileWriter } from './GameFileWriter';
 
-import { ActorType, Nodon, Connection, Texture } from '../../objects';
-
-import { BymlNode } from '../Byml';
+import { 
+  ActorType, 
+  Nodon,
+  Connection,
+  Texture,
+  Cost,
+  ActorCost,
+  COST_MAX,
+  COST_ACTORS_MAP,
+  COST_CONNECTION,
+} from '../../objects';
 
 export class GameFile {
   
@@ -78,6 +87,38 @@ export class GameFile {
     if (nodon) return nodon;
     const connection = this.getConnectionWithId(id);
     if (connection) return connection;
+  }
+
+  // not accurate until fancy node sub-types and "bind" connections are understood
+  getCost(): Cost {
+    const nodon = this.nodons;
+    const connections = this.connections;
+    let fixedInvisible = 0;
+    let fixedVisible = 0;
+    let moveInvisible = 0;
+    let moveVisible = 0;
+
+    nodon.forEach(nodon => {
+      const cost = COST_ACTORS_MAP.get(nodon.type);
+      fixedInvisible += cost.fixedInvisible;
+      fixedVisible += cost.fixedVisible;
+      moveInvisible += cost.moveInvisible;
+      moveVisible += cost.moveVisible;
+    });
+
+    connections.forEach(() => {
+      fixedInvisible += COST_CONNECTION.fixedInvisible;
+      fixedVisible += COST_CONNECTION.fixedVisible;
+      moveInvisible += COST_CONNECTION.moveInvisible;
+      moveVisible += COST_CONNECTION.moveVisible;
+    });
+
+    return {
+      fixedInvisible,
+      fixedVisible,
+      moveInvisible,
+      moveVisible,
+    };
   }
 
   getWriter() {
