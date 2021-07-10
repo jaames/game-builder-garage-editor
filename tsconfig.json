@@ -18,9 +18,12 @@
       "outDir": "dist",
       "baseUrl": ".",
       "paths": {
-          "*": [
-              "node_modules/*",
-          ]
+        "gifenc": [
+          "./src/types/gifenc.d.ts"
+        ],
+        "*": [
+            "node_modules/*",
+        ]
       }
   },
   "include": [

@@ -2,7 +2,7 @@
   "name": "game-builder-garage-editor",
   "version": "0.0.1",
   "scripts": {
-    "cli": "ts-node-cwd --compiler-options '{\"module\":\"commonjs\"}' src/cli/index.ts",
+    "cli": "ts-node-cwd --cwd-mode --compiler-options '{\"module\":\"commonjs\"}' src/cli/index.ts",
     "viewer": "parcel ./src/viewer.html",
     "start": "webpack s --mode=development",
     "dev": "webpack --mode=development",
@@ -57,7 +57,6 @@
     "react-router-dom": "^5.2.0",
     "reset-css": "^5.0.1",
     "three": "^0.129.0",
-    "ts-mixer": "^5.4.1",
     "ts-node": "^10.0.0",
     "yaml": "^2.0.0-6",
     "zustand": "^3.5.2"
