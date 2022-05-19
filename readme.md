@@ -33,6 +33,52 @@ glTF exporter so levels can be brought into other 3D software:
 
 ![](https://github.com/jaames/game-builder-garage-editor/blob/main/img/blender.png)
 
+### CLI
+
+You can run parts of this tool from the command line to inspect files etc
+
+#### Clone GitHub Repo
+
+```bash
+git clone https://github.com/jaames/game-builder-garage-editor
+```
+
+Then enter into it
+
+```
+cd game-builder-garage-editor
+```
+
+#### NPM dependencies
+
+Make sure you have installed [NodeJS](https://nodejs.org/en/), which also installs NPM.
+
+Then install the project dependencies by running this inside the `game-builder-garage-editor` directory:
+
+```
+npm install
+```
+
+#### CLI usage
+
+Use `npm run cli` to run the command line interface
+
+```
+Usage: npm run cli [options] [command]
+
+Options:
+  -V, --version                output the version number
+  -h, --help                   display help for command
+
+Commands:
+  game-hash <input>            attempt to generate a value hash for a given game BYML file (not working)
+  game-dump <input> <output>   dump game BYML content to a YAML file
+  game-meta <input>            returns metadata for a given game BYML file
+  table-hashes <input>         read value hashes from a LgcTpb.bin BYML file
+  table-dump <input> <output>  dump table BYML content to a YAML file
+  help [command]               display help for command
+```
+
 ----
 
 Please don't submit PRs or issues yet, this code is going to change a lot as the project develops. If you're interested in helping reverse-engineer Game Builder Garage, you can find me on Twitter `@rakujira`, or on Discord `@jaames#9860` -- I will likely post on Twitter when I feel like I've made enough progress for an announcement.
