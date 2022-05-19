@@ -3,7 +3,8 @@ import {
   BymlType,
   BymlHash,
   BymlNode,
-  getNode
+  getNode,
+  hasNode
 } from '../Byml';
 
 import { GameKey as Key } from './GameBymlKeys';
@@ -33,13 +34,20 @@ export class GameFileReader extends BymlReader {
     assert(this.rootNode.type === BymlType.Hash, 'Root node must be a hash node');
     // root node is always a hash node with one item, which is the crc32 hash of the filename w/o the extension
     const projectNode = [...this.rootNode.hashMap.values()][0];
-    //  project node contains a couple of sub-nodes, not sure why
-    const fileHolder =   getNode(projectNode, Key.mFileHolder, BymlType.Hash);
-    const fileNode =     getNode(fileHolder,  Key.mFile,       BymlType.Hash);
-    this.formatVersion = getNode(projectNode, Key.mVersion,    BymlType.Uint).value;
-    // only format ver 1 is known / supported!
-    assert(this.formatVersion === 1, `Format version not recognized`);
-    this.fileNode = fileNode;
+    const hasFileHolder = hasNode(projectNode, Key.mFileHolder);
+    // savedata project node contains a couple of sub-nodes, not sure why
+    if (hasFileHolder) {
+      const fileHolder =   getNode(projectNode, Key.mFileHolder, BymlType.Hash);
+      const fileNode =     getNode(fileHolder,  Key.mFile,       BymlType.Hash);
+      this.formatVersion = getNode(projectNode, Key.mVersion,    BymlType.Uint).value;
+      // only format ver 1 is known / supported!
+      assert(this.formatVersion === 1, `Format version not recognized`);
+      this.fileNode = fileNode;
+    }
+    // downloaded byml format doesn't
+    else {
+      this.fileNode = getNode(this.rootNode, Key.mFile, BymlType.Hash);
+    }
   }
 
   getMetaData(): GameMetaExtended {
